@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- =========================================================================
+       PROJECT CASE STUDY TEMPLATE
+       This page is one of four case studies sharing the SAME layout.
+       To create/populate a project, replace only the marked placeholders.
+       NOTE: this file lives in /projects/, so asset paths use "../".
+       Per-project image slug used below: "market-basket"
+       ========================================================================= -->
+
+  <!-- REPLACE: page title & description -->
+  <title>Market Basket Analysis — Case Study</title>
+  <meta name="description" content="Placeholder: business objective of the customer growth case study." />
+
+  <link rel="icon" type="image/png" href="../images/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION (note ../ paths from /projects/) -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a class="nav__logo" href="../index.html">Your<span>Name</span></a>
+      <div class="nav__links">
+        <a class="nav__link" href="../index.html">Home</a>
+        <a class="nav__link" href="../about.html">About</a>
+        <a class="nav__link" href="../portfolio.html">Portfolio</a>
+        <a class="nav__link" href="../documents/resume.pdf" download>Resume</a>
+        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="../about.html"><i class="fa-solid fa-user"></i>About</a>
+    <a href="../portfolio.html"><i class="fa-solid fa-layer-group"></i>Portfolio</a>
+    <a href="../documents/resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
+    <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+  </div>
+
+  <main>
+
+    <!-- =======================================================================
+         HERO
+         REPLACE: title, business objective, hero visualization, badges
+         ======================================================================= -->
+    <header class="project-hero section--offwhite">
+      <div class="container">
+        <p class="eyebrow" data-reveal>Case Study</p>
+        <!-- REPLACE: project title -->
+        <h1 class="project-hero__title" data-reveal data-reveal-delay="1">Market Basket Analysis</h1>
+        <!-- REPLACE: business objective (one sentence) -->
+        <p class="project-hero__objective" data-reveal data-reveal-delay="2">
+          Business objective placeholder — the single outcome this project set
+          out to achieve (e.g. reduce churn, increase customer lifetime value).
+        </p>
+        <!-- Technology badges (REPLACE labels) -->
+        <div class="tag-list" style="justify-content:center;" data-reveal data-reveal-delay="3">
+          <span class="tag">Python</span>
+          <span class="tag">mlxtend</span>
+          <span class="tag">Association Rules</span>
+          <span class="tag">Retail</span>
+          <span class="tag">SQL</span>
+        </div>
+
+        <!-- Hero visualization placeholder -->
+        <div data-reveal data-reveal-delay="4" style="margin-top: var(--space-lg);">
+          <!-- REPLACE with: <img src="../images/market-basket-hero.png" alt="..."> -->
+          <div class="placeholder placeholder--banner">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Hero visualization placeholder<br>(../images/market-basket-hero.png)</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         EXECUTIVE SUMMARY  (3 KPI cards + recommendation)
+         REPLACE: KPI values/labels and the recommendation text
+         ======================================================================= -->
+    <section class="section" aria-labelledby="summary-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Executive Summary</p>
+          <h2 id="summary-title">The headline results</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="card kpi-card" data-reveal>
+            <div class="kpi-card__value">+XX%</div>
+            <p class="kpi-card__label">KPI 1 placeholder (e.g. retention lift)</p>
+          </div>
+          <div class="card kpi-card" data-reveal data-reveal-delay="1">
+            <div class="kpi-card__value">$X.XM</div>
+            <p class="kpi-card__label">KPI 2 placeholder (e.g. revenue impact)</p>
+          </div>
+          <div class="card kpi-card" data-reveal data-reveal-delay="2">
+            <div class="kpi-card__value">0.XX</div>
+            <p class="kpi-card__label">KPI 3 placeholder (e.g. model AUC)</p>
+          </div>
+        </div>
+
+        <div class="insight-card" data-reveal style="margin-top: var(--space-lg); max-width: var(--max-width-text); margin-inline:auto;">
+          <strong>Business recommendation:</strong>
+          <p>Placeholder — the single most important recommendation an executive should take away from this work.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         BUSINESS PROBLEM  (large typography, keynote feel)
+         REPLACE: the challenge statement
+         ======================================================================= -->
+    <section class="keynote section--mist" aria-labelledby="problem-title">
+      <div class="container container--narrow">
+        <p class="eyebrow" data-reveal>The Challenge</p>
+        <h2 id="problem-title" class="keynote__statement" data-reveal data-reveal-delay="1">
+          Business challenge placeholder — describe the problem in one bold, human sentence.
+        </h2>
+        <p data-reveal data-reveal-delay="2" style="margin-top: var(--space-md); font-size: var(--fs-lead);">
+          Placeholder — expand on the context: why it mattered, who was affected,
+          and what was at stake for the business.
+        </p>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         DATA
+         REPLACE: dataset overview, data quality notes, data dictionary rows
+         ======================================================================= -->
+    <section class="section" aria-labelledby="data-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">The Data</p>
+          <h2 id="data-title">What we worked with</h2>
+        </div>
+
+        <div class="grid grid--2" style="margin-bottom: var(--space-lg);">
+          <div class="card" data-reveal>
+            <h3>Dataset overview</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — sources, time range, granularity, and volume of the data used.</p>
+          </div>
+          <div class="card" data-reveal data-reveal-delay="1">
+            <h3>Data quality</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — missingness, outliers, and the cleaning/validation steps taken.</p>
+          </div>
+        </div>
+
+        <!-- Data dictionary (REPLACE rows) -->
+        <div data-reveal>
+          <h3 style="margin-bottom: var(--space-sm);">Data dictionary</h3>
+          <table class="data-table">
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>field_name_1</td><td>string</td><td>Placeholder description of field 1</td></tr>
+              <tr><td>field_name_2</td><td>numeric</td><td>Placeholder description of field 2</td></tr>
+              <tr><td>field_name_3</td><td>date</td><td>Placeholder description of field 3</td></tr>
+              <tr><td>field_name_4</td><td>boolean</td><td>Placeholder description of field 4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         EXPLORATORY ANALYSIS  (charts + insight cards)
+         REPLACE: each chart title, image, and takeaway
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="eda-title">
+      <div class="container container--narrow">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Exploratory Analysis</p>
+          <h2 id="eda-title">What the data revealed</h2>
+        </div>
+
+        <!-- Chart 1 -->
+        <div class="chart-block" data-reveal>
+          <h3 class="chart-block__title">Chart title placeholder 1</h3>
+          <!-- REPLACE with: <img src="../images/market-basket-eda-1.png" alt="..."> -->
+          <div class="placeholder placeholder--wide">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Visualization placeholder<br>(../images/market-basket-eda-1.png)</span>
+          </div>
+          <div class="insight-card">
+            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
+          </div>
+        </div>
+
+        <!-- Chart 2 -->
+        <div class="chart-block" data-reveal>
+          <h3 class="chart-block__title">Chart title placeholder 2</h3>
+          <!-- REPLACE with: <img src="../images/market-basket-eda-2.png" alt="..."> -->
+          <div class="placeholder placeholder--wide">
+            <i class="fa-solid fa-chart-area"></i>
+            <span>Visualization placeholder<br>(../images/market-basket-eda-2.png)</span>
+          </div>
+          <div class="insight-card">
+            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
+          </div>
+        </div>
+
+        <!-- Chart 3 -->
+        <div class="chart-block" data-reveal>
+          <h3 class="chart-block__title">Chart title placeholder 3</h3>
+          <!-- REPLACE with: <img src="../images/market-basket-eda-3.png" alt="..."> -->
+          <div class="placeholder placeholder--wide">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Visualization placeholder<br>(../images/market-basket-eda-3.png)</span>
+          </div>
+          <div class="insight-card">
+            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         STATISTICAL ANALYSIS  (hypothesis / method / result / implication)
+         REPLACE: text in each card
+         ======================================================================= -->
+    <section class="section" aria-labelledby="stats-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Statistical Analysis</p>
+          <h2 id="stats-title">Testing what we believed</h2>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="card stat-analysis-card" data-reveal>
+            <h4>Hypothesis</h4>
+            <p>Placeholder — the hypothesis you set out to test.</p>
+          </div>
+          <div class="card stat-analysis-card" data-reveal data-reveal-delay="1">
+            <h4>Method</h4>
+            <p>Placeholder — the statistical test or approach used (e.g. t-test, chi-square, regression).</p>
+          </div>
+          <div class="card stat-analysis-card" data-reveal>
+            <h4>Result</h4>
+            <p>Placeholder — the result, with effect size and significance.</p>
+          </div>
+          <div class="card stat-analysis-card" data-reveal data-reveal-delay="1">
+            <h4>Business implication</h4>
+            <p>Placeholder — what the result means for decision-making.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         MACHINE LEARNING
+         REPLACE: pipeline diagram, model comparison, metrics, explainability
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="ml-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Machine Learning</p>
+          <h2 id="ml-title">From features to predictions</h2>
+        </div>
+
+        <!-- Pipeline diagram -->
+        <div data-reveal style="margin-bottom: var(--space-lg);">
+          <h3 style="margin-bottom: var(--space-sm);">Modeling pipeline</h3>
+          <!-- REPLACE with: <img src="../images/market-basket-ml-pipeline.png" alt="..."> -->
+          <div class="placeholder placeholder--banner">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span>Pipeline diagram placeholder<br>(../images/market-basket-ml-pipeline.png)</span>
+          </div>
+        </div>
+
+        <div class="grid grid--2">
+          <!-- Model comparison -->
+          <div class="card" data-reveal>
+            <h3>Model comparison</h3>
+            <table class="data-table" style="margin-top: var(--space-sm); box-shadow:none;">
+              <thead>
+                <tr><th>Model</th><th>Metric</th><th>Score</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Baseline</td><td>placeholder</td><td>0.XX</td></tr>
+                <tr><td>Model A</td><td>placeholder</td><td>0.XX</td></tr>
+                <tr><td>Model B (chosen)</td><td>placeholder</td><td>0.XX</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Performance metrics -->
+          <div class="card" data-reveal data-reveal-delay="1">
+            <h3>Performance metrics</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — headline metrics for the final model (accuracy, precision/recall, RMSE, etc.) and how they were validated.</p>
+          </div>
+        </div>
+
+        <!-- Explainability -->
+        <div class="card" data-reveal style="margin-top: var(--space-md);">
+          <h3>Explainability</h3>
+          <p style="margin-top: var(--space-sm);">Placeholder — feature importance / SHAP findings and what drives the model's predictions in business terms.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         DASHBOARD
+         REPLACE: Power BI screenshot + interactive dashboard link
+         ======================================================================= -->
+    <section class="section" aria-labelledby="dashboard-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Dashboard</p>
+          <h2 id="dashboard-title">Putting insight in decision-makers' hands</h2>
+        </div>
+
+        <div data-reveal>
+          <!-- REPLACE with: <img src="../images/market-basket-dashboard.png" alt="..."> -->
+          <div class="placeholder placeholder--wide">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Power BI screenshot placeholder<br>(../images/market-basket-dashboard.png)</span>
+          </div>
+        </div>
+
+        <div class="btn-group btn-group--center" data-reveal style="margin-top: var(--space-lg);">
+          <!-- REPLACE: interactive dashboard URL (Power BI / Tableau public link) -->
+          <a class="btn btn--primary" href="#REPLACE-dashboard-url" target="_blank" rel="noopener">
+            <i class="fa-solid fa-up-right-from-square"></i> Open Interactive Dashboard
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         BUSINESS RECOMMENDATIONS
+         REPLACE: each recommendation card
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="reco-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Recommendations</p>
+          <h2 id="reco-title">What we advised</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Recommendation 1</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
+          </div>
+          <div class="card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Recommendation 2</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
+          </div>
+          <div class="card" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Recommendation 3</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         BUSINESS IMPACT
+         REPLACE: metrics, ROI, expected outcomes
+         ======================================================================= -->
+    <section class="section" aria-labelledby="impact-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Business Impact</p>
+          <h2 id="impact-title">The value delivered</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="stat" data-reveal>
+            <div class="stat__number">$X.XM</div>
+            <span class="stat__label">Metrics placeholder</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="1">
+            <div class="stat__number">XX%</div>
+            <span class="stat__label">ROI placeholder</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="2">
+            <div class="stat__number">XX</div>
+            <span class="stat__label">Expected outcomes placeholder</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         LESSONS LEARNED
+         REPLACE: each lesson card
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="lessons-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Lessons Learned</p>
+          <h2 id="lessons-title">What I'd carry forward</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="card" data-reveal>
+            <h3>Lesson 1</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
+          </div>
+          <div class="card" data-reveal data-reveal-delay="1">
+            <h3>Lesson 2</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
+          </div>
+          <div class="card" data-reveal data-reveal-delay="2">
+            <h3>Lesson 3</h3>
+            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         REPOSITORY  (placeholder links)
+         REPLACE: each href with a real URL or file path
+         ======================================================================= -->
+    <section class="section" aria-labelledby="repo-title">
+      <div class="container container--narrow text-center">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Explore Further</p>
+          <h2 id="repo-title">Dig into the details</h2>
+        </div>
+        <div class="btn-group btn-group--center" data-reveal>
+          <!-- REPLACE all four links -->
+          <a class="btn btn--dark" href="#REPLACE-github-url" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub Repository</a>
+          <a class="btn btn--secondary" href="#REPLACE-notebook-url" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i> Notebook</a>
+          <a class="btn btn--secondary" href="#REPLACE-dataset-url" target="_blank" rel="noopener"><i class="fa-solid fa-database"></i> Dataset</a>
+          <a class="btn btn--secondary" href="../documents/market-basket-documentation.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i> Documentation</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         NEXT / PREVIOUS PROJECT
+         REPLACE: keep links pointing to the correct neighbouring case studies
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="next-title">
+      <div class="container">
+        <h2 id="next-title" class="section-header" data-reveal>Continue the tour</h2>
+        <div class="project-nav">
+          <!-- Previous -->
+          <a class="project-nav__card" href="funnel-analysis.html" data-reveal>
+            <span class="project-nav__label"><i class="fa-solid fa-arrow-left"></i> Previous</span>
+            <h3>Funnel Analysis</h3>
+          </a>
+          <!-- Next -->
+          <a class="project-nav__card project-nav__card--next" href="customer-growth.html" data-reveal data-reveal-delay="1">
+            <span class="project-nav__label">Next <i class="fa-solid fa-arrow-right"></i></span>
+            <h3>Customer Growth Intelligence</h3>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (note ../ paths) -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved.</p>
+      <div class="footer__socials">
+        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

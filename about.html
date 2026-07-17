@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: page title & description -->
+  <title>About — Lucas Orjales</title>
+  <meta name="description" content="Placeholder: executive biography of a senior data scientist and AI consultant." />
+
+  <!-- Favicon (REPLACE with your own icon) -->
+  <link rel="icon" type="image/png" href="images/icon_white.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION (keep in sync with other pages) -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a class="nav__logo" href="index.html">Your<span>Name</span></a>
+      <div class="nav__links">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="about.html">About</a>
+        <a class="nav__link" href="portfolio.html">Portfolio</a>
+        <a class="nav__link" href="documents/Lucas Orjales Resume.pdf" download>Resume</a>
+        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="about.html"><i class="fa-solid fa-user"></i>About</a>
+    <a href="portfolio.html"><i class="fa-solid fa-layer-group"></i>Portfolio</a>
+    <a href="documents/Lucas Orjales Resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
+    <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+  </div>
+
+  <main>
+
+    <!-- =======================================================================
+         HERO — executive introduction
+         REPLACE: photo, name, title, mission statement
+         ======================================================================= -->
+    <header class="hero section--offwhite">
+      <div class="container">
+        <div class="grid grid--2" style="align-items:center; gap: var(--space-x.75); text-align:left;">
+          <div data-reveal>
+            <p class="eyebrow">About</p>
+            <!-- REPLACE: your full name -->
+            <h1 class="hero__title" style="margin:0; max-width:600px; text-align:left;">Lucas Orjales</h1>
+            <!-- REPLACE: current title -->
+            <p class="lead" style="margin-top: var(--space-sm);">Supervisor - Data Scientist</p>
+            <!-- REPLACE: one-line mission statement -->
+            <p style="margin-top: var(--space-md);">
+              Mission statement placeholder — one memorable line about the change
+              you want to create with data and AI.
+            </p>
+            <div class="btn-group" style="margin-top: var(--space-lg);">
+              <a class="btn btn--primary" href="documents/Lucas Orjales Resume.pdf" download>
+                <i class="fa-solid fa-arrow-down"></i> Download Resume
+              </a>
+              <a class="btn btn--secondary" href="portfolio.html">View Portfolio</a>
+            </div>
+          </div>
+
+          <!-- Professional photo placeholder -->
+          <div data-reveal data-reveal-delay="1">
+            <!-- REPLACE with: <img src="images/portrait-about.jpg" alt="Your Name"> -->
+            <div class="hero-home__portrait" data-reveal data-reveal-delay="4">
+              <img
+                src="images/portrait-hero.jpg"
+                alt="Professional portrait of Your Name"
+                class="hero-home__portrait-image"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         BIOGRAPHY
+         REPLACE: your full story — write freely in these paragraphs
+         ======================================================================= -->
+    <section class="section" aria-labelledby="bio-title">
+      <div class="container container--narrow">
+        <div class="section-header" data-reveal style="text-align:left;">
+          <p class="eyebrow">Biography</p>
+          <h2 id="bio-title">My story</h2>
+        </div>
+        <div data-reveal data-reveal-delay="1">
+          <!-- REPLACE: Biography goes here (paragraph 1) -->
+          <p style="margin-bottom: var(--space-md); font-size: var(--fs-lead); color: var(--color-charcoal);">
+            Biography goes here — open with a compelling paragraph about who you
+            are, the kinds of problems you love solving, and the philosophy that
+            guides your work.
+          </p>
+          <!-- REPLACE: Biography goes here (paragraph 2) -->
+          <p style="margin-bottom: var(--space-md);">
+            Biography goes here — continue with your journey: the industries
+            you've worked across, the teams you've led, and the results you've
+            delivered for clients and stakeholders.
+          </p>
+          <!-- REPLACE: Biography goes here (paragraph 3) -->
+          <p>
+            Biography goes here — close with where you're focused now: AI
+            strategy, agentic systems, and translating advanced analytics into
+            decisions executives can act on.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         RESUME HIGHLIGHTS (icon grid)
+         REPLACE: the short description under each category
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="highlights-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Resume Highlights</p>
+          <h2 id="highlights-title">At a glance</h2>
+          <p>Placeholder — one sentence framing your professional highlights.</p>
+        </div>
+
+        <div class="grid grid--auto">
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-briefcase"></i></div>
+            <h3>Experience</h3>
+            <p>Placeholder — key roles &amp; years.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h3>Education</h3>
+            <p>Placeholder — degrees &amp; institutions.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon"><i class="fa-solid fa-code"></i></div>
+            <h3>Programming Languages</h3>
+            <p>Placeholder — Python, SQL, R, etc.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="3">
+            <div class="skill-card__icon"><i class="fa-solid fa-cloud"></i></div>
+            <h3>Cloud Platforms</h3>
+            <p>Placeholder — Azure, AWS, GCP.</p>
+          </article>
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-brain"></i></div>
+            <h3>Machine Learning</h3>
+            <p>Placeholder — modeling specialties.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-robot"></i></div>
+            <h3>AI</h3>
+            <p>Placeholder — LLMs &amp; agentic AI.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon"><i class="fa-solid fa-handshake"></i></div>
+            <h3>Consulting</h3>
+            <p>Placeholder — advisory engagements.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="3">
+            <div class="skill-card__icon"><i class="fa-solid fa-users"></i></div>
+            <h3>Leadership</h3>
+            <p>Placeholder — teams &amp; mentoring.</p>
+          </article>
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-microphone"></i></div>
+            <h3>Speaking</h3>
+            <p>Placeholder — talks &amp; webinars.</p>
+          </article>
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-certificate"></i></div>
+            <h3>Certifications</h3>
+            <p>Placeholder — credentials earned.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         CAREER TIMELINE (vertical)
+         REPLACE: each date, role, and description
+         ======================================================================= -->
+    <section class="section" aria-labelledby="timeline-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Career</p>
+          <h2 id="timeline-title">A path shaped by curiosity</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline__item" data-reveal>
+            <span class="timeline__date">20XX — Present</span>
+            <h3>Milestone / Role placeholder</h3>
+            <p>Placeholder — describe the role, scope, and a signature achievement.</p>
+          </div>
+          <div class="timeline__item" data-reveal>
+            <span class="timeline__date">20XX — 20XX</span>
+            <h3>Milestone / Role placeholder</h3>
+            <p>Placeholder — describe the role, scope, and a signature achievement.</p>
+          </div>
+          <div class="timeline__item" data-reveal>
+            <span class="timeline__date">20XX — 20XX</span>
+            <h3>Milestone / Role placeholder</h3>
+            <p>Placeholder — describe the role, scope, and a signature achievement.</p>
+          </div>
+          <div class="timeline__item" data-reveal>
+            <span class="timeline__date">20XX</span>
+            <h3>Education / Milestone placeholder</h3>
+            <p>Placeholder — degree, program, or early career milestone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         FEATURED TECHNOLOGIES (visual badges)
+         Purely visual — edit labels/icons as needed
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="tech-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Toolkit</p>
+          <h2 id="tech-title">Featured technologies</h2>
+        </div>
+        <div class="badge-grid" data-reveal data-reveal-delay="1">
+          <span class="badge"><i class="fa-brands fa-python"></i> Python</span>
+          <span class="badge"><i class="fa-solid fa-database"></i> SQL</span>
+          <span class="badge"><i class="fa-solid fa-chart-pie"></i> Power BI</span>
+          <span class="badge"><i class="fa-solid fa-cloud"></i> Azure</span>
+          <span class="badge"><i class="fa-solid fa-brain"></i> Machine Learning</span>
+          <span class="badge"><i class="fa-solid fa-square-root-variable"></i> Statistics</span>
+          <span class="badge"><i class="fa-solid fa-comment-dots"></i> LLMs</span>
+          <span class="badge"><i class="fa-brands fa-git-alt"></i> Git</span>
+          <span class="badge"><i class="fa-solid fa-layer-group"></i> Fabric</span>
+          <span class="badge"><i class="fa-solid fa-fire"></i> Databricks</span>
+          <span class="badge"><i class="fa-solid fa-robot"></i> OpenAI</span>
+          <span class="badge"><i class="fa-solid fa-diagram-project"></i> LangGraph</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         FEATURED WEBINAR (large embedded video placeholder)
+         REPLACE: video embed + description below
+         ======================================================================= -->
+    <section class="section" id="webinar" aria-labelledby="webinar-title">
+      <div class="container container--narrow">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Featured Webinar</p>
+          <h2 id="webinar-title">Enterprise Operational Intelligence: Smarter decisions through AI-driven insights</h2>
+        </div>
+
+        <div class="video-block" data-reveal data-reveal-delay="1">
+            <img 
+              src="images/webinar_thumbnail.png" 
+              alt="Enterprise Operational Intelligence Webinar"
+              class="video-block__thumbnail"
+            />
+
+            <a 
+              class="video-block__play"
+              href="https://rsmcanada.com/events/2026-events/enterprise-operational-intelligence-smarter-decisions-through-ai.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Watch webinar"
+            >
+              <span><i class="fa-solid fa-play"></i></span>
+            </a>
+          </div>
+
+        <p data-reveal data-reveal-delay="2" style="margin-top: var(--space-md); text-align:center;">
+          Organizations generate massive volumes of operational and transactional data every day, 
+          yet many teams still rely on fragmented reporting, manual reviews and reactive processes 
+          to identify emerging risks and opportunities. As artificial intelligence adoption accelerates, 
+          leading organizations are embedding intelligent analytics directly into enterprise workflows to 
+          improve visibility, accelerate decision making and strengthen operational oversight across the business.
+        </p>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         RESUME DOWNLOAD CTA
+         ======================================================================= -->
+    <section class="section section--dark text-center" aria-labelledby="resume-title">
+      <div class="container container--narrow">
+        <h2 id="resume-title" data-reveal>Want the full picture?</h2>
+        <p data-reveal data-reveal-delay="1" style="margin-top: var(--space-sm);">
+          Placeholder — one line inviting visitors to download your résumé.
+        </p>
+        <div data-reveal data-reveal-delay="2" style="margin-top: var(--space-lg);">
+          <!-- REPLACE: resume PDF path -->
+          <a class="btn btn--primary btn--large" href="documents/Lucas Orjales Resume.pdf" download>
+            <i class="fa-solid fa-arrow-down"></i> Download Resume
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (keep in sync) -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved.</p>
+      <div class="footer__socials">
+        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

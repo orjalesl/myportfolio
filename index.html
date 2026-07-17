@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ==========================================================
+       REPLACE: page title & meta description for SEO
+       ========================================================== -->
+  <title>Lucas Orjales — Supervisor Data Scientist</title>
+  <meta name="description" content="Placeholder: one-line description of who you are and what you do — used by search engines and social previews." />
+
+  <!-- Social / Open Graph preview (REPLACE image + text) -->
+  <meta property="og:title" content="Lucas Orjales — Supervisor Data Scientist" />
+  <meta property="og:description" content="Placeholder social share description." />
+  <meta property="og:image" content="images/og-preview.jpg" />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon (REPLACE with your own icon) -->
+  <link rel="icon" type="image/png" href="images/icon_white.png" />
+
+  <!-- Google Fonts — Inter (clean Apple-like sans-serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- =========================================================================
+       NAVIGATION  (identical across pages — keep in sync)
+       REPLACE: logo text, GitHub & LinkedIn URLs, resume path
+       ========================================================================= -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <!-- REPLACE: your name / initials -->
+      <a class="nav__logo" href="index.html">
+        <img src="images/logo_black.png" alt="Lucas Orjales Logo">
+      </a>
+
+      <div class="nav__links">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="about.html">About</a>
+        <a class="nav__link" href="portfolio.html">Portfolio</a>
+        <!-- REPLACE: resume PDF path (downloads on click) -->
+        <a class="nav__link" href="documents/resume.pdf" download>Resume</a>
+        <!-- REPLACE: GitHub & LinkedIn URLs -->
+        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+
+      <!-- Hamburger (mobile only) -->
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu (mirrors nav links) -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="about.html"><i class="fa-solid fa-user"></i>About</a>
+    <a href="portfolio.html"><i class="fa-solid fa-layer-group"></i>Portfolio</a>
+    <a href="documents/resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
+    <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+  </div>
+
+  <main>
+
+    <!-- =======================================================================
+         HERO
+         REPLACE: headline, subheadline, portrait image
+         ======================================================================= -->
+    <header class="hero section--offwhite">
+      <div class="container">
+        <p class="eyebrow" data-reveal>Senior Data Scientist &amp; AI Consultant</p>
+
+        <!-- REPLACE: main headline -->
+        <h1 class="hero__title gradient-text" data-reveal data-reveal-delay="1">
+          Turning complex data into confident business decisions.
+        </h1>
+
+        <!-- REPLACE: subheadline -->
+        <p class="hero__subtitle" data-reveal data-reveal-delay="2">
+          Subheadline placeholder — a single, elegant sentence about the value
+          you bring: analytics, machine learning, and AI strategy for leaders.
+        </p>
+
+        <div class="btn-group btn-group--center" data-reveal data-reveal-delay="3">
+          <a class="btn btn--primary" href="portfolio.html">View Portfolio</a>
+          <!-- REPLACE: resume PDF path -->
+          <a class="btn btn--secondary" href="documents/Lucas Orjales Resume.pdf" download>
+            <i class="fa-solid fa-arrow-down"></i> Download Resume
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         FEATURED SKILLS
+         REPLACE: one-sentence description under each skill
+         ======================================================================= -->
+    <section class="section" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Capabilities</p>
+          <h2 id="skills-title">A full-stack data science skill set</h2>
+          <p>Placeholder — one sentence framing the breadth of your expertise.</p>
+        </div>
+
+        <div class="grid grid--auto">
+          <!-- Each skill card: REPLACE the one-sentence description -->
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-brain"></i></div>
+            <h3>Machine Learning</h3>
+            <p>Placeholder — one sentence on your ML work.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-chart-simple"></i></div>
+            <h3>Statistical Analysis</h3>
+            <p>Placeholder — one sentence on statistical rigor.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon"><i class="fa-solid fa-flask-vial"></i></div>
+            <h3>A/B Testing</h3>
+            <p>Placeholder — one sentence on experimentation.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="3">
+            <div class="skill-card__icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>Forecasting</h3>
+            <p>Placeholder — one sentence on time-series forecasting.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <h3>Dashboarding</h3>
+            <p>Placeholder — one sentence on BI &amp; dashboards.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-database"></i></div>
+            <h3>SQL</h3>
+            <p>Placeholder — one sentence on data querying.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon"><i class="fa-brands fa-python"></i></div>
+            <h3>Python</h3>
+            <p>Placeholder — one sentence on your Python stack.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="3">
+            <div class="skill-card__icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <h3>Power BI</h3>
+            <p>Placeholder — one sentence on Power BI.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal>
+            <div class="skill-card__icon"><i class="fa-solid fa-robot"></i></div>
+            <h3>Agentic AI</h3>
+            <p>Placeholder — one sentence on agentic / LLM systems.</p>
+          </article>
+
+          <article class="card skill-card" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon"><i class="fa-solid fa-comments"></i></div>
+            <h3>Data Storytelling</h3>
+            <p>Placeholder — one sentence on communicating insight.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         FEATURED PROJECTS  (large horizontal cards)
+         REPLACE: summaries, tags, images. Links go to project case studies.
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Selected Work</p>
+          <h2 id="projects-title">Featured projects</h2>
+          <p>Placeholder — one sentence introducing your case studies.</p>
+        </div>
+
+        <div class="grid" style="gap: var(--space-lg);">
+
+          <!-- Project 1 -->
+          <article class="feature-card" data-reveal>
+            <div class="feature-card__media">
+              <!-- REPLACE with: <img src="images/project-customer-growth.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Project image placeholder<br>(images/project-customer-growth.jpg)</span>
+              </div>
+            </div>
+            <div class="feature-card__body">
+              <h3>Customer Growth Intelligence</h3>
+              <p>Placeholder — one-sentence summary of the customer growth project.</p>
+              <div class="tag-list">
+                <span class="tag">Python</span>
+                <span class="tag">Machine Learning</span>
+                <span class="tag">Power BI</span>
+              </div>
+              <a class="btn btn--dark" href="projects/customer-growth.html">View Case Study</a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="feature-card" data-reveal>
+            <div class="feature-card__media">
+              <!-- REPLACE with: <img src="images/project-demand-planning.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Project image placeholder<br>(images/project-demand-planning.jpg)</span>
+              </div>
+            </div>
+            <div class="feature-card__body">
+              <h3>Demand Planning</h3>
+              <p>Placeholder — one-sentence summary of the demand planning project.</p>
+              <div class="tag-list">
+                <span class="tag">Forecasting</span>
+                <span class="tag">Time Series</span>
+                <span class="tag">Databricks</span>
+              </div>
+              <a class="btn btn--dark" href="projects/demand-planning.html">View Case Study</a>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="feature-card" data-reveal>
+            <div class="feature-card__media">
+              <!-- REPLACE with: <img src="images/project-funnel-analysis.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Project image placeholder<br>(images/project-funnel-analysis.jpg)</span>
+              </div>
+            </div>
+            <div class="feature-card__body">
+              <h3>Funnel Analytics</h3>
+              <p>Placeholder — one-sentence summary of the funnel analytics project.</p>
+              <div class="tag-list">
+                <span class="tag">A/B Testing</span>
+                <span class="tag">SQL</span>
+                <span class="tag">Statistics</span>
+              </div>
+              <a class="btn btn--dark" href="projects/funnel-analysis.html">View Case Study</a>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="feature-card" data-reveal>
+            <div class="feature-card__media">
+              <!-- REPLACE with: <img src="images/project-market-basket.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Project image placeholder<br>(images/project-market-basket.jpg)</span>
+              </div>
+            </div>
+            <div class="feature-card__body">
+              <h3>Market Basket Analysis</h3>
+              <p>Placeholder — one-sentence summary of the market basket project.</p>
+              <div class="tag-list">
+                <span class="tag">Association Rules</span>
+                <span class="tag">Python</span>
+                <span class="tag">Retail</span>
+              </div>
+              <a class="btn btn--dark" href="projects/market-basket.html">View Case Study</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         WHY WORK WITH ME  (stat highlights)
+         REPLACE: every number and label below
+         ======================================================================= -->
+    <section class="section" aria-labelledby="why-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Why Work With Me</p>
+          <h2 id="why-title">Experience that drives measurable impact</h2>
+          <p>Placeholder — a short paragraph on the outcomes you deliver for clients and teams.</p>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="stat" data-reveal>
+            <div class="stat__number">10+</div>
+            <span class="stat__label">Years of Experience (placeholder)</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="1">
+            <div class="stat__number">8</div>
+            <span class="stat__label">Industries Served (placeholder)</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="2">
+            <div class="stat__number">20+</div>
+            <span class="stat__label">Technologies (placeholder)</span>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat__number">$XM</div>
+            <span class="stat__label">Business Impact (placeholder)</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="1">
+            <div class="stat__number">15</div>
+            <span class="stat__label">Teams Led (placeholder)</span>
+          </div>
+          <div class="stat" data-reveal data-reveal-delay="2">
+            <div class="stat__number">30+</div>
+            <span class="stat__label">Talks &amp; Webinars (placeholder)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         SPEAKING & THOUGHT LEADERSHIP
+         REPLACE: webinar title, description, video/thumbnail
+         ======================================================================= -->
+    <section class="section section--mist" aria-labelledby="speaking-title">
+      <div class="container">
+        <div class="grid grid--2" style="align-items:center; gap: var(--space-lg);">
+          <div data-reveal>
+            <p class="eyebrow">Speaking &amp; Thought Leadership</p>
+            <h2 id="speaking-title">Webinar title placeholder</h2>
+            <p style="margin-top: var(--space-sm);">
+              Placeholder — a short description of a featured talk, webinar, or
+              keynote: the audience, the topic, and the takeaway.
+            </p>
+            <a class="link-arrow" href="https://rsmcanada.com/events/2026-events/enterprise-operational-intelligence-smarter-decisions-through-ai.html" style="margin-top: var(--space-md);">
+              Watch on the About page <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </div>
+
+          <!-- Video thumbnail with play overlay -->
+          <div class="video-block" data-reveal data-reveal-delay="1">
+            <img 
+              src="images/webinar_thumbnail.png" 
+              alt="Enterprise Operational Intelligence Webinar"
+              class="video-block__thumbnail"
+            />
+
+            <a 
+              class="video-block__play"
+              href="https://rsmcanada.com/events/2026-events/enterprise-operational-intelligence-smarter-decisions-through-ai.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Watch webinar"
+            >
+              <span><i class="fa-solid fa-play"></i></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         CONTACT CTA
+         REPLACE: LinkedIn / GitHub / email
+         ======================================================================= -->
+    <section class="section section--dark text-center" aria-labelledby="contact-title">
+      <div class="container container--narrow">
+        <h2 id="contact-title" data-reveal>Let's build something intelligent.</h2>
+        <p data-reveal data-reveal-delay="1" style="margin-top: var(--space-sm);">
+          Placeholder — one inviting sentence encouraging visitors to connect
+          about consulting, collaboration, or speaking.
+        </p>
+        <div class="btn-group btn-group--center" data-reveal data-reveal-delay="2" style="margin-top: var(--space-lg);">
+          <a class="btn btn--primary" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener">
+            <i class="fa-brands fa-linkedin"></i> LinkedIn
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/yourusername" target="_blank" rel="noopener">
+            <i class="fa-brands fa-github"></i> GitHub
+          </a>
+          <!-- REPLACE: your email address -->
+          <a class="btn btn--ghost" href="mailto:you@example.com">
+            <i class="fa-solid fa-envelope"></i> Email
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER  (identical across pages — keep in sync)
+       ========================================================================= -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved. <!-- REPLACE name --></p>
+      <div class="footer__socials">
+        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <!-- Auto-update footer year -->
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

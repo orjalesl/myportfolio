@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: page title & description -->
+  <title>Portfolio — Your Name</title>
+  <meta name="description" content="Placeholder: a showcase of data science and AI case studies." />
+
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION (keep in sync) -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a class="nav__logo" href="index.html">Your<span>Name</span></a>
+      <div class="nav__links">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="about.html">About</a>
+        <a class="nav__link" href="portfolio.html">Portfolio</a>
+        <a class="nav__link" href="documents/resume.pdf" download>Resume</a>
+        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="about.html"><i class="fa-solid fa-user"></i>About</a>
+    <a href="portfolio.html"><i class="fa-solid fa-layer-group"></i>Portfolio</a>
+    <a href="documents/resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
+    <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+  </div>
+
+  <main>
+
+    <!-- HERO -->
+    <header class="hero section--offwhite">
+      <div class="container">
+        <p class="eyebrow" data-reveal>Portfolio</p>
+        <h1 class="hero__title" data-reveal data-reveal-delay="1">Case studies in data &amp; AI</h1>
+        <p class="hero__subtitle" data-reveal data-reveal-delay="2">
+          Placeholder — a short intro framing your portfolio as business stories,
+          not just technical reports. Each project moves from problem to impact.
+        </p>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         PREMIUM SHOWCASE CARDS  (Apple product-page feel)
+         Four large cards, each animating in on scroll.
+         REPLACE per card: image, title, business problem, skills, description,
+         technology chips, and the case-study link.
+         ======================================================================= -->
+    <section class="section">
+      <div class="container">
+        <div class="showcase">
+
+          <!-- CARD 1 — Customer Growth Intelligence -->
+          <article class="showcase-card" data-reveal>
+            <div class="showcase-card__media">
+              <!-- REPLACE with: <img src="images/project-customer-growth.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Large image placeholder<br>(images/project-customer-growth.jpg)</span>
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow">Case Study 01</p>
+              <h3>Customer Growth Intelligence</h3>
+              <p class="showcase-card__problem">Business problem: placeholder — the growth or retention challenge this project solved.</p>
+              <p class="showcase-card__skills"><strong>Skills:</strong> Machine Learning · Segmentation · Churn Modeling <!-- REPLACE --></p>
+              <p>Short description placeholder — one or two sentences on the approach and the outcome.</p>
+              <div class="tag-list">
+                <span class="tag">Python</span>
+                <span class="tag">scikit-learn</span>
+                <span class="tag">Power BI</span>
+                <span class="tag">Azure</span>
+              </div>
+              <a class="btn btn--dark" href="projects/customer-growth.html">Explore Case Study</a>
+            </div>
+          </article>
+
+          <!-- CARD 2 — Demand Planning -->
+          <article class="showcase-card" data-reveal>
+            <div class="showcase-card__media">
+              <!-- REPLACE with: <img src="images/project-demand-planning.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Large image placeholder<br>(images/project-demand-planning.jpg)</span>
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow">Case Study 02</p>
+              <h3>Demand Planning</h3>
+              <p class="showcase-card__problem">Business problem: placeholder — the forecasting / inventory challenge addressed.</p>
+              <p class="showcase-card__skills"><strong>Skills:</strong> Forecasting · Time Series · Optimization <!-- REPLACE --></p>
+              <p>Short description placeholder — one or two sentences on the approach and the outcome.</p>
+              <div class="tag-list">
+                <span class="tag">Python</span>
+                <span class="tag">Prophet</span>
+                <span class="tag">Databricks</span>
+                <span class="tag">Fabric</span>
+              </div>
+              <a class="btn btn--dark" href="projects/demand-planning.html">Explore Case Study</a>
+            </div>
+          </article>
+
+          <!-- CARD 3 — Funnel Analysis -->
+          <article class="showcase-card" data-reveal>
+            <div class="showcase-card__media">
+              <!-- REPLACE with: <img src="images/project-funnel-analysis.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Large image placeholder<br>(images/project-funnel-analysis.jpg)</span>
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow">Case Study 03</p>
+              <h3>Funnel Analysis</h3>
+              <p class="showcase-card__problem">Business problem: placeholder — the conversion / funnel drop-off challenge.</p>
+              <p class="showcase-card__skills"><strong>Skills:</strong> A/B Testing · Statistics · Product Analytics <!-- REPLACE --></p>
+              <p>Short description placeholder — one or two sentences on the approach and the outcome.</p>
+              <div class="tag-list">
+                <span class="tag">SQL</span>
+                <span class="tag">Python</span>
+                <span class="tag">Statistics</span>
+                <span class="tag">Power BI</span>
+              </div>
+              <a class="btn btn--dark" href="projects/funnel-analysis.html">Explore Case Study</a>
+            </div>
+          </article>
+
+          <!-- CARD 4 — Market Basket Analysis -->
+          <article class="showcase-card" data-reveal>
+            <div class="showcase-card__media">
+              <!-- REPLACE with: <img src="images/project-market-basket.jpg" alt="..."> -->
+              <div class="placeholder placeholder--wide">
+                <i class="fa-solid fa-image"></i>
+                <span>Large image placeholder<br>(images/project-market-basket.jpg)</span>
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow">Case Study 04</p>
+              <h3>Market Basket Analysis</h3>
+              <p class="showcase-card__problem">Business problem: placeholder — the cross-sell / assortment challenge.</p>
+              <p class="showcase-card__skills"><strong>Skills:</strong> Association Rules · Recommender Systems <!-- REPLACE --></p>
+              <p>Short description placeholder — one or two sentences on the approach and the outcome.</p>
+              <div class="tag-list">
+                <span class="tag">Python</span>
+                <span class="tag">mlxtend</span>
+                <span class="tag">Retail</span>
+                <span class="tag">SQL</span>
+              </div>
+              <a class="btn btn--dark" href="projects/market-basket.html">Explore Case Study</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT CTA -->
+    <section class="section section--dark text-center" aria-labelledby="contact-title">
+      <div class="container container--narrow">
+        <h2 id="contact-title" data-reveal>Have a problem worth solving?</h2>
+        <p data-reveal data-reveal-delay="1" style="margin-top: var(--space-sm);">
+          Placeholder — one inviting sentence about starting a conversation.
+        </p>
+        <div class="btn-group btn-group--center" data-reveal data-reveal-delay="2" style="margin-top: var(--space-lg);">
+          <a class="btn btn--primary" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          <a class="btn btn--ghost" href="mailto:you@example.com"><i class="fa-solid fa-envelope"></i> Email</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (keep in sync) -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved.</p>
+      <div class="footer__socials">
+        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
