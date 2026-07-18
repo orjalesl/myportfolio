@@ -158,7 +158,7 @@ p { color: var(--color-gray-600); }
 
 /* Gradient text accent (used sparingly on select headlines) */
 .gradient-text {
-  background: linear-gradient(120deg, var(--color-charcoal) 30%, var(--color-accent) 130%);
+  background: linear-gradient(120deg, var(--color-charcoal) 10%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -242,7 +242,7 @@ p { color: var(--color-gray-600); }
 }
 
 .btn--secondary {
-  background-color: transparent;
+  background-color: var(--color-mist);
   color: var(--color-accent);
   border: 1px solid var(--color-gray-200);
 }
@@ -349,7 +349,7 @@ p { color: var(--color-gray-600); }
   transition: color var(--dur-fast) var(--ease);
 }
 .nav__link:hover { color: var(--color-charcoal); }
-.nav__link.is-active { color: var(--color-charcoal); font-weight: 500; }
+.nav__link.is-active { color: var(--color-accent); font-weight: 500; }
 
 .nav__link--icon { font-size: 1rem; }
 
@@ -422,6 +422,28 @@ body.no-scroll { overflow: hidden; }
   padding-top: calc(var(--nav-height) + var(--space-xl));
   padding-bottom: var(--space-xl);
   text-align: center;
+}
+
+/* Hero with the knowledge-graph background (home page only).
+   The canvas sits edge-to-edge behind the content; the content is lifted
+   above it with z-index so headline, buttons and nav stay fully readable. */
+.hero--graph {
+  position: relative;
+  overflow: hidden;      /* clip the graph to the hero — no visible boundary */
+  isolation: isolate;
+}
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  pointer-events: none;  /* never intercept clicks/taps on hero content */
+}
+.hero--graph > .container {
+  position: relative;
+  z-index: 1;            /* content above the canvas */
 }
 
 .hero__title {
@@ -610,6 +632,53 @@ body.no-scroll { overflow: hidden; }
 }
 .csr-block__label i { font-size: 0.95rem; }
 .csr-block p { font-size: var(--fs-small); margin: 0; }
+
+/* Results KPI mini-cards — large blue metric + brief explanation.
+   Sits inside the Results .csr-block; wraps 3–5 cards responsively. */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 2000px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-mini {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) 0.75rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.kpi-mini__value {
+  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+  padding: 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.kpi-mini__desc {
+  margin-top: 0.45rem;
+  font-size: var(--fs-caption);
+  color: var(--color-gray-600);
+  line-height: 1.4;
+}
 
 /* --------------------------------------------------------------------------
    11. FEATURED PROJECT CARDS (large horizontal)

@@ -7,13 +7,13 @@
   <!-- ==========================================================
        REPLACE: page title & meta description for SEO
        ========================================================== -->
-  <title>Overview - Lucas Orjales</title>
+  <title>Lucas Orjales - Data Scientist</title>
   <meta name="description" content="Placeholder: one-line description of who you are and what you do — used by search engines and social previews." />
 
   <!-- Social / Open Graph preview (REPLACE image + text) -->
-  <meta property="og:title" content="Lucas Orjales — Supervisor Data Scientist" />
+  <meta property="og:title" content="Lucas Orjales - Data Scientist" />
   <meta property="og:description" content="Placeholder social share description." />
-  <meta property="og:image" content="images/og-preview.jpg" />
+  <meta property="og:image" content="images/logo_white.png" />
   <meta property="og:type" content="website" />
 
   <!-- Favicon (REPLACE with your own icon) -->
@@ -50,8 +50,9 @@
         <!-- REPLACE: resume PDF path (downloads on click) -->
         <a class="nav__link" href="documents/resume.pdf" download>Resume</a>
         <!-- REPLACE: GitHub & LinkedIn URLs -->
-        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a class="nav__link nav__link--icon" href="https://github.com/orjalesl" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/"
+         target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
       </div>
 
       <!-- Hamburger (mobile only) -->
@@ -77,51 +78,54 @@
          HERO
          REPLACE: headline, subheadline, portrait image
          ======================================================================= -->
-    <header class="hero section--offwhite">
+    <header class="hero hero--graph section--offwhite">
+      <!-- Knowledge-graph background animation (see js/hero-graph.js).
+           Purely decorative; sits behind all hero content. -->
+      <canvas class="hero__canvas" id="heroGraph" aria-hidden="true"></canvas>
+
       <div class="container">
-        <p class="eyebrow" data-reveal>Supervisor Data Scientist</p>
+        <p class="eyebrow" data-reveal>DATA SCIENTIST • AI ENGINEER • DATA ENGINEER</p>
 
         <!-- REPLACE: main headline -->
         <h1 class="hero__title gradient-text" data-reveal data-reveal-delay="1">
-          Turning complex data into confident business decisions.
+          Transforming enterprise data into AI powered business solutions.
         </h1>
 
         <!-- REPLACE: subheadline -->
         <p class="hero__subtitle" data-reveal data-reveal-delay="2">
-          Subheadline placeholder — a single, elegant sentence about the value
-          you bring: analytics, machine learning, and AI strategy for leaders.
+          Explore enterprise AI platforms, machine learning solutions, and analytics 
+          projects built across finance, professional serverices, non-profit, manufacturing, and public sector organizations.
         </p>
 
         <div class="btn-group btn-group--center" data-reveal data-reveal-delay="3">
-          <a class="btn btn--primary" href="portfolio.html">View Portfolio</a>
+          <a class="btn btn--primary" href="portfolio.html"><i class="fa-solid fa-layer-group"></i> Explore Portfolio</a>
           <!-- REPLACE: resume PDF path -->
-          <a class="btn btn--secondary" href="documents/Lucas Orjales Resume.pdf" download>
-            <i class="fa-solid fa-arrow-down"></i> Download Resume
-          </a>
+          <a class="btn btn--secondary" href="about.html"><i class="fa-solid fa-user"></i> About Me</a>
         </div>
       </div>
     </header>
 
     <!-- =======================================================================
-         ENTERPRISE EXPERIENCE
+         ENTERPRISE IMPACT
          Each card = one engagement. For every card REPLACE:
            - the title
            - the highlight tags
-           - the Challenge / Solution / Results placeholder text
+           - the Challenge and Solution placeholder text
+           - the Results KPI cards (metric + one-sentence explanation each)
          ======================================================================= -->
     <section class="section section--mist" aria-labelledby="experience-title">
       <div class="container container--wide">
         <div class="section-header" data-reveal>
-          <p class="eyebrow">Enterprise Experience</p>
-          <h2 id="experience-title">Work that moved the needle</h2>
-          <p>Placeholder — one sentence framing the enterprise engagements below.</p>
+          <p class="eyebrow">Enterprise Impact</p>
+          <h2 id="experience-title">Solutions that moved the needle</h2>
+          <p>Delivering AI and analytics solutions that solve real business challenges.</p>
         </div>
 
         <div class="experience-list">
 
           <!-- Experience 1 -->
           <article class="experience-card" data-reveal>
-            <span class="tag tag--industry"> FINANCE &amp; AUTDITING</span>
+            <span class="tag tag--industry eyebrow"></p> Finance &amp; Audtiting</span>
             <div class="experience-card__head">
               <h3>AI Audit Readiness Platform</h3>
               <div class="tag-list">
@@ -136,24 +140,53 @@
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
                 <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
+                <p>
+                  Finance and internal audit teams lacked a scalable way to continuously monitor enterprise 
+                  financial transactions for anomalies. Manual reviews struggled to keep pace with growing 
+                  data volumes, leaving high risk journal entries difficult to identify and investigate 
+                  efficiently.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
                 <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
+                <p>
+                  Designed and implemented an AI powered audit platform that centralized 
+                  financial data, applied machine learning, and surfaced high risk 
+                  transactions through interactive dashboards with integrated investigation and remediation workflows.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
+                <!-- REPLACE each KPI: the metric (kpi-mini__value) + a brief
+                     sentence explaining it (kpi-mini__desc). Add or remove
+                     .kpi-mini blocks to show 3–5 KPIs. -->
+                <div class="kpi-grid">
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">100%</div>
+                    <p class="kpi-mini__desc">Journal entry coverage</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">2× - 4×</div>
+                    <p class="kpi-mini__desc">More journal entries reviewed per hour</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">80%</div>
+                    <p class="kpi-mini__desc">Reduction in monthly pre audit preparation time</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">$300K+</div>
+                    <p class="kpi-mini__desc">Annual software cost avoided
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
 
           <!-- Experience 2 -->
           <article class="experience-card" data-reveal>
-            <span class="tag tag--industry"> STRATEGY &amp; MARKETING</span>
+            <span class="tag tag--industry eyebrow"> Strategy &amp; Marketing</span>
             <div class="experience-card__head">
               <h3>Member Churn</h3>
               <div class="tag-list">
@@ -168,24 +201,50 @@
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
                 <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
+                <p>
+                  Membership growth had plateaued because new acquisitions were offset by customer attrition. 
+                  The organization lacked visibility into which members were most likely to leave and the 
+                  factors driving churn.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
                 <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
+                <p>
+                  Developed predictive churn models in Azure Machine Learning using demographic, behavioral, and transactional data. 
+                  Delivered an interactive Power BI dashboard that translated model outputs into actionable business insights.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
+                <!-- REPLACE each KPI: the metric (kpi-mini__value) + a brief
+                     sentence explaining it (kpi-mini__desc). Add or remove
+                     .kpi-mini blocks to show 3–5 KPIs. -->
+                <div class="kpi-grid">
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">80%+</div>
+                    <p class="kpi-mini__desc">Model recall achieved</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">$450K+</div>
+                    <p class="kpi-mini__desc">Uncovered potential annual revenue at risk</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">300%+</div>
+                    <p class="kpi-mini__desc">ROI from retention campaigns</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">3</div>
+                    <p class="kpi-mini__desc">Analytics initiatives launched from project success</p>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
 
           <!-- Experience 3 -->
           <article class="experience-card" data-reveal>
-            <span class="tag tag--industry"> OPERATIONS</span>
+            <span class="tag tag--industry eyebrow"> Operations</span>
             <div class="experience-card__head">
               <h3>Claims Workbench Platform</h3>
               <div class="tag-list">
@@ -202,55 +261,53 @@
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
                 <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
+                <p>
+                  Claims processors relied on manual assignment methods that resulted in inconsistent 
+                  workloads, missed service level agreements, and growing provider dissatisfaction due 
+                  to processing delays.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
                 <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
+                <p>
+                  Designed and developed an intelligent claims workbench that automated claim prioritization, 
+                  workload allocation, and processor assignment based on claim urgency, employee skill sets, 
+                  daily capacity, and operational constraints. Administrative tools provided supervisors with 
+                  real time control over allocation rules and staffing adjustments.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
+                <!-- REPLACE each KPI: the metric (kpi-mini__value) + a brief
+                     sentence explaining it (kpi-mini__desc). Add or remove
+                     .kpi-mini blocks to show 3–5 KPIs. -->
+                <div class="kpi-grid">
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">95%</div>
+                    <p class="kpi-mini__desc">Reduction in late claim processing</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">$500K+</div>
+                    <p class="kpi-mini__desc">Operational cost savings within 6 months</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">100%</div>
+                    <p class="kpi-mini__desc">Automated claim prioritization and assignment</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">Real Time</div>
+                    <p class="kpi-mini__desc">Capacity based workload balancing</p>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
+
 
           <!-- Experience 4 -->
           <article class="experience-card" data-reveal>
-            <span class="tag tag--industry"> STRATEGY &amp; MARKETING</span>
-            <div class="experience-card__head">
-              <h3>Promotion Experimentation</h3>
-              <div class="tag-list">
-                <span class="tag"><i class="fa-solid fa-flask"></i> Experiment</span>
-                <span class="tag"><i class="fa-solid fa-square-root-variable"></i> Statistics</span>
-                <span class="tag"><i class="fa-solid fa-chart-simple"></i> Power BI</span>
-                <span class="tag"><i class="fa-brands fa-python"></i> Python</span>
-              </div>
-            </div>
-            <div class="experience-card__csr">
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
-                <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
-              </div>
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
-                <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
-              </div>
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
-              </div>
-            </div>
-          </article>
-
-          <!-- Experience 5 -->
-          <article class="experience-card" data-reveal>
-            <span class="tag tag--industry"> OPERATIONS</span>
+            <span class="tag tag--industry eyebrow"> Operations</span>
             <div class="experience-card__head">
               <h3>Building &amp; Zoning Bylaw AI Agent</h3>
               <div class="tag-list">
@@ -266,46 +323,44 @@
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
                 <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
+                <p>
+                  Building inspectors spent significant time manually searching municipal and provincial 
+                  bylaws or requesting clarification from subject matter experts, delaying inspections 
+                  and permit approvals.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
                 <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
+                <p>
+                  Developed an AI powered conversational agent using Copilot Studio that leveraged 
+                  municipal and provincial building regulations to provide inspectors with accurate, 
+                  contextual responses during inspections and permitting activities.
+                </p>
               </div>
               <div class="csr-block">
                 <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
-              </div>
-            </div>
-          </article>
-
-          <!-- Experience 6 — PLACEHOLDER card (replace title, tags, and C/S/R text) -->
-          <article class="experience-card" data-reveal>
-            <div class="experience-card__head">
-              <h3>Project title placeholder</h3>
-              <div class="tag-list">
-                <span class="tag">Tag</span>
-                <span class="tag">Tag</span>
-                <span class="tag">Tag</span>
-              </div>
-            </div>
-            <div class="experience-card__csr">
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-circle-exclamation"></i> Challenge</div>
-                <!-- REPLACE: describe the challenge -->
-                <p>Challenge placeholder — the problem this engagement set out to solve.</p>
-              </div>
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-lightbulb"></i> Solution</div>
-                <!-- REPLACE: describe the solution -->
-                <p>Solution placeholder — what you built and how you approached it.</p>
-              </div>
-              <div class="csr-block">
-                <div class="csr-block__label"><i class="fa-solid fa-chart-line"></i> Results</div>
-                <!-- REPLACE: describe the results -->
-                <p>Results placeholder — the measurable outcome and business impact.</p>
+                <!-- REPLACE each KPI: the metric (kpi-mini__value) + a brief
+                     sentence explaining it (kpi-mini__desc). Add or remove
+                     .kpi-mini blocks to show 3–5 KPIs. -->
+                <div class="kpi-grid">
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">90%</div>
+                    <p class="kpi-mini__desc">Reduction in bylaw research time</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">24/7</div>
+                    <p class="kpi-mini__desc">Availability of the AI agent</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">100%</div>
+                    <p class="kpi-mini__desc">Automated knowledge base updates</p>
+                  </div>
+                  <div class="kpi-mini">
+                    <div class="kpi-mini__value">2×</div>
+                    <p class="kpi-mini__desc">Increase in productivity</p>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
@@ -510,63 +565,20 @@
     </section>
 
     <!-- =======================================================================
-         WHY WORK WITH ME  (stat highlights)
-         REPLACE: every number and label below
-         ======================================================================= -->
-    <section class="section" aria-labelledby="why-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Why Work With Me</p>
-          <h2 id="why-title">Experience that drives measurable impact</h2>
-          <p>Placeholder — a short paragraph on the outcomes you deliver for clients and teams.</p>
-        </div>
-
-        <div class="grid grid--3">
-          <div class="stat" data-reveal>
-            <div class="stat__number">10+</div>
-            <span class="stat__label">Years of Experience (placeholder)</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="1">
-            <div class="stat__number">8</div>
-            <span class="stat__label">Industries Served (placeholder)</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="2">
-            <div class="stat__number">20+</div>
-            <span class="stat__label">Technologies (placeholder)</span>
-          </div>
-          <div class="stat" data-reveal>
-            <div class="stat__number">$XM</div>
-            <span class="stat__label">Business Impact (placeholder)</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="1">
-            <div class="stat__number">15</div>
-            <span class="stat__label">Teams Led (placeholder)</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="2">
-            <div class="stat__number">30+</div>
-            <span class="stat__label">Talks &amp; Webinars (placeholder)</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
          SPEAKING & THOUGHT LEADERSHIP
          REPLACE: webinar title, description, video/thumbnail
          ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="speaking-title">
+    <section class="section" aria-labelledby="speaking-title">
       <div class="container">
         <div class="grid grid--2" style="align-items:center; gap: var(--space-lg);">
           <div data-reveal>
             <p class="eyebrow">Speaking &amp; Thought Leadership</p>
-            <h2 id="speaking-title">Webinar title placeholder</h2>
+            <h2 id="speaking-title">Enterprise Operational Intelligence</h2>
             <p style="margin-top: var(--space-sm);">
-              Placeholder — a short description of a featured talk, webinar, or
-              keynote: the audience, the topic, and the takeaway.
+              Featured webinar exploring enterprise operational intelligence and how the AI Audit 
+              Readiness Platform I built for clients helps teams identify risk, streamline review, 
+              and accelerate audit readiness.
             </p>
-            <a class="link-arrow" href="https://rsmcanada.com/events/2026-events/enterprise-operational-intelligence-smarter-decisions-through-ai.html" style="margin-top: var(--space-md);">
-              Watch on the About page <i class="fa-solid fa-chevron-right"></i>
-            </a>
           </div>
 
           <!-- Video thumbnail with play overlay -->
@@ -591,49 +603,24 @@
       </div>
     </section>
 
-    <!-- =======================================================================
-         CONTACT CTA
-         REPLACE: LinkedIn / GitHub / email
-         ======================================================================= -->
-    <section class="section section--dark text-center" aria-labelledby="contact-title">
-      <div class="container container--narrow">
-        <h2 id="contact-title" data-reveal>Let's build something intelligent.</h2>
-        <p data-reveal data-reveal-delay="1" style="margin-top: var(--space-sm);">
-          Placeholder — one inviting sentence encouraging visitors to connect
-          about consulting, collaboration, or speaking.
-        </p>
-        <div class="btn-group btn-group--center" data-reveal data-reveal-delay="2" style="margin-top: var(--space-lg);">
-          <a class="btn btn--primary" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener">
-            <i class="fa-brands fa-linkedin"></i> LinkedIn
-          </a>
-          <a class="btn btn--ghost" href="https://github.com/yourusername" target="_blank" rel="noopener">
-            <i class="fa-brands fa-github"></i> GitHub
-          </a>
-          <!-- REPLACE: your email address -->
-          <a class="btn btn--ghost" href="mailto:you@example.com">
-            <i class="fa-solid fa-envelope"></i> Email
-          </a>
-        </div>
-      </div>
-    </section>
-
-  </main>
 
   <!-- =========================================================================
        FOOTER  (identical across pages — keep in sync)
        ========================================================================= -->
   <footer class="footer">
     <div class="container footer__inner">
-      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved. <!-- REPLACE name --></p>
+      <p class="footer__copy">© <span id="year">2026</span> Lucas Orjales. All rights reserved. <!-- REPLACE name --></p>
       <div class="footer__socials">
-        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/orjalesl" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:lporjales@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
       </div>
     </div>
   </footer>
 
   <script src="js/main.js"></script>
+  <!-- Hero knowledge-graph background (home page only) -->
+  <script src="js/hero-graph.js"></script>
   <!-- Auto-update footer year -->
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
