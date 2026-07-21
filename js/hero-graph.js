@@ -1,331 +1,354 @@
 /* ==========================================================================
-   hero-graph.js — "Fabric of Analytics" hero background
+   hero-graph.js — "Organic Fabric of Data" Hero Background
    --------------------------------------------------------------------------
-   Vanilla JS + Canvas 2D. No libraries.
-
-   A continuous, evenly-spaced mesh (a flexible "fabric") of connected data
-   points stretched across the hero. At rest it breathes with an almost
-   imperceptible swell. Every few seconds a SINGLE compression wave enters
-   from just off the right edge and travels left, physically compressing the
-   fabric along a smooth Gaussian profile and tinting that region from gray
-   through soft blue to accent blue — like information flowing through
-   connected enterprise data. The cursor stretches nearby fabric toward it.
-   A subtle perspective adds depth. Honors prefers-reduced-motion (static
-   mesh, no animation). Fades out as the hero scrolls away.
-
-   Self-initialising: only runs if #heroGraph exists (the home page).
+   Vanilla JS + Canvas 2D. 
+   Features:
+   - 3D Irregular/Jittered Mesh
+   - Multi-harmonic continuous breathing topology
+   - Smooth Right-to-Left compression waves (with edge-fade dampening)
+   - 2 to 3 second resting breaks between wave pulses
+   - Dynamic cursor interaction & floating data particles
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  var canvas = document.getElementById("heroGraph");
+  const canvas = document.getElementById("heroGraph");
   if (!canvas) return;
-  var hero = canvas.closest(".hero");
+  const hero = canvas.closest(".hero");
   if (!hero) return;
 
-  var ctx = canvas.getContext("2d", { alpha: true });
-  var PI2 = Math.PI * 2;
+  const ctx = canvas.getContext("2d", { alpha: true });
+  const PI2 = Math.PI * 2;
 
-  /* ---- Palette (RGB triplets) --------------------------------------------
-     Resting fabric = medium/light gray. Wave = soft blue → accent blue. */
-  var NODE_GRAY = [104, 110, 122];
-  var LINE_GRAY = [150, 155, 165];
-  var SOFT_BLUE = [92, 150, 232];
-  var ACCENT    = [0, 113, 227];
+  /* ---- Color Palette ---- */
+  const COLOR_BASE   = [120, 140, 175]; // Cool gray-blue base
+  const COLOR_MID    = [ 56, 189, 248]; // Cyan / Light Sky
+  const COLOR_ACCENT = [ 99, 102, 241]; // Indigo / Accent
+  const COLOR_GLOW   = [168,  85, 247]; // Deep violet accent wave
 
-  /* Resting opacities (spec: nodes 35–45%, lines 18–25%) */
-  var NODE_ALPHA = 0.42;
-  var LINE_ALPHA = 0.20;
+  /* ---- Grid & Mesh Settings ---- */
+  let W = 0, H = 0, dpr = 1;
+  let COLS = 45, ROWS = 35;
+  let grid = [];                         // 3D Point Matrix
+  let particles = [];                    // Floating ambient data nodes
+  let gridMinX = -1000, gridMaxX = 1000; // Calculated dynamically in initMesh
 
-  /* ---- Tunables ---- */
-  var IDLE_AMP    = 2.6;   /* px — breathing amplitude */
-  var WAVE_AMP    = 8;     /* px — max compression displacement (~5px effective) */
-  var MOUSE_R     = 150;   /* px — cursor influence radius */
-  var MOUSE_PULL  = 22;    /* px — max cursor stretch */
-  var EASE        = 0.14;  /* per-frame position easing → elastic relaxation */
-  var TOP_SCALE   = 0.94;  /* perspective: top slightly farther */
-  var BOT_SCALE   = 1.06;  /* perspective: bottom slightly closer */
+  /* ---- Animation & Interaction State ---- */
+  let running = false, rafId = null;
+  let epoch = 0;
+  
+  // Wave state (travels right to left)
+  let wave = {
+    x: 1000,
+    speed: 11,                           // Horizontal propagation speed
+    width: 480,                          // Width of the pulse crest
+    active: false
+  };
+  let nextWaveAt = 0;
 
-  /* ---- State ---- */
-  var W = 0, H = 0, dpr = 1;
-  var cxHalf = 0, cyHalf = 0;
-  var nodes = [];
-  var edges = [];          /* pairs of node indices */
-  var ncols = 0, nrows = 0;
-
-  var running = false, rafId = null;
-  var epoch = 0, lastNow = 0;
-
-  /* Single wave only */
-  var wave = null;         /* { start, dur, sigma, xStart, xEnd } */
-  var waveX = null;
-  var nextWaveAt = 0;
-
-  /* Mouse (flat-space, perspective is subtle enough to ignore for input) */
-  var mouse = { x: -9999, y: -9999, active: false };
-  var mFlatX = -9999, mFlatY = -9999, mInfluence = 0;
-
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // Mouse interaction state
+  const mouse = { x: -9999, y: -9999, targetX: -9999, targetY: -9999, active: false };
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   /* ----------------------------------------------------------------------
-     Helpers
+     3D Projection Engine
      ---------------------------------------------------------------------- */
-  function rand(a, b) { return a + Math.random() * (b - a); }
-  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
-  function smoothstep(t) { t = clamp01(t); return t * t * (3 - 2 * t); }
+  const CAMERA = {
+    fov: 380,
+    angleX: 0.52, // Slight tilt down to view surface topology
+    offsetY: 60   // Vertical offset centering
+  };
 
-  function isMobile() { return window.innerWidth < 640; }
+  function project3D(x, y, z) {
+    const cosX = Math.cos(CAMERA.angleX);
+    const sinX = Math.sin(CAMERA.angleX);
 
-  function targetNodes() {
-    var w = window.innerWidth;
-    if (w >= 1024) return 500;  /* desktop 180–220 */
-    if (w >= 640) return 135;   /* tablet  120–150 */
-    return 75;                  /* mobile  60–90   */
-  }
+    const y1 = y * cosX - z * sinX;
+    const z1 = y * sinX + z * cosX;
 
-  /* Perspective: uniform depth-scale about the centre. Top (small y) is
-     pulled inward (farther); bottom pushed outward (closer). Barely visible. */
-  function projX(fx, fy) {
-    var s = TOP_SCALE + (BOT_SCALE - TOP_SCALE) * clamp01(fy / H);
-    return cxHalf + (fx - cxHalf) * s;
-  }
-  function projY(fx, fy) {
-    var s = TOP_SCALE + (BOT_SCALE - TOP_SCALE) * clamp01(fy / H);
-    return cyHalf + (fy - cyHalf) * s;
+    const distance = CAMERA.fov + z1;
+    const scale = CAMERA.fov / Math.max(distance, 1);
+
+    const screenX = W / 2 + x * scale;
+    const screenY = H / 2 + (y1 + CAMERA.offsetY) * scale;
+
+    return { x: screenX, y: screenY, scale: scale };
   }
 
   /* ----------------------------------------------------------------------
-     Sizing / DPR
+     Data Initialization (Irregular Organic Mesh)
      ---------------------------------------------------------------------- */
   function resize() {
     W = hero.clientWidth;
     H = hero.clientHeight;
-    cxHalf = W / 2;
-    cyHalf = H / 2;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
+
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     canvas.style.width = W + "px";
     canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    COLS = W < 640 ? 24 : W < 1024 ? 36 : 48;
+    ROWS = W < 640 ? 20 : W < 1024 ? 28 : 36;
   }
 
-  /* ----------------------------------------------------------------------
-     Build the uniform mesh (with overscan so it runs edge-to-edge with no
-     visible boundary and no empty regions).
-     ---------------------------------------------------------------------- */
-  function buildMesh() {
-    var gap = Math.sqrt((W * H) / targetNodes());
-    var visCols = Math.max(2, Math.round(W / gap));
-    var visRows = Math.max(2, Math.round(H / gap));
-    var gapX = W / visCols;
-    var gapY = H / visRows;
+  function initMesh() {
+    grid = [];
+    const spanX = W * 1.8;
+    const spanZ = 1200;
+    const spacingX = spanX / COLS;
+    const spacingZ = spanZ / ROWS;
 
-    var OVER = 2; /* extra rings of nodes beyond each edge */
-    ncols = visCols + OVER * 2 + 1;
-    nrows = visRows + OVER * 2 + 1;
+    // Track 3D mesh boundaries for wave trigger/exit calculations
+    gridMinX = (-COLS / 2) * spacingX;
+    gridMaxX = (COLS / 2) * spacingX;
 
-    nodes = [];
-    for (var j = 0; j < nrows; j++) {
-      for (var i = 0; i < ncols; i++) {
-        var bx = (i - OVER) * gapX;
-        var by = (j - OVER) * gapY;
+    for (let r = 0; r < ROWS; r++) {
+      grid[r] = [];
+      for (let c = 0; c < COLS; c++) {
+        // Base regular grid positions
+        let bx = (c - COLS / 2) * spacingX;
+        let bz = (r - ROWS / 2) * spacingZ;
 
-        /* Add a random jitter offset to break up the perfect squares.
-           0.35 means up to 35% displacement of the gap size. 
-           Adjust this factor up or down to change the "organicness". */
-        var jitterAmount = 0.35; 
-        bx += rand(-gapX * jitterAmount, gapX * jitterAmount);
-        by += rand(-gapY * jitterAmount, gapY * jitterAmount);
-
-        nodes.push({
-          i: i, j: j,
-          bx: bx, by: by,   /* fixed grid anchor (flat space) */
-          cx: bx, cy: by,   /* current eased position (flat space) */
-          px: bx, py: by,   /* projected screen position */
-          ci: 0             /* wave intensity 0..1 (drives colour) */
-        });
-      }
-    }
-
-    /* Mesh edges: right + down neighbours = one continuous fabric */
-    edges = [];
-    for (var jj = 0; jj < nrows; jj++) {
-      for (var ii = 0; ii < ncols; ii++) {
-        var idx = jj * ncols + ii;
-        if (ii < ncols - 1) edges.push(idx, idx + 1);
-        if (jj < nrows - 1) edges.push(idx, idx + ncols);
-      }
-    }
-  }
-
-  /* ----------------------------------------------------------------------
-     Wave lifecycle — one at a time, right → left, then a pause
-     ---------------------------------------------------------------------- */
-  function startWave(now) {
-    var sigma = W * 0.14;                 /* Gaussian half-width */
-    var dur = isMobile() ? 3000 : rand(4000, 6000);
-    wave = {
-      start: now,
-      dur: dur,
-      sigma: sigma,
-      xStart: W + sigma * 2.5,            /* just outside the right edge */
-      xEnd: -sigma * 2.5                  /* fully exited on the left */
-    };
-    waveX = wave.xStart;
-  }
-
-  function updateWave(now) {
-    if (!wave) {
-      if (now >= nextWaveAt) startWave(now);
-      return;
-    }
-    var p = (now - wave.start) / wave.dur;
-    if (p >= 1) {
-      wave = null;
-      waveX = null;
-      nextWaveAt = now + rand(3500, 6000); /* breathe between waves */
-    } else {
-      waveX = wave.xStart + (wave.xEnd - wave.xStart) * p; /* steady travel */
-    }
-  }
-
-  /* ----------------------------------------------------------------------
-     Colour blend: gray → soft blue → accent blue, driven by intensity
-     ---------------------------------------------------------------------- */
-  function mix(base, ci) {
-    /* ci 0..1; 0..0.5 gray→soft, 0.5..1 soft→accent */
-    var r, g, b, f;
-    if (ci < 0.5) {
-      f = ci / 0.5;
-      r = base[0] + (SOFT_BLUE[0] - base[0]) * f;
-      g = base[1] + (SOFT_BLUE[1] - base[1]) * f;
-      b = base[2] + (SOFT_BLUE[2] - base[2]) * f;
-    } else {
-      f = (ci - 0.5) / 0.5;
-      r = SOFT_BLUE[0] + (ACCENT[0] - SOFT_BLUE[0]) * f;
-      g = SOFT_BLUE[1] + (ACCENT[1] - SOFT_BLUE[1]) * f;
-      b = SOFT_BLUE[2] + (ACCENT[2] - SOFT_BLUE[2]) * f;
-    }
-    return ((r | 0)) + "," + ((g | 0)) + "," + ((b | 0));
-  }
-
-  /* ----------------------------------------------------------------------
-     Per-frame update of node positions + intensity
-     ---------------------------------------------------------------------- */
-  function updateNodes(time, animated) {
-    /* ease the mouse influence + smoothed position for elastic return */
-    var targetInf = (animated && mouse.active) ? 1 : 0;
-    mInfluence += (targetInf - mInfluence) * 0.10;
-    if (mouse.active) {
-      mFlatX += (mouse.x - mFlatX) * 0.18;
-      mFlatY += (mouse.y - mFlatY) * 0.18;
-    }
-
-    var haveWave = animated && wave;
-    var sigma = haveWave ? wave.sigma : 1;
-    var inv2s2 = haveWave ? 1 / (2 * sigma * sigma) : 0;
-
-    for (var n = 0; n < nodes.length; n++) {
-      var nd = nodes[n];
-      var tx = nd.bx, ty = nd.by, ci = 0;
-
-      if (animated) {
-        /* --- idle breathing: coherent low-frequency swell --- */
-        tx += IDLE_AMP * Math.sin(nd.bx * 0.012 + nd.by * 0.010 + time * 0.50);
-        ty += IDLE_AMP * Math.cos(nd.by * 0.013 + nd.bx * 0.008 + time * 0.42);
-
-        /* --- individual slow drift: unique to each node --- */
-        // Uses the node index 'n' so every point wanders on its own path
-        tx += 4.0 * Math.sin(time * 0.25 + n * 0.7); 
-        ty += 4.0 * Math.cos(time * 0.20 + n * 0.4);
-
-        /* --- compression wave (Gaussian, pushes toward the wave centre) --- */
-        if (haveWave) {
-          var dx = nd.bx - waveX;
-          var e = Math.exp(-(dx * dx) * inv2s2);   /* 0..1 intensity */
-          tx += -(dx / sigma) * e * WAVE_AMP;       /* antisymmetric → compresses */
-          ci = e;
+        /* --- Irregular / Organic Mesh Displacement --- 
+           Keeps edge borders structured while breaking internal square patterns */
+        if (r > 0 && r < ROWS - 1 && c > 0 && c < COLS - 1) {
+          const jitterAmount = 0.42; // Offset magnitude breaking square geometry
+          bx += (Math.sin(c * 17.3 + r * 31.7) * spacingX) * jitterAmount;
+          bz += (Math.cos(r * 13.1 + c * 23.9) * spacingZ) * jitterAmount;
         }
 
-        /* --- cursor stretch: nearby fabric eases toward the cursor --- */
-        if (mInfluence > 0.001) {
-          var mdx = mFlatX - nd.bx, mdy = mFlatY - nd.by;
-          var md = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (md < MOUSE_R && md > 0.001) {
-            var pull = smoothstep(1 - md / MOUSE_R) * MOUSE_PULL * mInfluence;
-            tx += (mdx / md) * pull;
-            ty += (mdy / md) * pull;
+        grid[r][c] = {
+          wx: bx,
+          wy: 0,
+          wz: bz,
+          seed: Math.random() * Math.PI * 2, // Unique phase shift per node
+          intensity: 0,
+          px: 0, py: 0, scale: 0
+        };
+      }
+    }
+
+    // Floating ambient data dust particles
+    particles = [];
+    const pCount = W < 640 ? 20 : 50;
+    for (let i = 0; i < pCount; i++) {
+      particles.push({
+        x: (Math.random() - 0.5) * W * 1.6,
+        y: (Math.random() - 0.5) * 350,
+        z: Math.random() * 1000 - 300,
+        vy: -0.25 - Math.random() * 0.35,
+        size: 1 + Math.random() * 2
+      });
+    }
+  }
+
+  /* ----------------------------------------------------------------------
+     Wave Propagation & Smooth Lifecycle Dynamics
+     ---------------------------------------------------------------------- */
+  function triggerWave() {
+    // Start wave fully outside rightmost grid coordinate
+    wave.x = gridMaxX + wave.width; 
+    wave.active = true;
+  }
+
+  function updateTopology(time, now) {
+    // Smooth mouse position interpolation
+    mouse.x += (mouse.targetX - mouse.x) * 0.08;
+    mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+    // Advance Right-to-Left Wave
+    if (wave.active) {
+      wave.x -= wave.speed;
+
+      // Deactivate wave once it has fully passed off the left edge
+      if (wave.x < gridMinX - wave.width) {
+        wave.active = false;
+        // Schedule next wave after a clean 2 to 3 second pause
+        nextWaveAt = now + 2000 + Math.random() * 1000;
+      }
+    } else if (now > nextWaveAt) {
+      triggerWave();
+    }
+
+    // Update Node Coordinates & Heights
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const node = grid[r][c];
+
+        /* 1. Organic Multi-Harmonic Breathing */
+        let waveY = Math.sin(node.wx * 0.0035 + time * 0.9 + node.seed) * 16 +
+                    Math.cos(node.wz * 0.0040 + time * 0.7) * 12 +
+                    Math.sin((node.wx - node.wz) * 0.0025 + time * 1.1) * 8;
+
+        /* 2. Smooth Right-to-Left Wave Pulse */
+        let waveIntensity = 0;
+        if (wave.active) {
+          const dx = Math.abs(node.wx - wave.x);
+
+          if (dx < wave.width) {
+            // Cosine curve profile for wave crest
+            const norm = dx / wave.width;
+            const pulse = Math.cos(norm * (Math.PI / 2));
+            let intensity = Math.pow(Math.max(0, pulse), 2.5);
+
+            /* --- EDGE FADE ENVELOPE (Prevents entry/exit glitches) ---
+               Smoothly ramps down intensity near the left and right outer boundaries */
+            const edgeDistX = Math.min(
+              Math.abs(node.wx - gridMinX), 
+              Math.abs(node.wx - gridMaxX)
+            );
+            const edgeFade = Math.min(1, edgeDistX / 250);
+            intensity *= edgeFade;
+
+            waveY -= intensity * 70; // Smooth elevation change
+            waveIntensity = intensity;
           }
         }
-      }
 
-      /* elastic easing toward target → no snapping, natural relaxation */
-      if (animated) {
-        nd.cx += (tx - nd.cx) * EASE;
-        nd.cy += (ty - nd.cy) * EASE;
-      } else {
-        nd.cx = tx; nd.cy = ty;
+        /* 3. Mouse Distortion Stretch */
+        if (mouse.active) {
+          const proj = project3D(node.wx, waveY, node.wz);
+          const mdx = proj.x - mouse.x;
+          const mdy = proj.y - mouse.y;
+          const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+          if (mDist < 170) {
+            const pull = (1 - mDist / 170);
+            waveY += Math.sin(pull * Math.PI) * 32;
+            waveIntensity = Math.max(waveIntensity, pull * 0.6);
+          }
+        }
+
+        node.wy = waveY;
+        node.intensity = waveIntensity;
+
+        // Apply 3D Projection
+        const projected = project3D(node.wx, node.wy, node.wz);
+        node.px = projected.x;
+        node.py = projected.y;
+        node.scale = projected.scale;
       }
-      nd.ci = ci;
-      nd.px = projX(nd.cx, nd.cy);
-      nd.py = projY(nd.cx, nd.cy);
+    }
+
+    // Particle drift loop
+    for (let p of particles) {
+      p.y += p.vy;
+      if (p.y < -300) p.y = 200;
     }
   }
 
   /* ----------------------------------------------------------------------
-     Draw
+     Render Loop Engine
      ---------------------------------------------------------------------- */
-  function draw() {
+  function mixColors(c1, c2, weight) {
+    const w = Math.min(Math.max(weight, 0), 1);
+    const r = Math.round(c1[0] + (c2[0] - c1[0]) * w);
+    const g = Math.round(c1[1] + (c2[1] - c1[1]) * w);
+    const b = Math.round(c1[2] + (c2[2] - c1[2]) * w);
+    return `${r},${g},${b}`;
+  }
+
+  function render() {
     ctx.clearRect(0, 0, W, H);
 
-    /* --- edges (the fabric) --- */
-    ctx.lineWidth = 1;
-    for (var e = 0; e < edges.length; e += 2) {
-      var A = nodes[edges[e]], B = nodes[edges[e + 1]];
-      var ci = (A.ci + B.ci) * 0.5;
-      var alpha = LINE_ALPHA + ci * 0.16;      /* brighten in the wave */
-      if (alpha < 0.02) continue;
-      ctx.strokeStyle = "rgba(" + mix(LINE_GRAY, ci) + "," + alpha.toFixed(3) + ")";
+    /* --- Draw Ambient Data Dust Particles --- */
+    for (let p of particles) {
+      const proj = project3D(p.x, p.y, p.z);
+      if (proj.scale <= 0) continue;
+      const alpha = Math.min(0.5, proj.scale * 0.35);
+      ctx.fillStyle = `rgba(${COLOR_MID.join(",")}, ${alpha})`;
       ctx.beginPath();
-      ctx.moveTo(A.px, A.py);
-      ctx.lineTo(B.px, B.py);
-      ctx.stroke();
+      ctx.arc(proj.x, proj.y, p.size * proj.scale, 0, PI2);
+      ctx.fill();
     }
 
-    /* --- nodes --- */
-    for (var n = 0; n < nodes.length; n++) {
-      var nd = nodes[n];
-      var ci = nd.ci;
-      var alpha = NODE_ALPHA + ci * 0.22;
-      var rad = 1.5 + ci * 1.3;
-      ctx.fillStyle = "rgba(" + mix(NODE_GRAY, ci) + "," + alpha.toFixed(3) + ")";
-      ctx.beginPath();
-      ctx.arc(nd.px, nd.py, rad, 0, PI2);
-      ctx.fill();
+    /* --- Draw Organic Mesh Edges --- */
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const p1 = grid[r][c];
+
+        // Draw horizontal neighbor connection
+        if (c < COLS - 1) {
+          drawEdge(p1, grid[r][c + 1]);
+        }
+
+        // Draw vertical neighbor connection
+        if (r < ROWS - 1) {
+          drawEdge(p1, grid[r + 1][c]);
+        }
+
+        // Cross-connect diagonal edges on alternating nodes to form irregular triangles
+        if (r < ROWS - 1 && c < COLS - 1 && (r + c) % 2 === 0) {
+          drawEdge(p1, grid[r + 1][c + 1]);
+        }
+      }
+    }
+
+    /* --- Draw Glowing Dynamic Node Highlights --- */
+    for (let r = 0; r < ROWS; r += 2) {
+      for (let c = 0; c < COLS; c += 2) {
+        const node = grid[r][c];
+        if (node.scale <= 0) continue;
+
+        const baseAlpha = Math.min(0.75, node.scale * 0.4);
+        const nodeColor = node.intensity > 0.1 
+          ? mixColors(COLOR_MID, COLOR_GLOW, node.intensity)
+          : COLOR_BASE.join(",");
+
+        ctx.fillStyle = `rgba(${nodeColor}, ${baseAlpha + node.intensity * 0.4})`;
+        ctx.beginPath();
+        ctx.arc(node.px, node.py, (1.2 + node.intensity * 2.2) * node.scale, 0, PI2);
+        ctx.fill();
+      }
     }
   }
 
+  function drawEdge(p1, p2) {
+    if (p1.scale <= 0 || p2.scale <= 0) return;
+
+    const avgIntensity = (p1.intensity + p2.intensity) * 0.5;
+    const avgScale = (p1.scale + p2.scale) * 0.5;
+    
+    let alpha = Math.min(0.4, avgScale * 0.32) + avgIntensity * 0.45;
+    if (alpha < 0.02) return;
+
+    let strokeColor;
+    if (avgIntensity > 0.3) {
+      strokeColor = mixColors(COLOR_MID, COLOR_ACCENT, (avgIntensity - 0.3) * 1.4);
+    } else if (avgIntensity > 0.05) {
+      strokeColor = mixColors(COLOR_BASE, COLOR_MID, avgIntensity * 6);
+    } else {
+      strokeColor = COLOR_BASE.join(",");
+    }
+
+    ctx.lineWidth = Math.max(0.4, (0.7 + avgIntensity * 1.6) * avgScale);
+    ctx.strokeStyle = `rgba(${strokeColor}, ${alpha.toFixed(3)})`;
+
+    ctx.beginPath();
+    ctx.moveTo(p1.px, p1.py);
+    ctx.lineTo(p2.px, p2.py);
+    ctx.stroke();
+  }
+
   /* ----------------------------------------------------------------------
-     Main loop + scroll fade
+     Lifecycle & Event Handlers
      ---------------------------------------------------------------------- */
   function frame(now) {
     if (!running) return;
 
-    /* fade the whole layer out as the hero scrolls away */
-    var heroH = hero.offsetHeight || H;
-    var scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
-    var master = 1 - Math.min(scrolled / (heroH * 0.9), 1);
-    canvas.style.opacity = master.toFixed(3);
-    if (master <= 0.01) { rafId = requestAnimationFrame(frame); return; }
+    // Fade canvas out smoothly on scroll down
+    const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+    const masterAlpha = 1 - Math.min(scrolled / (H * 0.8), 1);
+    canvas.style.opacity = masterAlpha.toFixed(3);
 
-    lastNow = now;
-    var time = (now - epoch) / 1000;
-
-    updateWave(now);
-    updateNodes(time, true);
-    draw();
+    if (masterAlpha > 0.01) {
+      const time = (now - epoch) * 0.001;
+      updateTopology(time, now);
+      render();
+    }
 
     rafId = requestAnimationFrame(frame);
   }
@@ -333,10 +356,8 @@
   function start() {
     if (running || reduceMotion.matches) return;
     running = true;
-    var now = performance.now();
-    if (!epoch) epoch = now;
-    lastNow = now;
-    if (!nextWaveAt) nextWaveAt = now + 1500; /* first wave shortly after load */
+    epoch = performance.now();
+    nextWaveAt = epoch + 800; // Trigger initial wave shortly after load
     rafId = requestAnimationFrame(frame);
   }
 
@@ -346,68 +367,40 @@
     rafId = null;
   }
 
-  function drawStatic() {
-    canvas.style.opacity = "1";
-    wave = null; waveX = null; mInfluence = 0;
-    updateNodes(0, false);
-    draw();
+  function onMouseMove(e) {
+    const rect = hero.getBoundingClientRect();
+    mouse.targetX = e.clientX - rect.left;
+    mouse.targetY = e.clientY - rect.top;
+    mouse.active = true;
   }
 
-  /* ----------------------------------------------------------------------
-     Events
-     ---------------------------------------------------------------------- */
-  function onMouseMove(ev) {
-    var rect = hero.getBoundingClientRect();
-    var x = ev.clientX - rect.left;
-    var y = ev.clientY - rect.top;
-    if (x >= 0 && x <= W && y >= 0 && y <= H) {
-      if (!mouse.active) { mFlatX = x; mFlatY = y; }
-      mouse.x = x; mouse.y = y; mouse.active = true;
-    } else {
-      mouse.active = false;
-    }
+  function onMouseLeave() {
+    mouse.active = false;
+    mouse.targetX = -9999;
+    mouse.targetY = -9999;
   }
 
-  var resizeTimer = null;
+  let resizeTimer;
   function onResize() {
-    if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
       resize();
-      buildMesh();
-      if (reduceMotion.matches) drawStatic();
-    }, 200);
+      initMesh();
+    }, 150);
   }
 
-  function onReduceMotionChange() {
-    stop();
-    resize();
-    buildMesh();
-    if (reduceMotion.matches) drawStatic();
-    else start();
-  }
-
-  /* ----------------------------------------------------------------------
-     Init
-     ---------------------------------------------------------------------- */
   function init() {
     resize();
-    buildMesh();
+    initMesh();
 
     window.addEventListener("resize", onResize, { passive: true });
-    if (reduceMotion.addEventListener) {
-      reduceMotion.addEventListener("change", onReduceMotionChange);
-    } else if (reduceMotion.addListener) {
-      reduceMotion.addListener(onReduceMotionChange);
-    }
-
-    if (reduceMotion.matches) { drawStatic(); return; }
-
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    hero.addEventListener("mousemove", onMouseMove, { passive: true });
+    hero.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
     if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) start(); else stop(); });
-      }, { threshold: 0 });
+      const io = new IntersectionObserver((entries) => {
+        entries[0].isIntersecting ? start() : stop();
+      }, { threshold: 0.05 });
       io.observe(hero);
     } else {
       start();
