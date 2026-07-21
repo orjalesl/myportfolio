@@ -3,9 +3,9 @@
    --------------------------------------------------------------------------
    Vanilla JS + Canvas 2D. 
    Features:
-   - 3D Irregular/Jittered Mesh (Stretched on mobile)
+   - 3D Irregular/Jittered Mesh
    - Multi-harmonic continuous breathing topology
-   - Smooth Right-to-Left compression waves (Constant 2-second travel duration)
+   - Smooth Right-to-Left compression waves (with edge-fade dampening)
    - 2 to 3 second resting breaks between wave pulses
    - Dynamic cursor interaction & floating data particles
    ========================================================================== */
@@ -41,7 +41,7 @@
   // Wave state (travels right to left)
   let wave = {
     x: 1000,
-    speed: 11,                           // Calculated dynamically for 2s duration
+    speed: 11,                           // Horizontal propagation speed
     width: 480,                          // Width of the pulse crest
     active: false
   };
@@ -77,7 +77,7 @@
   }
 
   /* ----------------------------------------------------------------------
-     Data Initialization (Irregular Organic Mesh - Mobile Responsive)
+     Data Initialization (Irregular Organic Mesh)
      ---------------------------------------------------------------------- */
   function resize() {
     W = hero.clientWidth;
@@ -90,32 +90,20 @@
     canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Reduced column count on smaller screens so mesh lines don't cluster
-    COLS = W < 640 ? 16 : W < 1024 ? 30 : 48;
-    ROWS = W < 640 ? 18 : W < 1024 ? 24 : 36;
+    COLS = W < 640 ? 24 : W < 1024 ? 36 : 48;
+    ROWS = W < 640 ? 20 : W < 1024 ? 28 : 36;
   }
 
   function initMesh() {
     grid = [];
-    
-    // Stretch fabric horizontally on smaller viewports to prevent overcrowding
-    const spanMultiplier = W < 640 ? 2.6 : W < 1024 ? 2.1 : 1.8;
-    const spanX = W * spanMultiplier;
+    const spanX = W * 1.8;
     const spanZ = 1200;
-    
     const spacingX = spanX / COLS;
     const spacingZ = spanZ / ROWS;
 
     // Track 3D mesh boundaries for wave trigger/exit calculations
     gridMinX = (-COLS / 2) * spacingX;
     gridMaxX = (COLS / 2) * spacingX;
-
-    // Scale wave crest width to match mesh scale
-    wave.width = Math.max(300, spanX * 0.18);
-
-    // Calculate exact speed needed to cover distance in 2 seconds (60fps * 2s = 120 frames)
-    const totalTravelDistance = (gridMaxX + wave.width) - (gridMinX - wave.width);
-    wave.speed = totalTravelDistance / 120;
 
     for (let r = 0; r < ROWS; r++) {
       grid[r] = [];
@@ -145,7 +133,7 @@
 
     // Floating ambient data dust particles
     particles = [];
-    const pCount = W < 640 ? 15 : 50;
+    const pCount = W < 640 ? 20 : 50;
     for (let i = 0; i < pCount; i++) {
       particles.push({
         x: (Math.random() - 0.5) * W * 1.6,
@@ -212,7 +200,7 @@
               Math.abs(node.wx - gridMinX), 
               Math.abs(node.wx - gridMaxX)
             );
-            const edgeFade = Math.min(1, edgeDistX / 200);
+            const edgeFade = Math.min(1, edgeDistX / 250);
             intensity *= edgeFade;
 
             waveY -= intensity * 70; // Smooth elevation change
