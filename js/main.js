@@ -145,79 +145,108 @@
        </div>
      ------------------------------------------------------------------ */
   document.querySelectorAll("[data-carousel]").forEach(function (root) {
-    var viewport = root.querySelector(".carousel__viewport");
-    var track = root.querySelector(".carousel__track");
-    var tabsWrap = root.querySelector(".carousel__tabs");
-    var prevBtn = root.querySelector("[data-carousel-prev]");
-    var nextBtn = root.querySelector("[data-carousel-next]");
-    if (!viewport || !track) return;
+    // Each carousel is initialised independently: a failure in one must never
+    // stop the others from initialising (that would leave later carousels in
+    // the stacked, non-interactive fallback state).
+    try {
+      var viewport = root.querySelector(".carousel__viewport");
+      var track = root.querySelector(".carousel__track");
+      var tabsWrap = root.querySelector(".carousel__tabs");
+      var prevBtn = root.querySelector("[data-carousel-prev]");
+      var nextBtn = root.querySelector("[data-carousel-next]");
+      if (!viewport || !track) return;
 
-    var slides = Array.prototype.slice.call(track.children);
-    if (slides.length < 2) return; // nothing to navigate
+      var slides = Array.prototype.slice.call(track.children);
+      if (slides.length < 2) return; // nothing to navigate
 
-    var index = 0;
-    var tabs = [];
+      var index = 0;
+      var tabs = [];
 
-    // Build one named tab per slide (from data-title, fallback to number)
-    if (tabsWrap) {
-      slides.forEach(function (slide, i) {
-        var b = document.createElement("button");
-        b.type = "button";
-        b.className = "carousel__tab";
-        b.setAttribute("role", "tab");
-        b.textContent = slide.getAttribute("data-title") || String(i + 1);
-        b.addEventListener("click", function () { go(i); });
-        tabsWrap.appendChild(b);
-        tabs.push(b);
+      // Build one named tab per slide (from data-title, fallback to number)
+      if (tabsWrap) {
+        slides.forEach(function (slide, i) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "carousel__tab";
+          b.setAttribute("role", "tab");
+          b.textContent = slide.getAttribute("data-title") || String(i + 1);
+          b.addEventListener("click", function () { go(i); });
+          tabsWrap.appendChild(b);
+          tabs.push(b);
+        });
+      }
+
+      function setHeight() {
+        // Viewport hugs the active slide so cards of different heights look clean.
+        // Guard against a 0 measurement (e.g. mid-reveal) which would hide everything.
+        var h = slides[index].offsetHeight;
+        if (h > 0) viewport.style.height = h + "px";
+      }
+
+      function update() {
+        track.style.transform = "translateX(" + (-index * 100) + "%)";
+        tabs.forEach(function (t, i) {
+          var on = i === index;
+          t.classList.toggle("is-active", on);
+          t.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        // Measure after the browser has laid the slide out
+        if (window.requestAnimationFrame) requestAnimationFrame(setHeight);
+        else setHeight();
+      }
+
+      function go(i) {
+        index = (i + slides.length) % slides.length; // wrap around
+        update();
+      }
+
+      if (prevBtn) prevBtn.addEventListener("click", function () { go(index - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { go(index + 1); });
+
+      // Keyboard arrows when the carousel (or a child) has focus
+      root.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
+        else if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
       });
-    }
 
-    function setHeight() {
-      // Viewport hugs the active slide so cards of different heights look clean
-      viewport.style.height = slides[index].offsetHeight + "px";
-    }
+      // Touch swipe (horizontal only — don't hijack vertical scrolling)
+      var startX = null, startY = null;
+      viewport.addEventListener("touchstart", function (e) {
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      }, { passive: true });
+      viewport.addEventListener("touchend", function (e) {
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        var dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) { go(dx < 0 ? index + 1 : index - 1); }
+        startX = startY = null;
+      }, { passive: true });
 
-    function update() {
-      track.style.transform = "translateX(" + (-index * 100) + "%)";
-      tabs.forEach(function (t, i) {
-        var on = i === index;
-        t.classList.toggle("is-active", on);
-        t.setAttribute("aria-selected", on ? "true" : "false");
-      });
-      setHeight();
-    }
-
-    function go(i) {
-      index = (i + slides.length) % slides.length; // wrap around
+      // Activate the enhanced (horizontal) layout, then lay out
+      root.classList.add("is-ready");
       update();
+
+      // --- Robust height recalculation ---
+      window.addEventListener("resize", setHeight, { passive: true });
+      window.addEventListener("orientationchange", function () { setTimeout(setHeight, 250); });
+      window.addEventListener("load", setHeight);
+      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(setHeight).catch(function () {}); }
+      [100, 400, 1000].forEach(function (t) { setTimeout(setHeight, t); });
+
+      // Keep the viewport sized to the active slide even as content reflows
+      if ("ResizeObserver" in window) {
+        var ro = new ResizeObserver(function () { setHeight(); });
+        slides.forEach(function (s) { ro.observe(s); });
+      }
+      // Recompute once the carousel actually scrolls into view (post-reveal)
+      if ("IntersectionObserver" in window) {
+        var vo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) setHeight(); });
+        }, { threshold: 0.01 });
+        vo.observe(root);
+      }
+    } catch (err) {
+      if (window.console && console.warn) console.warn("Carousel init skipped:", err);
     }
-
-    if (prevBtn) prevBtn.addEventListener("click", function () { go(index - 1); });
-    if (nextBtn) nextBtn.addEventListener("click", function () { go(index + 1); });
-
-    // Keyboard arrows when the carousel (or a child) has focus
-    root.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
-      else if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
-    });
-
-    // Touch swipe
-    var startX = null;
-    viewport.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
-    viewport.addEventListener("touchend", function (e) {
-      if (startX === null) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 45) { go(dx < 0 ? index + 1 : index - 1); }
-      startX = null;
-    }, { passive: true });
-
-    // Activate the enhanced (horizontal) layout, then lay out
-    root.classList.add("is-ready");
-    update();
-
-    // Recalculate height after images/fonts settle and on resize
-    window.addEventListener("resize", setHeight, { passive: true });
-    window.addEventListener("load", setHeight);
-    setTimeout(setHeight, 300);
   });
 })();

@@ -380,6 +380,18 @@ p { color: var(--color-gray-600); }
 .nav__toggle.is-open span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
 .nav__toggle.is-open span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
 
+/* Dedicated Slide Tab Navigation */
+.cs-tabnav {
+  display: flex;
+  gap: .3rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--cs-border);
+  margin-bottom: 1rem;
+}
+.cs-tabnav::-webkit-scrollbar { 
+  display: none; 
+}
 /* --------------------------------------------------------------------------
    7. MOBILE MENU
    -------------------------------------------------------------------------- */
@@ -1191,7 +1203,6 @@ body.no-scroll { overflow: hidden; }
 /* Carousel-scoped card overrides ----------------------------------------- */
 /* Experience card as a full-width slide: Challenge | Solution side by side,
    Results (last block) spanning the full width beneath them. */
-.carousel .experience-card { height: 100%; }
 .carousel .experience-card__csr { grid-template-columns: 1fr 1fr; gap: var(--space-md); }
 .carousel .experience-card__csr .csr-block:last-child { grid-column: 1 / -1; }
 /* Neutralise the alternating image-side layout inside a carousel (only one
@@ -1205,3 +1216,36 @@ body.no-scroll { overflow: hidden; }
   .carousel__arrow { width: 42px; height: 42px; }
   .carousel.is-ready .carousel__slide { padding: 8px 2px 24px; }
 }
+
+/* --------------------------------------------------------------------------
+   22. CLOSING CTA — reusable dark, rounded gradient call-to-action card
+   Global component so it never needs re-declaring per page. Usage:
+     <section class="section">
+       <div class="container container--narrow">
+         <div class="closing-cta" data-reveal>
+           <h2>…</h2>
+           <p>…</p>
+           <div class="btn-group">
+             <a class="btn btn--primary" …>…</a>
+             <a class="btn btn--ghost" …>…</a>
+           </div>
+         </div>
+       </div>
+     </section>
+   -------------------------------------------------------------------------- */
+.closing-cta {
+  text-align: center;
+  background: linear-gradient(160deg, #12151b, #1d2530);
+  border-radius: var(--radius-lg);
+  padding: clamp(2.5rem, 6vw, 4.5rem);
+  box-shadow: var(--shadow-lg);
+}
+.closing-cta h2 { color: var(--color-white); margin: 0; }
+.closing-cta p {
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 52ch;
+  margin: var(--space-sm) auto 0;
+  line-height: 1.6;
+}
+.closing-cta .btn-group { justify-content: center; margin-top: var(--space-lg); }
+/* On the dark card, the ghost button reads white (already the global default). */

@@ -5,17 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- =========================================================================
-       CASE STUDY (slide edition) — Member Churn Prediction + Uplift Modeling
-       A simpler page: same hero, a sticky tab bar (same 7 items), and each tab
-       shows one PowerPoint slide image. Click a slide to view it full screen;
-       click the image again or the X to minimize.
-
-       REPLACE: drop your exported slide images in  ../images/slides/  using the
-       file names referenced in each tab's data-src (overview.png, etc.).
-       Until then a labeled placeholder is shown automatically.
+       CASE STUDY (slide edition + interactive sections)
+       Member Churn Prediction + Uplift Modeling
        ========================================================================= -->
-  <title>Member Churn &amp; Uplift Modeling — Slides</title>
-  <meta name="description" content="Member churn prediction and uplift modeling — presented as a guided slide deck." />
+  <title>Member Churn &amp; Uplift Modeling — Case Study</title>
+  <meta name="description" content="Member churn prediction and uplift modeling — presented as a guided slide deck with interactive model explorer and business results." />
 
   <link rel="icon" type="image/png" href="../images/icon_white.png" />
 
@@ -23,163 +17,257 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/styles.css?v=3" />
 
   <style>
   /* ---- Local tokens (scoped to .cs) ---- */
   .cs {
-    --cs-bg: #f4f6f9; --cs-card: #fff; --cs-ink: #14161a; --cs-muted: #6b7280;
-    --cs-faint: #9aa1ab; --cs-accent: #0071e3; --cs-accent-soft: #eaf2fe;
-    --cs-border: #e7e9ee; --cs-border-2: #dfe2e8; --cs-r: 18px; --cs-r-lg: 26px;
+    --cs-bg: #f4f6f9;
+    --cs-card: #fff;
+    --cs-ink: #14161a;
+    --cs-ink-soft: #3a3f47;
+    --cs-muted: #6b7280;
+    --cs-faint: #9aa1ab;
+    --cs-accent: #0071e3;
+    --cs-accent-2: #4f8cff;
+    --cs-accent-soft: #eaf2fe;
+    --cs-border: #e7e9ee;
+    --cs-border-2: #dfe2e8;
+    --cs-r-sm: 12px;
+    --cs-r: 18px;
+    --cs-r-lg: 26px;
     --cs-sh-sm: 0 1px 2px rgba(20,22,26,.04), 0 4px 14px rgba(20,22,26,.05);
-    --cs-sh: 0 10px 30px rgba(20,22,26,.08); --cs-sh-lg: 0 30px 70px rgba(20,22,26,.16);
+    --cs-sh: 0 10px 30px rgba(20,22,26,.08);
+    --cs-sh-lg: 0 30px 70px rgba(20,22,26,.16);
+    --cs-glow: 0 0 0 1px rgba(0,113,227,.35), 0 14px 40px rgba(0,113,227,.20);
     --cs-ease: cubic-bezier(.16,1,.3,1);
-    background: var(--cs-bg); color: var(--cs-ink);
+    background: var(--cs-bg);
+    color: var(--cs-ink);
   }
   .cs *, .cs *::before, .cs *::after { box-sizing: border-box; }
-  .cs-wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.1rem,4vw,2.5rem); }
+  .cs-wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.1rem, 4vw, 2.5rem); }
+  .cs-section { padding-block: clamp(3.5rem, 8vw, 7rem); scroll-margin-top: 128px; }
+  .cs-head { margin-bottom: clamp(2rem, 4vw, 3.2rem); }
+  .cs-h2 { font-size: clamp(1.8rem, 3.6vw, 2.9rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.05; margin: 0; color: var(--cs-ink); }
+  .cs-sub { font-size: clamp(1rem, 1.4vw, 1.15rem); color: var(--cs-muted); max-width: 60ch; margin: 1rem 0 0; line-height: 1.6; }
 
   /* ---- Buttons ---- */
-  .cs-btn { display:inline-flex; align-items:center; justify-content:center; gap:.55em; font:inherit;
-    font-weight:500; font-size:.98rem; line-height:1; cursor:pointer; padding:.95em 1.6em; border-radius:999px;
-    border:1px solid transparent; text-decoration:none;
-    transition: transform .25s var(--cs-ease), box-shadow .25s var(--cs-ease), background .25s var(--cs-ease), color .25s var(--cs-ease), border-color .25s var(--cs-ease); }
-  .cs-btn--primary { background: var(--cs-accent); color:#fff; }
+  .cs-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+    font: inherit; font-weight: 500; font-size: .98rem; line-height: 1; cursor: pointer;
+    padding: .95em 1.6em; border-radius: 999px; border: 1px solid transparent;
+    text-decoration: none;
+    transition: transform .25s var(--cs-ease), box-shadow .25s var(--cs-ease),
+                background .25s var(--cs-ease), color .25s var(--cs-ease), border-color .25s var(--cs-ease);
+  }
+  .cs-btn--primary { background: var(--cs-accent); color: #fff; }
   .cs-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,113,227,.35); }
-  .cs-btn--dark { background: var(--cs-ink); color:#fff; }
+  .cs-btn--dark { background: var(--cs-ink); color: #fff; }
   .cs-btn--dark:hover { transform: translateY(-2px); box-shadow: var(--cs-sh); }
   .cs-btn:active { transform: scale(.98); }
 
   /* ---- Scroll reveal ---- */
-  .reveal { opacity:0; transform: translateY(24px); transition: opacity .7s var(--cs-ease), transform .7s var(--cs-ease); }
-  .reveal.in { opacity:1; transform:none; }
-  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--cs-ease), transform .7s var(--cs-ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal[data-d="1"]{ transition-delay: .07s; }
+  .reveal[data-d="2"]{ transition-delay: .14s; }
+  .reveal[data-d="3"]{ transition-delay: .21s; }
+  .reveal[data-d="4"]{ transition-delay: .28s; }
+  @media (prefers-reduced-motion: reduce){ .reveal { opacity: 1; transform: none; transition: none; } }
 
   /* =======================================================================
-     HERO (same information as the interactive case study)
+     HERO
      ======================================================================= */
   .cs-hero {
-    position: relative; overflow: hidden; min-height: 92vh; display:flex; align-items:center;
+    position: relative; overflow: hidden; min-height: 92vh; display: flex; align-items: center;
     padding-top: calc(var(--nav-height) + clamp(3rem,8vw,6rem)); padding-bottom: clamp(3rem,8vw,6rem);
     background:
       radial-gradient(1100px 520px at 78% -10%, #e9f1ff 0%, rgba(233,241,255,0) 60%),
       radial-gradient(900px 500px at 8% 8%, #eef1f6 0%, rgba(238,241,246,0) 55%), var(--cs-bg);
   }
-  .cs-eyebrow { display:inline-flex; align-items:center; gap:.5em; font-size:.78rem; font-weight:600;
-    letter-spacing:.12em; text-transform:uppercase; color: var(--cs-accent); margin:0 0 .9rem; }
-  .cs-hero__title { font-size: clamp(2.4rem,6.2vw,5rem); font-weight:800; letter-spacing:-.035em;
-    line-height:1.02; margin:.2rem 0 0; max-width:16ch; }
+  .cs-eyebrow { display: inline-flex; align-items: center; gap: .5em; font-size: .78rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--cs-accent); margin: 0 0 .9rem; }
+  .cs-hero__title { font-size: clamp(2.4rem,6.2vw,5rem); font-weight: 800; letter-spacing: -.035em;
+    line-height: 1.02; margin: .2rem 0 0; max-width: 16ch; }
   .cs-hero__title .grad { background: linear-gradient(100deg, var(--cs-ink) 20%, var(--cs-accent) 115%);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
-  .cs-hero__sub { font-size: clamp(1.05rem,1.7vw,1.4rem); color: var(--cs-muted); max-width:54ch; margin:1.4rem 0 0; line-height:1.5; }
-  .cs-badges { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1.8rem; }
-  .cs-badge { display:inline-flex; align-items:center; gap:.5em; font-size:.85rem; font-weight:500; color:#3a3f47;
-    background:#fff; border:1px solid var(--cs-border-2); border-radius:999px; padding:.55em 1.05em; box-shadow: var(--cs-sh-sm);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .cs-hero__sub { font-size: clamp(1.05rem,1.7vw,1.4rem); color: var(--cs-muted); max-width: 54ch; margin: 1.4rem 0 0; line-height: 1.5; }
+  .cs-badges { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.8rem; }
+  .cs-badge { display: inline-flex; align-items: center; gap: .5em; font-size: .85rem; font-weight: 500; color: #3a3f47;
+    background: #fff; border: 1px solid var(--cs-border-2); border-radius: 999px; padding: .55em 1.05em; box-shadow: var(--cs-sh-sm);
     transition: transform .25s var(--cs-ease), box-shadow .25s var(--cs-ease), border-color .25s var(--cs-ease); }
   .cs-badge i { color: var(--cs-accent); }
   .cs-badge:hover { transform: translateY(-3px); box-shadow: var(--cs-sh); border-color: var(--cs-accent); }
-  .cs-hero__cta { display:flex; flex-wrap:wrap; gap:.85rem; margin-top:2.2rem; }
-  .cs-hero__hint { margin-top:2.4rem; display:flex; align-items:center; gap:.6em; color: var(--cs-faint); font-size:.9rem; }
+  .cs-hero__cta { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2.2rem; }
+  .cs-hero__hint { margin-top: 2.4rem; display: flex; align-items: center; gap: .6em; color: var(--cs-faint); font-size: .9rem; }
   .cs-hero__hint i { animation: bob 1.8s var(--cs-ease) infinite; }
-  @keyframes bob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(4px) } }
+  @keyframes bob { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(4px); } }
   @media (prefers-reduced-motion: reduce){ .cs-hero__hint i { animation: none; } }
 
   /* =======================================================================
-     STICKY TAB NAV (same items — each swaps the slide shown below)
+     STICKY TAB NAV
      ======================================================================= */
   .cs-subnav { position: sticky; top: var(--nav-height); z-index: 40;
     background: rgba(255,255,255,.82); backdrop-filter: saturate(180%) blur(16px);
     -webkit-backdrop-filter: saturate(180%) blur(16px); border-block: 1px solid var(--cs-border); }
-  .cs-subnav__row { display:flex; gap:.3rem; overflow-x:auto; scrollbar-width:none; }
-  .cs-subnav__row::-webkit-scrollbar { display:none; }
-  .cs-tab { position:relative; white-space:nowrap; font:inherit; font-size:.92rem; font-weight:500;
-    color: var(--cs-muted); background:transparent; border:none; cursor:pointer; padding:1rem .9rem;
-    transition: color .25s var(--cs-ease); }
-  .cs-tab::after { content:""; position:absolute; left:.9rem; right:.9rem; bottom:-1px; height:2px;
-    background: var(--cs-accent); border-radius:2px; transform: scaleX(0); transition: transform .3s var(--cs-ease); }
-  .cs-tab:hover { color: var(--cs-ink); }
-  .cs-tab.is-active { color: var(--cs-accent); }
-  .cs-tab.is-active::after { transform: scaleX(1); }
+  .cs-subnav__row { display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; }
+  .cs-subnav__row::-webkit-scrollbar { display: none; }
+  .cs-tab, .cs-subnav a { position: relative; white-space: nowrap; font: inherit; font-size: .92rem; font-weight: 500;
+    color: var(--cs-muted); background: transparent; border: none; cursor: pointer; padding: 1rem .9rem;
+    text-decoration: none; transition: color .25s var(--cs-ease); }
+  .cs-tab::after, .cs-subnav a::after { content: ""; position: absolute; left: .9rem; right: .9rem; bottom: -1px; height: 2px;
+    background: var(--cs-accent); border-radius: 2px; transform: scaleX(0); transition: transform .3s var(--cs-ease); }
+  .cs-tab:hover, .cs-subnav a:hover { color: var(--cs-ink); }
+  .cs-tab.is-active, .cs-subnav a.is-active { color: var(--cs-accent); }
+  .cs-tab.is-active::after, .cs-subnav a.is-active::after { transform: scaleX(1); }
 
   /* =======================================================================
-     SLIDE VIEWER (large, click to go full screen)
+     SLIDE VIEWER
      ======================================================================= */
   .cs-stage { padding-block: clamp(2rem,5vw,4rem); }
-  .cs-stage__head { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin-bottom:1.2rem; flex-wrap:wrap; }
-  .cs-stage__title { font-size: clamp(1.4rem,2.6vw,2rem); font-weight:700; letter-spacing:-.02em; margin:0; }
-  .cs-stage__count { color: var(--cs-faint); font-size:.9rem; font-variant-numeric: tabular-nums; }
+  .cs-stage__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .cs-stage__title { font-size: clamp(1.4rem,2.6vw,2rem); font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  .cs-stage__count { color: var(--cs-faint); font-size: .9rem; font-variant-numeric: tabular-nums; }
 
   .slide-frame {
-    position: relative; width:100%; aspect-ratio: 16/9; border-radius: var(--cs-r-lg);
+    position: relative; width: 100%; aspect-ratio: 16/9; border-radius: var(--cs-r-lg);
     overflow: hidden; cursor: zoom-in; background: var(--cs-card);
     border: 1px solid var(--cs-border); box-shadow: var(--cs-sh);
     transition: transform .35s var(--cs-ease), box-shadow .35s var(--cs-ease);
   }
   .slide-frame:hover { transform: translateY(-3px); box-shadow: var(--cs-sh-lg); }
-  .slide-frame__img { position:absolute; inset:0; width:100%; height:100%; object-fit: contain;
-    background:#fff; opacity:0; transition: opacity .4s var(--cs-ease); }
-  .slide-frame__img.is-loaded { opacity:1; }
-  /* Dashed placeholder shown until the real image loads (or if it's missing) */
+  .slide-frame__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    background: #fff; opacity: 0; transition: opacity .4s var(--cs-ease); }
+  .slide-frame__img.is-loaded { opacity: 1; }
   .slide-frame__ph {
-    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:.7rem; text-align:center; padding:2rem; color: var(--cs-faint); font-size:.95rem; font-weight:500;
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: .7rem; text-align: center; padding: 2rem; color: var(--cs-faint); font-size: .95rem; font-weight: 500;
     background: repeating-linear-gradient(45deg,#f5f6f8,#f5f6f8 14px,#eef0f3 14px,#eef0f3 28px);
   }
-  .slide-frame__ph i { font-size:2rem; opacity:.6; }
-  .slide-frame__ph code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.82rem; color:#6b7280; }
-  /* Expand affordance */
+  .slide-frame__ph i { font-size: 2rem; opacity: .6; }
+  .slide-frame__ph code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; color: #6b7280; }
   .slide-frame__zoom {
-    position:absolute; top:14px; right:14px; z-index:2; width:40px; height:40px; border-radius:12px;
-    display:grid; place-items:center; background: rgba(20,22,26,.55); color:#fff; font-size:.95rem;
-    border:none; cursor:pointer; opacity:0; transform: translateY(-4px);
+    position: absolute; top: 14px; right: 14px; z-index: 2; width: 40px; height: 40px; border-radius: 12px;
+    display: grid; place-items: center; background: rgba(20,22,26,.55); color: #fff; font-size: .95rem;
+    border: none; cursor: pointer; opacity: 0; transform: translateY(-4px);
     transition: opacity .3s var(--cs-ease), transform .3s var(--cs-ease), background .25s var(--cs-ease);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
-  .slide-frame:hover .slide-frame__zoom { opacity:1; transform:none; }
+  .slide-frame:hover .slide-frame__zoom { opacity: 1; transform: none; }
   .slide-frame__zoom:hover { background: rgba(20,22,26,.8); }
-  .slide-frame__caption { margin-top:1rem; color: var(--cs-muted); font-size:.95rem; }
 
-  /* Prev / next under the slide (mirrors the tabs) */
-  .cs-slidenav { display:flex; align-items:center; justify-content:center; gap:var(--space-sm); margin-top:1.4rem; }
-  .cs-arrow { width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:#fff;
-    color: var(--cs-ink); border:1px solid var(--cs-border-2); box-shadow: var(--cs-sh-sm); cursor:pointer;
+  .cs-slidenav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.4rem; }
+  .cs-arrow { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: #fff;
+    color: var(--cs-ink); border: 1px solid var(--cs-border-2); box-shadow: var(--cs-sh-sm); cursor: pointer;
     transition: transform .25s var(--cs-ease), color .25s var(--cs-ease), border-color .25s var(--cs-ease), box-shadow .25s var(--cs-ease); }
   .cs-arrow:hover { transform: translateY(-2px); color: var(--cs-accent); border-color: var(--cs-accent); box-shadow: var(--cs-sh); }
   .cs-arrow:active { transform: scale(.94); }
 
   /* =======================================================================
-     LIGHTBOX (full screen within the page)
+     LIGHTBOX
      ======================================================================= */
   .lightbox {
-    position: fixed; inset:0; z-index: 2000; display:flex; align-items:center; justify-content:center;
+    position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center;
     padding: clamp(1rem, 4vw, 3rem); background: rgba(12,14,18,.92);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-    opacity:0; visibility:hidden; transition: opacity .3s var(--cs-ease), visibility .3s var(--cs-ease); cursor: zoom-out;
+    opacity: 0; visibility: hidden; transition: opacity .3s var(--cs-ease), visibility .3s var(--cs-ease); cursor: zoom-out;
   }
-  .lightbox.is-open { opacity:1; visibility:visible; }
-  .lightbox__img { max-width:100%; max-height:100%; object-fit:contain; border-radius:10px;
+  .lightbox.is-open { opacity: 1; visibility: visible; }
+  .lightbox__img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px;
     box-shadow: 0 40px 120px rgba(0,0,0,.6); transform: scale(.96); transition: transform .3s var(--cs-ease); }
   .lightbox.is-open .lightbox__img { transform: scale(1); }
-  .lightbox__ph { max-width: 900px; width:100%; aspect-ratio:16/9; border-radius:10px; display:flex;
-    flex-direction:column; align-items:center; justify-content:center; gap:.8rem; color:#c7ccd4; text-align:center;
+  .lightbox__ph { max-width: 900px; width: 100%; aspect-ratio: 16/9; border-radius: 10px; display: flex;
+    flex-direction: column; align-items: center; justify-content: center; gap: .8rem; color: #c7ccd4; text-align: center;
     background: repeating-linear-gradient(45deg,#20242c,#20242c 16px,#272c35 16px,#272c35 32px); }
-  .lightbox__ph i { font-size:2.4rem; opacity:.7; }
+  .lightbox__ph i { font-size: 2.4rem; opacity: .7; }
   .lightbox__close {
     position: fixed; top: clamp(1rem,3vw,2rem); right: clamp(1rem,3vw,2rem); z-index: 2001;
-    width:48px; height:48px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
-    background: rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.28); font-size:1.1rem;
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+    background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.28); font-size: 1.1rem;
     transition: background .25s var(--cs-ease), transform .25s var(--cs-ease); }
   .lightbox__close:hover { background: rgba(255,255,255,.28); transform: rotate(90deg); }
   body.cs-lock { overflow: hidden; }
 
+  /* =======================================================================
+     MODEL EXPLORER STYLES (Injected from customer-growth.html)
+     ======================================================================= */
+  .cs-explorer { display: grid; grid-template-columns: 250px minmax(0,1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
+  .cs-mnav { display: flex; flex-direction: column; gap: .3rem; position: sticky; top: calc(var(--nav-height) + 72px); }
+  .cs-mnav__btn {
+    position: relative; text-align: left; font: inherit; cursor: pointer; background: transparent; border: none;
+    padding: .95rem 1rem .95rem 1.1rem; border-radius: 12px; color: var(--cs-muted); font-weight: 500; font-size: .98rem;
+    display: flex; align-items: center; gap: .7rem; transition: background .25s var(--cs-ease), color .25s var(--cs-ease);
+  }
+  .cs-mnav__btn i { width: 1.1em; color: var(--cs-faint); transition: color .25s var(--cs-ease); }
+  .cs-mnav__btn:hover { background: #eef1f6; color: var(--cs-ink); }
+  .cs-mnav__btn.is-active { background: #fff; color: var(--cs-accent); box-shadow: var(--cs-sh-sm); }
+  .cs-mnav__btn.is-active i { color: var(--cs-accent); }
+  .cs-mnav__btn.is-active::before { content:""; position:absolute; left:0; top:22%; bottom:22%; width:3px; border-radius:3px; background:var(--cs-accent); }
+  .cs-mpanel { background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg);
+               padding: clamp(1.6rem, 3.5vw, 2.8rem); box-shadow: var(--cs-sh); }
+  .cs-mpanel h3 { font-size: 1.7rem; font-weight: 700; letter-spacing: -.025em; margin: 0; }
+  .cs-mpanel__purpose { color: var(--cs-muted); font-size: 1.05rem; margin: .6rem 0 1.8rem; line-height: 1.55; }
+  .cs-mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.2rem 1.6rem; }
+  .cs-mblock__h { display:flex; align-items:center; gap:.5em; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--cs-accent); margin-bottom: .5rem; }
+  .cs-mblock p { font-size: .93rem; color: var(--cs-ink-soft); line-height: 1.55; margin: 0; }
+  .cs-mblock ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+  .cs-mblock li { font-size: .92rem; color: var(--cs-ink-soft); display: flex; gap: .5em; }
+  .cs-mblock li::before { content: "→"; color: var(--cs-accent); }
+  .cs-mpanel__foot { margin-top: 2rem; padding-top: 1.6rem; border-top: 1px solid var(--cs-border); display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+  .cs-impact { font-size: .95rem; color: var(--cs-ink-soft); max-width: 46ch; }
+  .cs-impact b { color: var(--cs-ink); }
+
+  /* =======================================================================
+     RESULTS STYLES (Injected from customer-growth.html)
+     ======================================================================= */
+  .cs-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.2rem; }
+  .cs-kpi {
+    cursor: pointer; background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg);
+    padding: 1.6rem 1.5rem; box-shadow: var(--cs-sh-sm); text-align: left;
+    transition: transform .3s var(--cs-ease), box-shadow .3s var(--cs-ease);
+  }
+  .cs-kpi:hover { transform: translateY(-4px) scale(1.015); box-shadow: var(--cs-sh); }
+  .cs-kpi__top { display: flex; align-items: center; justify-content: space-between; }
+  .cs-kpi__ico { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--cs-accent-soft); color: var(--cs-accent); }
+  .cs-kpi__chev { color: var(--cs-faint); transition: transform .3s var(--cs-ease); }
+  .cs-kpi.is-open .cs-kpi__chev { transform: rotate(180deg); }
+  .cs-kpi__val { font-size: clamp(2.1rem, 3.4vw, 2.7rem); font-weight: 800; letter-spacing: -.03em; color: var(--cs-accent); line-height: 1; margin: 1.1rem 0 .3rem; }
+  .cs-kpi__lab { font-size: .95rem; font-weight: 600; color: var(--cs-ink); }
+  .cs-kpi__detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s var(--cs-ease); }
+  .cs-kpi.is-open .cs-kpi__detail { grid-template-rows: 1fr; }
+  .cs-kpi__detail > div { overflow: hidden; }
+  .cs-kpi__detail dl { margin: 1.1rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--cs-border); }
+  .cs-kpi__detail dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--cs-faint); margin-top: .8rem; }
+  .cs-kpi__detail dt:first-child { margin-top: 0; }
+  .cs-kpi__detail dd { margin: .25rem 0 0; font-size: .9rem; color: var(--cs-ink-soft); line-height: 1.5; }
+
+  .cs-fade { animation: csfade .4s var(--cs-ease); }
+  @keyframes csfade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* Closing CTA now uses the global .closing-cta component (css/styles.css) */
+
+  /* Perspective emphasis: elements tagged for the active lens get a ring */
+  .cs [data-emph] { transition: box-shadow .4s var(--cs-ease), border-color .4s var(--cs-ease); }
+  .cs.persp-hiring   [data-emph~="hiring"],
+  .cs.persp-scientist[data-emph~="scientist"],
+  .cs.persp-exec     [data-emph~="exec"] { border-color: var(--cs-accent); box-shadow: var(--cs-glow); }
+
+  /* Responsive Adjustments */
+  @media (max-width: 900px) {
+    .cs-explorer { grid-template-columns: 1fr; }
+    .cs-mnav { position: static; flex-direction: row; overflow-x: auto; scrollbar-width: none; }
+    .cs-mnav::-webkit-scrollbar { display: none; }
+    .cs-mnav__btn { white-space: nowrap; }
+    .cs-mnav__btn.is-active::before { display: none; }
+  }
   @media (max-width: 640px) {
-    .cs-arrow { width:42px; height:42px; }
+    .cs-arrow { width: 42px; height: 42px; }
   }
   </style>
 </head>
 <body>
 
-  <!-- GLOBAL SITE NAVIGATION (kept in sync with the rest of the site) -->
+  <!-- GLOBAL SITE NAVIGATION -->
   <nav class="nav" aria-label="Primary">
     <div class="nav__inner">
       <a class="nav__logo" href="../index.html"><img src="../images/logo_black.png" alt="Lucas Orjales Logo"></a>
@@ -205,9 +293,7 @@
 
   <main class="cs" id="csRoot">
 
-    <!-- ===================================================================
-         HERO (same information)
-         =================================================================== -->
+    <!-- HERO -->
     <header class="cs-hero">
       <div class="cs-wrap">
         <p class="cs-eyebrow reveal in"><i class="fa-solid fa-diagram-project"></i> Case Study · Machine Learning</p>
@@ -225,82 +311,166 @@
         </div>
 
         <div class="cs-hero__cta reveal in">
-          <a class="cs-btn cs-btn--dark" href="#slides"><i class="fa-solid fa-images"></i> View Slides</a>
-          <!-- REPLACE href with the real repository -->
-          <a class="cs-btn cs-btn--primary" href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Explore GitHub</a>
+          <a class="cs-btn cs-btn--dark" href="#overview"><i class="fa-solid fa-images"></i> View Slides</a>
+          <a class="cs-btn cs-btn--primary" href="https://github.com/orjalesl" target="_blank" rel="noopener" data-repo><i class="fa-brands fa-github"></i> Explore GitHub</a>
         </div>
 
         <div class="cs-hero__hint reveal in"><i class="fa-solid fa-chevron-down"></i> Scroll to browse the deck</div>
       </div>
     </header>
 
-    <!-- ===================================================================
-         STICKY TAB NAV — same items; each shows one slide image
-         =================================================================== -->
-    <nav class="cs-subnav" id="slides" aria-label="Slides">
-      <div class="cs-wrap cs-subnav__row" role="tablist">
-        <!-- REPLACE data-src file names once you upload the slide PNGs to ../images/slides/ -->
-        <button class="cs-tab" role="tab" data-src="../images/slides/overview.png"     data-caption="Overview">Overview</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/architecture.png" data-caption="Architecture">Architecture</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/workflow.png"     data-caption="Workflow">Workflow</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/models.png"        data-caption="Models">Models</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/results.png"       data-caption="Results">Results</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/dashboard.png"     data-caption="Dashboard">Dashboard</button>
-        <button class="cs-tab" role="tab" data-src="../images/slides/lessons.png"       data-caption="Lessons">Lessons</button>
+    <!-- STICKY SECTION NAV — scrolls through the page -->
+    <nav class="cs-subnav" aria-label="Sections">
+      <div class="cs-wrap cs-subnav__row" id="csSubnav">
+        <a href="#overview" class="is-active">Overview</a>
+        <a href="#insights">Insights</a>
+        <a href="#models">Models</a>
+        <a href="#results">Results</a>
       </div>
     </nav>
 
     <!-- ===================================================================
-         SLIDE VIEWER
+         OVERVIEW — slide deck browsed with a Model-Explorer-style picker
+         (left vertical list) plus prev/next arrows below the image.
          =================================================================== -->
-    <section class="cs-stage">
+    <section class="cs-section" id="overview" style="background:#eef1f6;">
       <div class="cs-wrap">
-        <div class="cs-stage__head">
-          <h2 class="cs-stage__title" id="slideTitle">Overview</h2>
-          <span class="cs-stage__count" id="slideCount">01 / 07</span>
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-images"></i> Overview</p>
+          <h2 class="cs-h2">The deck, one slide at a time</h2>
+          <p class="cs-sub">Pick a slide from the list or use the arrows — click any slide to view it full screen.</p>
         </div>
 
-        <!-- Click anywhere on the frame to open full screen -->
-        <figure class="slide-frame" id="slideFrame" tabindex="0" role="button" aria-label="Open slide full screen">
-          <button class="slide-frame__zoom" id="slideZoom" type="button" aria-label="Expand slide" tabindex="-1"><i class="fa-solid fa-expand"></i></button>
-          <img class="slide-frame__img" id="slideImg" alt="" />
-          <div class="slide-frame__ph" id="slidePh">
-            <i class="fa-solid fa-image"></i>
-            <span>Slide image placeholder</span>
-            <code id="slidePhPath"></code>
-            <span style="font-size:.82rem; opacity:.8;">Drop the exported slide here, then click to enlarge.</span>
-          </div>
-        </figure>
-        <figcaption class="slide-frame__caption" id="slideCaption">Placeholder — click the slide to view it full screen.</figcaption>
+        <div class="cs-explorer">
+          <!-- Slide picker: same navigation pattern as the Model Explorer -->
+          <nav class="cs-mnav reveal" id="slideNav" aria-label="Overview Slides"></nav>
 
-        <div class="cs-slidenav">
-          <button class="cs-arrow" id="slidePrev" type="button" aria-label="Previous slide"><i class="fa-solid fa-arrow-left"></i></button>
-          <button class="cs-arrow" id="slideNext" type="button" aria-label="Next slide"><i class="fa-solid fa-arrow-right"></i></button>
+          <!-- Image + arrows -->
+          <div class="reveal" data-d="1">
+            <div class="cs-stage__head">
+              <h3 class="cs-stage__title" id="slideTitle">Overview</h3>
+              <span class="cs-stage__count" id="slideCount">01 / 07</span>
+            </div>
+
+            <figure class="slide-frame" id="slideFrame">
+              <button class="slide-frame__zoom" aria-label="View full screen"><i class="fa-solid fa-expand"></i></button>
+              <div class="slide-frame__ph" id="slidePH">
+                <i class="fa-regular fa-image"></i>
+                <div>Slide image placeholder</div>
+                <code id="slidePath">../images/slides/overview.png</code>
+              </div>
+              <img class="slide-frame__img" id="slideImg" src="" alt="Slide view" />
+            </figure>
+
+            <div class="cs-slidenav">
+              <button class="cs-arrow" id="prevSlide" aria-label="Previous slide"><i class="fa-solid fa-arrow-left"></i></button>
+              <button class="cs-arrow" id="nextSlide" aria-label="Next slide"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Closing CTA -->
-    <section class="cs-stage" style="padding-top:0;">
-      <div class="cs-wrap" style="text-align:center;">
-        <a class="cs-btn cs-btn--primary" href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Explore Repository</a>
-        <a class="cs-btn cs-btn--dark" href="../portfolio.html" style="margin-left:.6rem;"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+    <!-- ===================================================================
+         INSIGHTS — duplicate navigation structure, using its own image set
+         =================================================================== -->
+    <section class="cs-section" id="insights">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-lightbulb"></i> Insights</p>
+          <h2 class="cs-h2">Key data insights &amp; takeaways</h2>
+          <p class="cs-sub">Explore key findings, feature importance, and analytical breakdowns generated from model exploration.</p>
+        </div>
+
+        <div class="cs-explorer">
+          <!-- Slide picker for Insights section -->
+          <nav class="cs-mnav reveal" id="insightsNav" aria-label="Insights Slides"></nav>
+
+          <!-- Image + arrows -->
+          <div class="reveal" data-d="1">
+            <div class="cs-stage__head">
+              <h3 class="cs-stage__title" id="insightsTitle">Insights</h3>
+              <span class="cs-stage__count" id="insightsCount">01 / 05</span>
+            </div>
+
+            <figure class="slide-frame" id="insightsFrame">
+              <button class="slide-frame__zoom" aria-label="View full screen"><i class="fa-solid fa-expand"></i></button>
+              <div class="slide-frame__ph" id="insightsPH">
+                <i class="fa-regular fa-image"></i>
+                <div>Insights image placeholder</div>
+                <code id="insightsPath">../images/insights/behavioral_drivers.png</code>
+              </div>
+              <img class="slide-frame__img" id="insightsImg" src="" alt="Insights view" />
+            </figure>
+
+            <div class="cs-slidenav">
+              <button class="cs-arrow" id="prevInsight" aria-label="Previous insight slide"><i class="fa-solid fa-arrow-left"></i></button>
+              <button class="cs-arrow" id="nextInsight" aria-label="Next insight slide"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         INJECTED SECTION 1: MODEL EXPLORER
+         =================================================================== -->
+    <section class="cs-section" id="models" style="background:#eef1f6;">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-layer-group"></i> Model Explorer</p>
+          <h2 class="cs-h2">Five models, one retention strategy</h2>
+          <p class="cs-sub">Browse each model like documentation — purpose, approach, algorithms, evaluation, and business impact.</p>
+        </div>
+
+        <div class="cs-explorer">
+          <nav class="cs-mnav reveal" id="modelNav" aria-label="Models"></nav>
+          <div class="cs-mpanel reveal" data-d="1" id="modelPanel" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         INJECTED SECTION 2: RESULTS
+         =================================================================== -->
+    <section class="cs-section" id="results">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-chart-line"></i> Business Results</p>
+          <h2 class="cs-h2">Outcomes that survive a CFO's questions</h2>
+          <p class="cs-sub">Illustrative figures — tap any card to see why it matters, how it's calculated, and the business implication.</p>
+        </div>
+        <div class="cs-kpis" id="kpiGrid"></div>
+      </div>
+    </section>
+
+    <!-- Closing CTA (global .closing-cta component — styles in css/styles.css) -->
+    <section class="section" style="background:#eef1f6;">
+      <div class="container container--narrow">
+        <div class="closing-cta">
+          <h2>See the full build on GitHub</h2>
+          <p>Notebooks, modeling code, causal uplift experiments, and the executive deliverables — all documented end to end.</p>
+          <div class="btn-group">
+            <a class="btn btn--primary" href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Explore Repository</a>
+            <a class="btn btn--ghost" href="../portfolio.html"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+          </div>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- LIGHTBOX (full screen within the page) -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lightbox__close" id="lbClose" type="button" aria-label="Close full screen"><i class="fa-solid fa-xmark"></i></button>
-    <img class="lightbox__img" id="lbImg" alt="" style="display:none;" />
-    <div class="lightbox__ph" id="lbPh">
-      <i class="fa-solid fa-image"></i>
-      <span>Slide image placeholder — upload the PNG to see it here.</span>
+  <!-- LIGHTBOX FOR SLIDES -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Slide full screen view">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close full screen"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox__ph" id="lightboxPH">
+      <i class="fa-regular fa-image"></i>
+      <div id="lightboxCaption">Slide image placeholder</div>
     </div>
+    <img class="lightbox__img" id="lightboxImg" src="" alt="Slide full screen view" style="display:none;" />
   </div>
 
-  <!-- FOOTER (kept in sync) -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer__inner">
       <p class="footer__copy">© <span id="year">2026</span> Lucas Orjales. All rights reserved.</p>
@@ -312,112 +482,358 @@
     </div>
   </footer>
 
+  <!-- Global site JS -->
   <script src="../js/main.js"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
-  <!-- =========================================================================
-       SLIDE VIEWER + LIGHTBOX (vanilla JS)
-       ========================================================================= -->
+  <!-- Combined Interactive & Slide JS -->
   <script>
   (function () {
     "use strict";
 
-    var tabs   = Array.prototype.slice.call(document.querySelectorAll(".cs-tab"));
-    if (!tabs.length) return;
+    var REPO_URL = "https://github.com/orjalesl";
 
-    var frame   = document.getElementById("slideFrame");
-    var img     = document.getElementById("slideImg");
-    var ph      = document.getElementById("slidePh");
-    var phPath  = document.getElementById("slidePhPath");
-    var title   = document.getElementById("slideTitle");
-    var caption = document.getElementById("slideCaption");
-    var count   = document.getElementById("slideCount");
-    var prevBtn = document.getElementById("slidePrev");
-    var nextBtn = document.getElementById("slideNext");
+    var $  = function (s, r) { return (r || document).querySelector(s); };
+    var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+    var esc = function (t) { return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
 
-    var lb      = document.getElementById("lightbox");
-    var lbImg   = document.getElementById("lbImg");
-    var lbPh    = document.getElementById("lbPh");
-    var lbClose = document.getElementById("lbClose");
+    $$("[data-repo]").forEach(function (a) { a.href = REPO_URL; a.target = "_blank"; a.rel = "noopener"; });
 
-    var index = 0;
-    var total = tabs.length;
+    /* ------------------------------------------------------------------
+       SHARED LIGHTBOX LOGIC
+       ------------------------------------------------------------------ */
+    var lightbox = $("#lightbox");
+    var lightboxImg = $("#lightboxImg");
+    var lightboxPH = $("#lightboxPH");
+    var lightboxCaption = $("#lightboxCaption");
+    var lightboxClose = $("#lightboxClose");
 
-    function pad(n) { return (n < 10 ? "0" : "") + n; }
-
-    /* Show slide at `i` in the inline viewer */
-    function show(i) {
-      index = (i + total) % total;
-      var tab = tabs[index];
-      var src = tab.getAttribute("data-src");
-      var label = tab.getAttribute("data-caption") || tab.textContent.trim();
-
-      tabs.forEach(function (t, k) {
-        var on = k === index;
-        t.classList.toggle("is-active", on);
-        t.setAttribute("aria-selected", on ? "true" : "false");
-      });
-
-      title.textContent = label;
-      caption.textContent = label + " — click the slide to view it full screen.";
-      count.textContent = pad(index + 1) + " / " + pad(total);
-      if (phPath) phPath.textContent = src;
-
-      /* Reset then load; onload/onerror toggles the placeholder */
-      img.classList.remove("is-loaded");
-      ph.style.display = "flex";
-      img.alt = label + " slide";
-      img.onload = function () { img.classList.add("is-loaded"); ph.style.display = "none"; };
-      img.onerror = function () { img.classList.remove("is-loaded"); ph.style.display = "flex"; };
-      img.src = src;
-    }
-
-    /* ---- Lightbox (full screen within the page) ---- */
-    function openLightbox() {
-      var loaded = img.classList.contains("is-loaded");
-      if (loaded) {
-        lbImg.src = img.src;
-        lbImg.alt = img.alt;
-        lbImg.style.display = "";
-        lbPh.style.display = "none";
+    function openLightbox(src, caption) {
+      if (src) {
+        lightboxImg.src = src;
+        lightboxImg.style.display = "block";
+        lightboxPH.style.display = "none";
       } else {
-        lbImg.style.display = "none";
-        lbPh.style.display = "flex";
+        lightboxImg.style.display = "none";
+        lightboxPH.style.display = "flex";
+        lightboxCaption.textContent = "Slide image placeholder: " + caption;
       }
-      lb.classList.add("is-open");
-      lb.setAttribute("aria-hidden", "false");
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
       document.body.classList.add("cs-lock");
     }
+
     function closeLightbox() {
-      lb.classList.remove("is-open");
-      lb.setAttribute("aria-hidden", "true");
+      lightbox.classList.remove("is-open");
+      lightbox.setAttribute("aria-hidden", "true");
       document.body.classList.remove("cs-lock");
     }
 
-    /* ---- Wire up ---- */
-    tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); }); });
-    prevBtn.addEventListener("click", function () { show(index - 1); });
-    nextBtn.addEventListener("click", function () { show(index + 1); });
-
-    frame.addEventListener("click", openLightbox);
-    frame.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(); }
-      else if (e.key === "ArrowLeft") { show(index - 1); }
-      else if (e.key === "ArrowRight") { show(index + 1); }
-    });
-
-    /* Click the image (or backdrop) to minimize; X closes too */
-    lb.addEventListener("click", closeLightbox);
-    lbClose.addEventListener("click", function (e) { e.stopPropagation(); closeLightbox(); });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && lb.classList.contains("is-open")) closeLightbox();
-      else if (lb.classList.contains("is-open")) {
-        if (e.key === "ArrowLeft") { show(index - 1); openLightbox(); }
-        else if (e.key === "ArrowRight") { show(index + 1); openLightbox(); }
+    if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+    if (lightbox) lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox || e.target === lightboxImg || e.target.classList.contains("lightbox__ph")) {
+        closeLightbox();
       }
     });
 
-    show(0); // start on Overview
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && lightbox && lightbox.classList.contains("is-open")) {
+        closeLightbox();
+      }
+    });
+
+    /* ------------------------------------------------------------------
+       GENERIC SLIDE VIEWER CREATOR FUNCTION
+       ------------------------------------------------------------------ */
+    function initSlideViewer(config) {
+      var slides = config.slides;
+      var navEl = $(config.navId);
+      var titleEl = $(config.titleId);
+      var countEl = $(config.countId);
+      var imgEl = $(config.imgId);
+      var phEl = $(config.phId);
+      var pathEl = $(config.pathId);
+      var frameEl = $(config.frameId);
+      var prevBtn = $(config.prevId);
+      var nextBtn = $(config.nextId);
+
+      var navBtns = [];
+      var currentIdx = 0;
+
+      if (navEl) {
+        slides.forEach(function (s, i) {
+          var b = document.createElement("button");
+          b.className = "cs-mnav__btn"; b.type = "button"; b.dataset.i = i;
+          b.innerHTML = '<i class="fa-solid ' + s.icon + '"></i> ' + esc(s.caption);
+          b.addEventListener("click", function () { loadSlide(i); });
+          navEl.appendChild(b);
+          navBtns.push(b);
+        });
+      }
+
+      function loadSlide(idx) {
+        if (!slides.length) return;
+        if (idx < 0) idx = slides.length - 1;
+        if (idx >= slides.length) idx = 0;
+        currentIdx = idx;
+
+        navBtns.forEach(function (b, i) {
+          var active = i === idx;
+          b.classList.toggle("is-active", active);
+          b.setAttribute("aria-current", active ? "true" : "false");
+        });
+
+        var s = slides[idx];
+        if (titleEl) titleEl.textContent = s.caption;
+        if (countEl) countEl.textContent =
+          (idx + 1 < 10 ? "0" : "") + (idx + 1) + " / " + (slides.length < 10 ? "0" : "") + slides.length;
+        if (pathEl) pathEl.textContent = s.src;
+
+        imgEl.classList.remove("is-loaded");
+        var img = new Image();
+        img.onload = function () {
+          imgEl.src = s.src;
+          imgEl.classList.add("is-loaded");
+          phEl.style.display = "none";
+        };
+        img.onerror = function () {
+          imgEl.src = "";
+          phEl.style.display = "flex";
+        };
+        img.src = s.src;
+      }
+
+      if (prevBtn) prevBtn.addEventListener("click", function () { loadSlide(currentIdx - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { loadSlide(currentIdx + 1); });
+
+      if (frameEl) {
+        frameEl.addEventListener("click", function () {
+          var currentSlide = slides[currentIdx];
+          openLightbox(imgEl.classList.contains("is-loaded") ? currentSlide.src : "", currentSlide.src);
+        });
+      }
+
+      loadSlide(0);
+    }
+
+    /* ------------------------------------------------------------------
+       1. OVERVIEW SLIDES INITIALIZATION
+       ------------------------------------------------------------------ */
+    var OVERVIEW_SLIDES = [
+      { src:"../images/slides/overview.png",         caption:"Executive Summary",     icon:"fa-rectangle-list" },
+      { src:"../images/slides/business_problem.png", caption:"Business Problem",     icon:"fa-question-circle" },
+      { src:"../images/slides/architecture.png",     caption:"Architecture",         icon:"fa-sitemap" },
+      { src:"../images/slides/models.png",           caption:"Models",               icon:"fa-brain" },
+      { src:"../images/slides/experiment.png",       caption:"Experimental Design", icon:"fa-flask" },
+      { src:"../images/slides/roi.png",              caption:"ROI",                  icon:"fa-chart-line" },
+      { src:"../images/slides/recommendations.png",  caption:"Recommendations",      icon:"fa-star" },
+      { src:"../images/slides/lessons.png",          caption:"Lessons",              icon:"fa-lightbulb" }
+    ];
+
+    initSlideViewer({
+      slides: OVERVIEW_SLIDES,
+      navId: "#slideNav",
+      titleId: "#slideTitle",
+      countId: "#slideCount",
+      imgId: "#slideImg",
+      phId: "#slidePH",
+      pathId: "#slidePath",
+      frameId: "#slideFrame",
+      prevId: "#prevSlide",
+      nextId: "#nextSlide"
+    });
+
+    /* ------------------------------------------------------------------
+       2. INSIGHTS SLIDES INITIALIZATION
+       ------------------------------------------------------------------ */
+    var INSIGHTS_SLIDES = [
+      { src:"../images/insights/behavioral_drivers.png", caption:"Customer Behavior",  icon:"fa-users" },
+      { src:"../images/insights/uplift_deciles.png",     caption:"Customer Value",      icon:"fa-solid fa-dollar-sign" },
+      { src:"../images/insights/clv_distribution.png",   caption:"Segmentation",    icon:"fa-object-group" },
+      { src:"../images/insights/feature_importance.png", caption:"Churn", icon:"fa-exclamation-triangle" },
+      { src:"../images/insights/segment_migration.png",  caption:"Experimentation",   icon:"fa-flask" },
+      { src:"../images/insights/segment_migration.png",  caption:"Uplift",   icon:"fa-solid fa-arrows-down-to-people" }
+    ];
+
+    initSlideViewer({
+      slides: INSIGHTS_SLIDES,
+      navId: "#insightsNav",
+      titleId: "#insightsTitle",
+      countId: "#insightsCount",
+      imgId: "#insightsImg",
+      phId: "#insightsPH",
+      pathId: "#insightsPath",
+      frameId: "#insightsFrame",
+      prevId: "#prevInsight",
+      nextId: "#nextInsight"
+    });
+
+    /* ------------------------------------------------------------------
+       DATA FOR INJECTED SECTIONS (from customer-growth.html)
+       ------------------------------------------------------------------ */
+    var MODELS = [
+      { icon:"fa-users-viewfinder", name:"Customer Segmentation",
+        purpose:"Reveal behaviorally distinct member groups so strategy and messaging can be tailored.",
+        problem:"A single retention approach ignores that members churn for very different reasons.",
+        approach:"Unsupervised clustering on engagement/spend features, profiled and named for business use.",
+        algos:["K-Means","Hierarchical clustering","UMAP (viz)"],
+        feats:["RFM features","Engagement cadence","Tenure & plan type"],
+        metrics:["Silhouette score","Segment stability","Business interpretability"],
+        impact:"Turned an anonymous member base into <b>actionable audiences</b> for targeted retention." },
+      { icon:"fa-gem", name:"Customer Lifetime Value",
+        purpose:"Quantify each member's forward economic value to weight retention effort.",
+        problem:"Saving a low-value member can cost more than the member is worth.",
+        approach:"Probabilistic CLV modeling combining purchase frequency and monetary value over tenure.",
+        algos:["BG/NBD","Gamma-Gamma","Gradient boosting (benchmark)"],
+        feats:["Purchase frequency","Average order value","Tenure & recency"],
+        metrics:["MAE vs. holdout value","Calibration","Decile lift"],
+        impact:"Let the business <b>prioritize high-value members</b> rather than treat everyone equally." },
+      { icon:"fa-triangle-exclamation", name:"Churn Prediction",
+        purpose:"Estimate the probability each member leaves in the next period.",
+        problem:"Without a risk signal, outreach is reactive and late.",
+        approach:"Calibrated gradient boosting with rigorous leakage control and probability calibration.",
+        algos:["XGBoost","LightGBM","Isotonic calibration"],
+        feats:["Engagement decline","Support friction","Billing signals"],
+        metrics:["ROC-AUC","PR-AUC","Calibration (Brier)"],
+        impact:"Provided a <b>trustworthy risk score</b> — the input everything downstream depends on." },
+      { icon:"fa-code-branch", name:"Uplift Modeling",
+        purpose:"Estimate the causal effect of a retention offer to find the truly persuadable.",
+        problem:"High churn risk ≠ worth targeting; some leave regardless, some stay regardless.",
+        approach:"Causal meta-learners on treatment/control data to score incremental impact, not correlation.",
+        algos:["T-/X-learner","Causal forests","EconML"],
+        feats:["Treatment response history","Segment × risk interactions","Offer sensitivity"],
+        metrics:["Qini coefficient","Uplift @ decile","Policy value"],
+        impact:"Focused budget on the <b>persuadable few</b> — the core driver of marketing efficiency." },
+      { icon:"fa-coins", name:"ROI Simulation",
+        purpose:"Convert scores into an optimal target list and a defensible budget.",
+        problem:"Leaders need a number: who to target, how much to spend, expected return.",
+        approach:"Combine churn × CLV × uplift with campaign economics; simulate net ROI across budgets.",
+        algos:["Expected-value ranking","Monte Carlo","Budget optimization"],
+        feats:["Churn probability","Predicted CLV","Uplift score","Contact cost"],
+        metrics:["Net ROI","Incremental retained revenue","Cost per retained member"],
+        impact:"Produced the <b>recommendation executives approved</b> — spend, target, and expected payoff." }
+    ];
+
+    var KPIS = [
+      { icon:"fa-shield-halved", val:"$4.2M", lab:"Revenue Protected",
+        why:"Retained revenue from members the model correctly flagged and the campaign successfully saved.",
+        how:"Incremental retained members × predicted CLV, measured against a holdout control group.",
+        imp:"Reframes retention from a cost center to a measurable revenue driver." },
+      { icon:"fa-bullseye", val:"-38%", lab:"Marketing Efficiency",
+        why:"Reduction in retention spend needed to save the same number of members.",
+        how:"Targeting by uplift vs. by churn risk alone, compared at equal retention outcomes.",
+        imp:"Frees budget to reinvest in growth without losing members." },
+      { icon:"fa-arrow-trend-up", val:"+22%", lab:"Retention Lift",
+        why:"Increase in retention among treated persuadable members vs. control.",
+        how:"Difference in retention rate between treatment and control in the persuadable segment.",
+        imp:"Proves the program causes retention rather than taking credit for it." },
+      { icon:"fa-coins", val:"6.3x", lab:"Campaign ROI",
+        why:"Net return per dollar of retention spend under the recommended target list.",
+        how:"Incremental retained revenue minus campaign cost, divided by campaign cost.",
+        imp:"Gives finance a clear, conservative basis to fund the program." }
+    ];
+
+    /* ------------------------------------------------------------------
+       INITIALIZE MODEL EXPLORER
+       ------------------------------------------------------------------ */
+    (function initModels() {
+      var nav = $("#modelNav"), panel = $("#modelPanel");
+      if (!nav || !panel) return;
+
+      MODELS.forEach(function (m, i) {
+        var b = document.createElement("button");
+        b.className = "cs-mnav__btn"; b.type = "button"; b.dataset.i = i;
+        b.innerHTML = '<i class="fa-solid ' + m.icon + '"></i> ' + esc(m.name);
+        b.addEventListener("click", function () { selectModel(i); });
+        nav.appendChild(b);
+      });
+
+      function block(h, inner) { return '<div class="cs-mblock"><div class="cs-mblock__h">' + h + '</div>' + inner + '</div>'; }
+      function list(arr) { return '<ul>' + arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>'; }
+
+      function selectModel(i) {
+        var m = MODELS[i];
+        $$(".cs-mnav__btn", nav).forEach(function (el) { el.classList.toggle("is-active", +el.dataset.i === i); });
+        panel.innerHTML =
+          '<div class="cs-fade">' +
+            '<h3>' + esc(m.name) + '</h3>' +
+            '<p class="cs-mpanel__purpose">' + esc(m.purpose) + '</p>' +
+            '<div class="cs-mgrid">' +
+              block("Business Problem", '<p>' + esc(m.problem) + '</p>') +
+              block("Approach", '<p>' + esc(m.approach) + '</p>') +
+              block("Algorithms", list(m.algos)) +
+              block("Key Features", list(m.feats)) +
+              block("Evaluation Metrics", list(m.metrics)) +
+            '</div>' +
+            '<div class="cs-mpanel__foot">' +
+              '<p class="cs-impact"><b>Business impact:</b> ' + m.impact + '</p>' +
+              '<a class="cs-btn cs-btn--dark" href="' + REPO_URL + '" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> View code</a>' +
+            '</div>' +
+          '</div>';
+      }
+      selectModel(0);
+    })();
+
+    /* ------------------------------------------------------------------
+       INITIALIZE RESULTS KPIS
+       ------------------------------------------------------------------ */
+    (function initKpis() {
+      var grid = $("#kpiGrid");
+      if (!grid) return;
+      KPIS.forEach(function (k, i) {
+        var card = document.createElement("article");
+        card.className = "cs-kpi reveal"; card.dataset.d = (i % 4) + 1;
+        card.setAttribute("tabindex", "0");
+        card.innerHTML =
+          '<div class="cs-kpi__top"><span class="cs-kpi__ico"><i class="fa-solid ' + k.icon + '"></i></span>' +
+          '<i class="fa-solid fa-chevron-down cs-kpi__chev"></i></div>' +
+          '<div class="cs-kpi__val">' + esc(k.val) + '</div>' +
+          '<div class="cs-kpi__lab">' + esc(k.lab) + '</div>' +
+          '<div class="cs-kpi__detail"><div><dl>' +
+            '<dt>Why it matters</dt><dd>' + esc(k.why) + '</dd>' +
+            '<dt>How it\'s calculated</dt><dd>' + esc(k.how) + '</dd>' +
+            '<dt>Business implication</dt><dd>' + esc(k.imp) + '</dd>' +
+          '</dl></div></div>';
+        var toggle = function () { card.classList.toggle("is-open"); };
+        card.addEventListener("click", toggle);
+        card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+        grid.appendChild(card);
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       SCROLL REVEAL ANIMATION
+       ------------------------------------------------------------------ */
+    (function initReveal() {
+      var els = $$(".reveal");
+      if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+      }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+
+    /* ------------------------------------------------------------------
+       SUBNAV ACTIVE HIGHLIGHT ON SCROLL
+       ------------------------------------------------------------------ */
+    (function initSubnav() {
+      var links = $$("#csSubnav a");
+      if (!links.length || !("IntersectionObserver" in window)) return;
+      var map = {};
+      links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+      var sections = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove("is-active"); });
+            if (map[en.target.id]) map[en.target.id].classList.add("is-active");
+          }
+        });
+      }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+      sections.forEach(function (s) { io.observe(s); });
+    })();
+
   })();
   </script>
 </body>

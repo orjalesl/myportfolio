@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
 </head>
 <body>
 
@@ -195,16 +195,19 @@
       </div>
     </section>
 
-    <!-- CONTACT CTA -->
-    <section class="section section--dark text-center" aria-labelledby="contact-title">
-      <div class="container container--narrow">
-        <h2 id="contact-title" data-reveal>Have a problem worth solving?</h2>
-        <p data-reveal data-reveal-delay="1" style="margin-top: var(--space-sm);">
-          Placeholder — one inviting sentence about starting a conversation.
-        </p>
-        <div class="btn-group btn-group--center" data-reveal data-reveal-delay="2" style="margin-top: var(--space-lg);">
-          <a class="btn btn--primary" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-          <a class="btn btn--ghost" href="mailto:you@example.com"><i class="fa-solid fa-envelope"></i> Email</a>
+    <!-- =======================================================================
+         CLOSING CTA  (global .closing-cta component — styles in css/styles.css)
+         ======================================================================= -->
+    <section class="section">
+      <div class="container">
+        <div class="closing-cta" data-reveal>
+          <h2>Have a problem worth solving?</h2>
+          <p>I'm always open to consulting engagements, collaboration, and speaking. Let's talk about what you're working on.</p>
+          <div class="btn-group">
+            <a class="btn btn--primary" href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            <a class="btn btn--ghost" href="mailto:lporjales@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+            <a class="btn btn--ghost" href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
         </div>
       </div>
     </section>
@@ -223,7 +226,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=2"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

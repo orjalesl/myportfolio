@@ -27,8 +27,8 @@
   <!-- Font Awesome (icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
-  <!-- Site styles -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Site styles (?v= cache-buster: bump when styles.css changes) -->
+  <link rel="stylesheet" href="css/styles.css?v=3" />
 </head>
 <body>
 
@@ -641,6 +641,22 @@
       </div>
     </section>
 
+    <!-- =======================================================================
+         CLOSING CTA  (global .closing-cta component — styles in css/styles.css)
+         ======================================================================= -->
+    <section class="section">
+      <div class="container">
+        <div class="closing-cta" data-reveal>
+          <h2>Let's build something intelligent.</h2>
+          <p>I'm always open to consulting engagements, collaboration, and speaking. If you have a problem worth solving, let's talk.</p>
+          <div class="btn-group">
+            <a class="btn btn--primary" href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            <a class="btn btn--ghost" href="mailto:lporjales@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+            <a class="btn btn--ghost" href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
   <!-- =========================================================================
        FOOTER  (identical across pages — keep in sync)
@@ -656,7 +672,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=2"></script>
   <!-- Hero knowledge-graph background (home page only) -->
   <script src="js/hero-graph.js"></script>
   <!-- Auto-update footer year -->
