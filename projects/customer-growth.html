@@ -5,488 +5,1163 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- =========================================================================
-       PROJECT CASE STUDY TEMPLATE
-       This page is one of four case studies sharing the SAME layout.
-       To create/populate a project, replace only the marked placeholders.
-       NOTE: this file lives in /projects/, so asset paths use "../".
-       Per-project image slug used below: "customer-growth"
+       CASE STUDY — Member Churn Prediction + Uplift Modeling
+       Self-contained interactive page. All page-specific CSS/JS live in this
+       file (in <style> and <script>). Shared design tokens come from
+       ../css/styles.css; the global site nav/footer are reused for consistency.
+       REPLACE: REPO_URL (bottom <script>) and any placeholder copy/numbers.
        ========================================================================= -->
+  <title>Member Churn &amp; Uplift Modeling — Case Study</title>
+  <meta name="description" content="Predicting member churn and identifying which customers are actually worth retaining through causal machine learning." />
 
-  <!-- REPLACE: page title & description -->
-  <title>Customer Growth Intelligence — Case Study</title>
-  <meta name="description" content="Placeholder: business objective of the customer growth case study." />
-
-  <link rel="icon" type="image/png" href="../images/favicon.png" />
+  <link rel="icon" type="image/png" href="../images/icon_white.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../css/styles.css" />
+
+  <!-- =========================================================================
+       PAGE-SPECIFIC STYLES
+       ========================================================================= -->
+  <style>
+  /* ---- Local design tokens (scoped to .cs) ---- */
+  .cs {
+    --cs-bg:          #f4f6f9;
+    --cs-card:        #ffffff;
+    --cs-ink:         #14161a;
+    --cs-ink-soft:    #3a3f47;
+    --cs-muted:       #6b7280;
+    --cs-faint:       #9aa1ab;
+    --cs-accent:      #0071e3;
+    --cs-accent-2:    #4f8cff;
+    --cs-accent-soft: #eaf2fe;
+    --cs-border:      #e7e9ee;
+    --cs-border-2:    #dfe2e8;
+    --cs-r-sm:        12px;
+    --cs-r:           18px;
+    --cs-r-lg:        26px;
+    --cs-sh-sm:       0 1px 2px rgba(20,22,26,.04), 0 4px 14px rgba(20,22,26,.05);
+    --cs-sh:          0 10px 30px rgba(20,22,26,.08);
+    --cs-sh-lg:       0 30px 70px rgba(20,22,26,.16);
+    --cs-glow:        0 0 0 1px rgba(0,113,227,.35), 0 14px 40px rgba(0,113,227,.20);
+    --cs-ease:        cubic-bezier(.16,1,.3,1);
+
+    background: var(--cs-bg);
+    color: var(--cs-ink);
+  }
+  .cs *,
+  .cs *::before,
+  .cs *::after { box-sizing: border-box; }
+
+  .cs-wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.1rem, 4vw, 2.5rem); }
+  .cs-section { padding-block: clamp(3.5rem, 8vw, 7rem); scroll-margin-top: 128px; }
+  .cs-eyebrow {
+    display: inline-flex; align-items: center; gap: .5em;
+    font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cs-accent); margin: 0 0 .9rem;
+  }
+  .cs-h2 { font-size: clamp(1.8rem, 3.6vw, 2.9rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.05; margin: 0; color: var(--cs-ink); }
+  .cs-sub { font-size: clamp(1rem, 1.4vw, 1.15rem); color: var(--cs-muted); max-width: 60ch; margin: 1rem 0 0; line-height: 1.6; }
+  .cs-head { margin-bottom: clamp(2rem, 4vw, 3.2rem); }
+
+  /* ---- Buttons ---- */
+  .cs-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+    font: inherit; font-weight: 500; font-size: .98rem; line-height: 1; cursor: pointer;
+    padding: .95em 1.6em; border-radius: 999px; border: 1px solid transparent;
+    transition: transform .25s var(--cs-ease), background .25s var(--cs-ease),
+                box-shadow .25s var(--cs-ease), color .25s var(--cs-ease), border-color .25s var(--cs-ease);
+    text-decoration: none;
+  }
+  .cs-btn--primary { background: var(--cs-accent); color: #fff; }
+  .cs-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,113,227,.35); }
+  .cs-btn--ghost { background: #fff; color: var(--cs-ink); border-color: var(--cs-border-2); }
+  .cs-btn--ghost:hover { transform: translateY(-2px); box-shadow: var(--cs-sh-sm); border-color: var(--cs-accent); color: var(--cs-accent); }
+  .cs-btn--dark { background: var(--cs-ink); color: #fff; }
+  .cs-btn--dark:hover { transform: translateY(-2px); box-shadow: var(--cs-sh); }
+  .cs-btn:active { transform: scale(.98); }
+
+  /* ---- Scroll reveal ---- */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s var(--cs-ease), transform .7s var(--cs-ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal[data-d="1"]{ transition-delay:.07s } .reveal[data-d="2"]{ transition-delay:.14s }
+  .reveal[data-d="3"]{ transition-delay:.21s } .reveal[data-d="4"]{ transition-delay:.28s }
+  .reveal[data-d="5"]{ transition-delay:.35s } .reveal[data-d="6"]{ transition-delay:.42s }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none } }
+
+  /* =======================================================================
+     1. HERO
+     ======================================================================= */
+  .cs-hero {
+    position: relative; overflow: hidden;
+    padding-top: calc(var(--nav-height) + clamp(3rem, 8vw, 6rem));
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+    min-height: 92vh; display: flex; align-items: center;
+    background:
+      radial-gradient(1100px 520px at 78% -10%, #e9f1ff 0%, rgba(233,241,255,0) 60%),
+      radial-gradient(900px 500px at 8% 8%, #eef1f6 0%, rgba(238,241,246,0) 55%),
+      var(--cs-bg);
+  }
+  .cs-hero__inner { width: 100%; }
+  .cs-hero__title {
+    font-size: clamp(2.4rem, 6.2vw, 5rem); font-weight: 800; letter-spacing: -.035em;
+    line-height: 1.02; margin: .2rem 0 0; max-width: 16ch; color: var(--cs-ink);
+  }
+  .cs-hero__title .grad {
+    background: linear-gradient(100deg, var(--cs-ink) 20%, var(--cs-accent) 115%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .cs-hero__sub { font-size: clamp(1.05rem, 1.7vw, 1.4rem); color: var(--cs-muted); max-width: 54ch; margin: 1.4rem 0 0; line-height: 1.5; }
+  .cs-badges { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.8rem; }
+  .cs-badge {
+    display: inline-flex; align-items: center; gap: .5em; font-size: .85rem; font-weight: 500;
+    color: var(--cs-ink-soft); background: #fff; border: 1px solid var(--cs-border-2);
+    border-radius: 999px; padding: .55em 1.05em; box-shadow: var(--cs-sh-sm);
+    transition: transform .25s var(--cs-ease), box-shadow .25s var(--cs-ease), border-color .25s var(--cs-ease);
+  }
+  .cs-badge i { color: var(--cs-accent); }
+  .cs-badge:hover { transform: translateY(-3px); box-shadow: var(--cs-sh); border-color: var(--cs-accent); }
+  .cs-hero__cta { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2.2rem; }
+
+  /* Perspective segmented control */
+  .cs-persp { margin-top: 2.6rem; }
+  .cs-persp__label { font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--cs-faint); margin-bottom: .6rem; }
+  .cs-seg {
+    display: inline-flex; background: #eceef2; border: 1px solid var(--cs-border-2);
+    border-radius: 999px; padding: 5px; gap: 4px; position: relative; max-width: 100%; flex-wrap: wrap;
+  }
+  .cs-seg__btn {
+    font: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; border: none; background: transparent;
+    color: var(--cs-muted); padding: .6em 1.15em; border-radius: 999px; white-space: nowrap;
+    transition: color .3s var(--cs-ease), background .3s var(--cs-ease), box-shadow .3s var(--cs-ease);
+  }
+  .cs-seg__btn[aria-selected="true"] { background: #fff; color: var(--cs-accent); box-shadow: var(--cs-sh-sm); }
+  .cs-lens {
+    display: block; margin-top: 1.2rem; font-size: .98rem; color: var(--cs-ink-soft);
+    background: var(--cs-accent-soft); border: 1px solid #d6e6fb; border-left: 3px solid var(--cs-accent);
+    border-radius: 10px; padding: .8rem 1rem; max-width: 60ch;
+    transition: opacity .35s var(--cs-ease);
+  }
+  .cs-lens b { color: var(--cs-accent); font-weight: 600; }
+
+  /* =======================================================================
+     2. STICKY SUBNAV
+     ======================================================================= */
+  .cs-subnav {
+    position: sticky; top: var(--nav-height); z-index: 40;
+    background: rgba(255,255,255,.78); backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-block: 1px solid var(--cs-border);
+  }
+  .cs-subnav__row { display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; }
+  .cs-subnav__row::-webkit-scrollbar { display: none; }
+  .cs-subnav a {
+    position: relative; white-space: nowrap; font-size: .92rem; font-weight: 500; color: var(--cs-muted);
+    text-decoration: none; padding: 1rem .9rem; transition: color .25s var(--cs-ease);
+  }
+  .cs-subnav a::after {
+    content: ""; position: absolute; left: .9rem; right: .9rem; bottom: -1px; height: 2px;
+    background: var(--cs-accent); border-radius: 2px; transform: scaleX(0); transform-origin: center;
+    transition: transform .3s var(--cs-ease);
+  }
+  .cs-subnav a:hover { color: var(--cs-ink); }
+  .cs-subnav a.is-active { color: var(--cs-accent); }
+  .cs-subnav a.is-active::after { transform: scaleX(1); }
+
+  /* =======================================================================
+     3. ARCHITECTURE
+     ======================================================================= */
+  .cs-arch { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+  .cs-flow { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .cs-node {
+    text-align: left; width: 100%; cursor: pointer; background: var(--cs-card);
+    border: 1px solid var(--cs-border); border-radius: var(--cs-r);
+    padding: 1rem 1.15rem; display: flex; align-items: center; gap: .95rem; font: inherit;
+    box-shadow: var(--cs-sh-sm);
+    transition: transform .3s var(--cs-ease), box-shadow .3s var(--cs-ease), border-color .3s var(--cs-ease);
+  }
+  .cs-node:hover { transform: translateY(-3px); box-shadow: var(--cs-glow); border-color: transparent; }
+  .cs-node.is-active { border-color: var(--cs-accent); box-shadow: var(--cs-glow); }
+  .cs-node__ico {
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--cs-accent-soft); color: var(--cs-accent); font-size: 1.15rem;
+  }
+  .cs-node__t { font-weight: 600; font-size: 1rem; color: var(--cs-ink); }
+  .cs-node__s { font-size: .82rem; color: var(--cs-faint); margin-top: .1rem; }
+  .cs-node__n { margin-left: auto; font-size: .8rem; font-weight: 600; color: var(--cs-faint); }
+  /* Animated connector */
+  .cs-conn { height: 26px; width: 2px; margin-inline: auto; background: linear-gradient(var(--cs-accent), var(--cs-accent-2)); opacity: .35;
+             transform: scaleY(0); transform-origin: top; transition: transform .5s var(--cs-ease); }
+  .cs-flow.in .cs-conn { transform: scaleY(1); }
+  .cs-flow.in .cs-conn:nth-of-type(2){ transition-delay:.05s } .cs-flow.in .cs-conn:nth-of-type(4){ transition-delay:.1s }
+  .cs-flow.in .cs-conn:nth-of-type(6){ transition-delay:.15s } .cs-flow.in .cs-conn:nth-of-type(8){ transition-delay:.2s }
+  .cs-flow.in .cs-conn:nth-of-type(10){ transition-delay:.25s } .cs-flow.in .cs-conn:nth-of-type(12){ transition-delay:.3s }
+  .cs-flow.in .cs-conn:nth-of-type(14){ transition-delay:.35s }
+
+  .cs-arch__panel {
+    position: sticky; top: calc(var(--nav-height) + 72px); background: var(--cs-card);
+    border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg); padding: clamp(1.4rem, 3vw, 2.2rem);
+    box-shadow: var(--cs-sh);
+  }
+  .cs-panel__ico { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center;
+                   background: var(--cs-accent-soft); color: var(--cs-accent); font-size: 1.4rem; margin-bottom: 1rem; }
+  .cs-panel__title { font-size: 1.4rem; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  .cs-panel__purpose { color: var(--cs-muted); margin: .6rem 0 1.4rem; line-height: 1.55; }
+  .cs-io { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.4rem; }
+  .cs-io__box { background: var(--cs-bg); border: 1px solid var(--cs-border); border-radius: 12px; padding: .9rem 1rem; }
+  .cs-io__h { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--cs-faint); margin-bottom: .4rem; }
+  .cs-io__box p { font-size: .9rem; color: var(--cs-ink-soft); margin: 0; line-height: 1.5; }
+  .cs-chiprow { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .cs-chip { font-size: .78rem; font-weight: 500; color: var(--cs-ink-soft); background: var(--cs-bg);
+             border: 1px solid var(--cs-border-2); border-radius: 999px; padding: .4em .85em; }
+  .cs-fade { animation: csfade .4s var(--cs-ease); }
+  @keyframes csfade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* =======================================================================
+     4. WORKFLOW TIMELINE
+     ======================================================================= */
+  .cs-track { display: flex; gap: .75rem; overflow-x: auto; padding-bottom: .6rem; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .cs-track::-webkit-scrollbar { display: none; }
+  .cs-stage {
+    scroll-snap-align: start; flex: 1 0 auto; min-width: 150px; cursor: pointer; font: inherit; text-align: left;
+    background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r);
+    padding: 1.1rem 1.15rem; box-shadow: var(--cs-sh-sm);
+    transition: transform .3s var(--cs-ease), box-shadow .3s var(--cs-ease), border-color .3s var(--cs-ease);
+  }
+  .cs-stage:hover { transform: translateY(-3px); box-shadow: var(--cs-sh); }
+  .cs-stage.is-active { border-color: var(--cs-accent); box-shadow: var(--cs-glow); }
+  .cs-stage__n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 9px;
+                 background: var(--cs-accent-soft); color: var(--cs-accent); font-weight: 700; font-size: .85rem; margin-bottom: .7rem; }
+  .cs-stage.is-active .cs-stage__n { background: var(--cs-accent); color: #fff; }
+  .cs-stage__t { font-weight: 600; font-size: .96rem; }
+  .cs-wf-panel {
+    margin-top: 1.5rem; background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg);
+    padding: clamp(1.5rem, 3.5vw, 2.6rem); box-shadow: var(--cs-sh); min-height: 220px;
+  }
+  .cs-wf-panel h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; margin: 0 0 .2rem; }
+  .cs-wf-panel .cs-wf-lead { color: var(--cs-muted); margin: .4rem 0 1.4rem; max-width: 65ch; line-height: 1.6; }
+  .cs-wf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+  .cs-wf-item { display: flex; gap: .7rem; align-items: flex-start; }
+  .cs-wf-item i { color: var(--cs-accent); margin-top: .2rem; }
+  .cs-wf-item span { font-size: .92rem; color: var(--cs-ink-soft); line-height: 1.5; }
+
+  /* =======================================================================
+     5. MODEL EXPLORER
+     ======================================================================= */
+  .cs-explorer { display: grid; grid-template-columns: 250px minmax(0,1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
+  .cs-mnav { display: flex; flex-direction: column; gap: .3rem; position: sticky; top: calc(var(--nav-height) + 72px); }
+  .cs-mnav__btn {
+    position: relative; text-align: left; font: inherit; cursor: pointer; background: transparent; border: none;
+    padding: .95rem 1rem .95rem 1.1rem; border-radius: 12px; color: var(--cs-muted); font-weight: 500; font-size: .98rem;
+    display: flex; align-items: center; gap: .7rem; transition: background .25s var(--cs-ease), color .25s var(--cs-ease);
+  }
+  .cs-mnav__btn i { width: 1.1em; color: var(--cs-faint); transition: color .25s var(--cs-ease); }
+  .cs-mnav__btn:hover { background: #eef1f6; color: var(--cs-ink); }
+  .cs-mnav__btn.is-active { background: #fff; color: var(--cs-accent); box-shadow: var(--cs-sh-sm); }
+  .cs-mnav__btn.is-active i { color: var(--cs-accent); }
+  .cs-mnav__btn.is-active::before { content:""; position:absolute; left:0; top:22%; bottom:22%; width:3px; border-radius:3px; background:var(--cs-accent); }
+  .cs-mpanel { background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg);
+               padding: clamp(1.6rem, 3.5vw, 2.8rem); box-shadow: var(--cs-sh); }
+  .cs-mpanel h3 { font-size: 1.7rem; font-weight: 700; letter-spacing: -.025em; margin: 0; }
+  .cs-mpanel__purpose { color: var(--cs-muted); font-size: 1.05rem; margin: .6rem 0 1.8rem; line-height: 1.55; }
+  .cs-mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.2rem 1.6rem; }
+  .cs-mblock__h { display:flex; align-items:center; gap:.5em; font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--cs-accent); margin-bottom: .5rem; }
+  .cs-mblock p { font-size: .93rem; color: var(--cs-ink-soft); line-height: 1.55; margin: 0; }
+  .cs-mblock ul { margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+  .cs-mblock li { font-size: .92rem; color: var(--cs-ink-soft); display: flex; gap: .5em; }
+  .cs-mblock li::before { content: "→"; color: var(--cs-accent); }
+  .cs-mpanel__foot { margin-top: 2rem; padding-top: 1.6rem; border-top: 1px solid var(--cs-border); display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+  .cs-impact { font-size: .95rem; color: var(--cs-ink-soft); max-width: 46ch; }
+  .cs-impact b { color: var(--cs-ink); }
+
+  /* =======================================================================
+     6. RESULTS KPIs
+     ======================================================================= */
+  .cs-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.2rem; }
+  .cs-kpi {
+    cursor: pointer; background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg);
+    padding: 1.6rem 1.5rem; box-shadow: var(--cs-sh-sm); text-align: left;
+    transition: transform .3s var(--cs-ease), box-shadow .3s var(--cs-ease);
+  }
+  .cs-kpi:hover { transform: translateY(-4px) scale(1.015); box-shadow: var(--cs-sh); }
+  .cs-kpi__top { display: flex; align-items: center; justify-content: space-between; }
+  .cs-kpi__ico { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--cs-accent-soft); color: var(--cs-accent); }
+  .cs-kpi__chev { color: var(--cs-faint); transition: transform .3s var(--cs-ease); }
+  .cs-kpi.is-open .cs-kpi__chev { transform: rotate(180deg); }
+  .cs-kpi__val { font-size: clamp(2.1rem, 3.4vw, 2.7rem); font-weight: 800; letter-spacing: -.03em; color: var(--cs-accent); line-height: 1; margin: 1.1rem 0 .3rem; }
+  .cs-kpi__lab { font-size: .95rem; font-weight: 600; color: var(--cs-ink); }
+  .cs-kpi__detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s var(--cs-ease); }
+  .cs-kpi.is-open .cs-kpi__detail { grid-template-rows: 1fr; }
+  .cs-kpi__detail > div { overflow: hidden; }
+  .cs-kpi__detail dl { margin: 1.1rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--cs-border); }
+  .cs-kpi__detail dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--cs-faint); margin-top: .8rem; }
+  .cs-kpi__detail dt:first-child { margin-top: 0; }
+  .cs-kpi__detail dd { margin: .25rem 0 0; font-size: .9rem; color: var(--cs-ink-soft); line-height: 1.5; }
+
+  /* =======================================================================
+     7. DASHBOARD SHOWCASE
+     ======================================================================= */
+  .cs-dash { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1fr); gap: clamp(1.2rem,3vw,2.2rem); align-items: start; }
+  .cs-dash__frame { background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r-lg); box-shadow: var(--cs-sh); overflow: hidden; }
+  .cs-dash__bar { display: flex; align-items: center; gap: .5rem; padding: .8rem 1.1rem; border-bottom: 1px solid var(--cs-border); background: #fafbfc; }
+  .cs-dot { width: 11px; height: 11px; border-radius: 50%; background: #e0e3e8; }
+  .cs-dash__bar span { margin-left: .5rem; font-size: .82rem; color: var(--cs-faint); font-weight: 500; }
+  .cs-dash__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; padding: 1.1rem; }
+  .cs-tile {
+    cursor: pointer; background: var(--cs-bg); border: 1px solid var(--cs-border); border-radius: 14px; padding: 1rem;
+    text-align: left; font: inherit; transition: transform .25s var(--cs-ease), box-shadow .25s var(--cs-ease), border-color .25s var(--cs-ease);
+  }
+  .cs-tile:hover { transform: translateY(-3px); box-shadow: var(--cs-sh-sm); border-color: var(--cs-accent); background: #fff; }
+  .cs-tile.is-active { border-color: var(--cs-accent); box-shadow: var(--cs-glow); background: #fff; }
+  .cs-tile__h { display: flex; align-items: center; gap: .5em; font-size: .8rem; font-weight: 600; color: var(--cs-ink-soft); margin-bottom: .7rem; }
+  .cs-tile__h i { color: var(--cs-accent); }
+  .cs-tile--kpi { grid-column: span 1; }
+  .cs-tile--wide { grid-column: span 2; }
+  .cs-tile--full { grid-column: span 4; }
+  .cs-tile__big { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; color: var(--cs-ink); }
+  .cs-tile__cap { font-size: .72rem; color: var(--cs-faint); margin-top: .15rem; }
+  /* CSS/SVG mini charts */
+  .cs-bars { display: flex; align-items: flex-end; gap: 6px; height: 68px; }
+  .cs-bars i { flex: 1; background: linear-gradient(var(--cs-accent-2), var(--cs-accent)); border-radius: 4px 4px 0 0; opacity: .85; }
+  .cs-fi { display: flex; flex-direction: column; gap: 7px; }
+  .cs-fi__row { display: grid; grid-template-columns: 92px 1fr; align-items: center; gap: .5rem; font-size: .74rem; color: var(--cs-muted); }
+  .cs-fi__track { height: 9px; background: #e6e9ef; border-radius: 6px; overflow: hidden; }
+  .cs-fi__fill { height: 100%; background: linear-gradient(90deg, var(--cs-accent-2), var(--cs-accent)); border-radius: 6px; }
+  .cs-donut { width: 84px; height: 84px; border-radius: 50%; background: conic-gradient(var(--cs-accent) 0 42%, var(--cs-accent-2) 42% 68%, #9fc0f2 68% 86%, #d9e4f2 86% 100%); position: relative; }
+  .cs-donut::after { content:""; position:absolute; inset:22%; border-radius:50%; background:#fff; }
+  .cs-seg-legend { display:flex; flex-direction:column; gap:.35rem; font-size:.76rem; color:var(--cs-muted); }
+  .cs-seg-legend span { display:flex; align-items:center; gap:.45em; }
+  .cs-seg-legend i { width:9px; height:9px; border-radius:3px; display:inline-block; }
+  .cs-line { width: 100%; height: 74px; display: block; }
+  .cs-filters { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .cs-filters b { font-size:.72rem; font-weight:500; color:var(--cs-ink-soft); background:#fff; border:1px solid var(--cs-border-2); border-radius:999px; padding:.3em .75em; }
+
+  .cs-dash__panel {
+    position: sticky; top: calc(var(--nav-height) + 72px); background: var(--cs-card); border: 1px solid var(--cs-border);
+    border-radius: var(--cs-r-lg); padding: clamp(1.4rem, 3vw, 2rem); box-shadow: var(--cs-sh);
+  }
+  .cs-dash__panel h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; margin: 0 0 1rem; }
+  .cs-dp__block { margin-bottom: 1.1rem; }
+  .cs-dp__block:last-child { margin-bottom: 0; }
+  .cs-dp__h { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--cs-accent); margin-bottom: .3rem; }
+  .cs-dp__block p { font-size: .92rem; color: var(--cs-ink-soft); line-height: 1.55; margin: 0; }
+
+  /* =======================================================================
+     9. GITHUB REPO PREVIEW
+     ======================================================================= */
+  .cs-repo { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+  .cs-folder {
+    display: block; text-decoration: none; color: inherit; background: var(--cs-card); border: 1px solid var(--cs-border);
+    border-radius: var(--cs-r); padding: 1.1rem 1.2rem; box-shadow: var(--cs-sh-sm); overflow: hidden;
+    transition: transform .3s var(--cs-ease), box-shadow .3s var(--cs-ease), border-color .3s var(--cs-ease);
+  }
+  .cs-folder:hover { transform: translateY(-4px); box-shadow: var(--cs-sh); border-color: var(--cs-accent); }
+  .cs-folder__top { display: flex; align-items: center; gap: .7rem; }
+  .cs-folder__ico { color: #f2b134; font-size: 1.25rem; }
+  .cs-folder:hover .cs-folder__ico { color: var(--cs-accent); }
+  .cs-folder__name { font-weight: 600; font-size: .98rem; }
+  .cs-folder__open { margin-left: auto; color: var(--cs-faint); font-size: .8rem; transition: transform .3s var(--cs-ease), color .3s var(--cs-ease); }
+  .cs-folder:hover .cs-folder__open { color: var(--cs-accent); transform: translateX(3px); }
+  .cs-folder__files { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--cs-ease); }
+  .cs-folder:hover .cs-folder__files, .cs-folder:focus-visible .cs-folder__files { grid-template-rows: 1fr; }
+  .cs-folder__files > div { overflow: hidden; }
+  .cs-folder__files ul { margin: .85rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .cs-folder__files li { font-size: .74rem; color: var(--cs-muted); background: var(--cs-bg); border: 1px solid var(--cs-border); border-radius: 8px; padding: .28em .6em; display: flex; gap: .4em; align-items: center; }
+  .cs-folder__files li i { color: var(--cs-accent); }
+
+  /* =======================================================================
+     10. LESSONS
+     ======================================================================= */
+  .cs-lessons { display: flex; flex-direction: column; gap: .85rem; max-width: 860px; margin-inline: auto; }
+  .cs-lesson { background: var(--cs-card); border: 1px solid var(--cs-border); border-radius: var(--cs-r); box-shadow: var(--cs-sh-sm); overflow: hidden; }
+  .cs-lesson__q {
+    width: 100%; text-align: left; font: inherit; cursor: pointer; background: transparent; border: none;
+    padding: 1.25rem 1.4rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .cs-lesson__ico { width: 40px; height: 40px; flex: 0 0 auto; border-radius: 11px; display: grid; place-items: center; background: var(--cs-accent-soft); color: var(--cs-accent); }
+  .cs-lesson__t { font-weight: 600; font-size: 1.05rem; }
+  .cs-lesson__chev { margin-left: auto; color: var(--cs-faint); transition: transform .35s var(--cs-ease); }
+  .cs-lesson.is-open .cs-lesson__chev { transform: rotate(180deg); }
+  .cs-lesson__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s var(--cs-ease); }
+  .cs-lesson.is-open .cs-lesson__body { grid-template-rows: 1fr; }
+  .cs-lesson__body > div { overflow: hidden; }
+  .cs-lesson__body p { margin: 0 1.4rem 1.4rem; padding-left: 56px; color: var(--cs-ink-soft); line-height: 1.6; font-size: .96rem; }
+
+  /* ---- Closing CTA ---- */
+  .cs-final { text-align: center; background: linear-gradient(160deg, #12151b, #1d2530); border-radius: var(--cs-r-lg); padding: clamp(2.5rem, 6vw, 4.5rem); box-shadow: var(--cs-sh-lg); }
+  .cs-final h2 { color: #fff; font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  .cs-final p { color: rgba(255,255,255,.72); max-width: 52ch; margin: 1rem auto 0; line-height: 1.6; }
+  .cs-final .cs-hero__cta { justify-content: center; }
+  .cs-final .cs-btn--ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.3); }
+  .cs-final .cs-btn--ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+  /* Perspective emphasis: elements tagged for the active lens get a ring */
+  .cs [data-emph] { transition: box-shadow .4s var(--cs-ease), border-color .4s var(--cs-ease); }
+  .cs.persp-hiring   [data-emph~="hiring"],
+  .cs.persp-scientist[data-emph~="scientist"],
+  .cs.persp-exec     [data-emph~="exec"] { border-color: var(--cs-accent); box-shadow: var(--cs-glow); }
+
+  /* =======================================================================
+     RESPONSIVE
+     ======================================================================= */
+  @media (max-width: 900px) {
+    .cs-arch, .cs-explorer, .cs-dash { grid-template-columns: 1fr; }
+    .cs-arch__panel, .cs-mnav, .cs-dash__panel { position: static; }
+    .cs-mnav { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
+    .cs-mnav::-webkit-scrollbar { display: none; }
+    .cs-mnav__btn { white-space: nowrap; }
+    .cs-mnav__btn.is-active::before { display: none; }
+    .cs-dash__grid { grid-template-columns: repeat(2, 1fr); }
+    .cs-tile--wide, .cs-tile--full { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .cs-dash__grid { grid-template-columns: 1fr; }
+    .cs-tile--wide, .cs-tile--full { grid-column: span 1; }
+    .cs-lesson__body p { padding-left: 0; }
+  }
+  </style>
 </head>
 <body>
 
-  <!-- NAVIGATION (note ../ paths from /projects/) -->
+  <!-- =========================================================================
+       GLOBAL SITE NAVIGATION (kept in sync with the rest of the site)
+       ========================================================================= -->
   <nav class="nav" aria-label="Primary">
     <div class="nav__inner">
-      <a class="nav__logo" href="../index.html">Your<span>Name</span></a>
+      <a class="nav__logo" href="../index.html"><img src="../images/logo_black.png" alt="Lucas Orjales Logo"></a>
       <div class="nav__links">
         <a class="nav__link" href="../index.html">Home</a>
         <a class="nav__link" href="../about.html">About</a>
         <a class="nav__link" href="../portfolio.html">Portfolio</a>
-        <a class="nav__link" href="../documents/resume.pdf" download>Resume</a>
-        <a class="nav__link nav__link--icon" href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a class="nav__link" href="../documents/Lucas Orjales Resume.pdf" download>Resume</a>
+        <a class="nav__link nav__link--icon" href="https://github.com/orjalesl" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a class="nav__link nav__link--icon" href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
       </div>
-      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-        <span></span><span></span>
-      </button>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
     </div>
   </nav>
-
   <div class="mobile-menu" id="mobileMenu">
     <a href="../index.html"><i class="fa-solid fa-house"></i>Home</a>
     <a href="../about.html"><i class="fa-solid fa-user"></i>About</a>
     <a href="../portfolio.html"><i class="fa-solid fa-layer-group"></i>Portfolio</a>
-    <a href="../documents/resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
-    <a href="https://github.com/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
-    <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+    <a href="../documents/Lucas Orjales Resume.pdf" download><i class="fa-solid fa-file-arrow-down"></i>Resume</a>
+    <a href="https://github.com/orjalesl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>GitHub</a>
+    <a href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
   </div>
 
-  <main>
+  <main class="cs persp-hiring" id="csRoot">
 
-    <!-- =======================================================================
-         HERO
-         REPLACE: title, business objective, hero visualization, badges
-         ======================================================================= -->
-    <header class="project-hero section--offwhite">
-      <div class="container">
-        <p class="eyebrow" data-reveal>Case Study</p>
-        <!-- REPLACE: project title -->
-        <h1 class="project-hero__title" data-reveal data-reveal-delay="1">Customer Growth Intelligence</h1>
-        <!-- REPLACE: business objective (one sentence) -->
-        <p class="project-hero__objective" data-reveal data-reveal-delay="2">
-          Business objective placeholder — the single outcome this project set
-          out to achieve (e.g. reduce churn, increase customer lifetime value).
+        
+
+    <!-- ===================================================================
+         2. HERO
+         =================================================================== -->
+    <header class="cs-hero" id="overview">
+      <div class="cs-wrap cs-hero__inner">
+        <p class="cs-eyebrow reveal in">Case Study</p>
+        <h1 class="cs-hero__title reveal in" data-d="1">Member Churn Prediction <span class="grad">&amp; Uplift Modeling</span></h1>
+        <p class="cs-hero__sub reveal in" data-d="2">
+          Predicting member churn and identifying which customers are actually worth retaining
+          through causal machine learning — so retention budget goes only where it changes behavior.
         </p>
-        <!-- Technology badges (REPLACE labels) -->
-        <div class="tag-list" style="justify-content:center;" data-reveal data-reveal-delay="3">
-          <span class="tag">Python</span>
-          <span class="tag">scikit-learn</span>
-          <span class="tag">Machine Learning</span>
-          <span class="tag">Power BI</span>
-          <span class="tag">Azure</span>
+
+        <div class="cs-badges reveal in" data-d="3">
+          <span class="cs-badge"><i class="fa-solid fa-circle-nodes"></i> End-to-End Machine Learning</span>
+          <span class="cs-badge"><i class="fa-solid fa-users"></i> Customer Analytics</span>
+          <span class="cs-badge"><i class="fa-solid fa-code-branch"></i> Causal ML</span>
+          <span class="cs-badge"><i class="fa-solid fa-chess-king"></i> Executive Strategy</span>
         </div>
 
-        <!-- Hero visualization placeholder -->
-        <div data-reveal data-reveal-delay="4" style="margin-top: var(--space-lg);">
-          <!-- REPLACE with: <img src="../images/customer-growth-hero.png" alt="..."> -->
-          <div class="placeholder placeholder--banner">
-            <i class="fa-solid fa-chart-line"></i>
-            <span>Hero visualization placeholder<br>(../images/customer-growth-hero.png)</span>
-          </div>
+        <div class="cs-hero__cta reveal in" data-d="4">
+          <a class="cs-btn cs-btn--dark" href="#architecture"><i class="fa-solid fa-sitemap"></i> View Architecture</a>
+          <a class="cs-btn cs-btn--primary" data-repo href="#"><i class="fa-brands fa-github"></i> Explore GitHub</a>
         </div>
+
       </div>
     </header>
 
-    <!-- =======================================================================
-         EXECUTIVE SUMMARY  (3 KPI cards + recommendation)
-         REPLACE: KPI values/labels and the recommendation text
-         ======================================================================= -->
-    <section class="section" aria-labelledby="summary-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Executive Summary</p>
-          <h2 id="summary-title">The headline results</h2>
+    <!-- ===================================================================
+         1. STICKY SUBNAV
+         =================================================================== -->
+    <nav class="cs-subnav" aria-label="Case study sections">
+      <div class="cs-wrap cs-subnav__row" id="csSubnav">
+        <a href="#overview">Overview</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#models">Models</a>
+        <a href="#results">Results</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#lessons">Lessons</a>
+      </div>
+    </nav>
+
+
+    <!-- ===================================================================
+         3. ARCHITECTURE
+         =================================================================== -->
+    <section class="cs-section" id="architecture" >
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-sitemap"></i> System Architecture</p>
+          <h2 class="cs-h2">One pipeline, from raw data to executive decision</h2>
+          <p class="cs-sub">Select any stage to see its purpose, inputs, outputs, and the tools behind it. Every stage feeds the next — the mesh is the product.</p>
         </div>
 
-        <div class="grid grid--3">
-          <div class="card kpi-card" data-reveal>
-            <div class="kpi-card__value">+XX%</div>
-            <p class="kpi-card__label">KPI 1 placeholder (e.g. retention lift)</p>
-          </div>
-          <div class="card kpi-card" data-reveal data-reveal-delay="1">
-            <div class="kpi-card__value">$X.XM</div>
-            <p class="kpi-card__label">KPI 2 placeholder (e.g. revenue impact)</p>
-          </div>
-          <div class="card kpi-card" data-reveal data-reveal-delay="2">
-            <div class="kpi-card__value">0.XX</div>
-            <p class="kpi-card__label">KPI 3 placeholder (e.g. model AUC)</p>
-          </div>
-        </div>
+        <div class="cs-arch">
+          <!-- Node flow (connectors animate on reveal) -->
+          <div class="cs-flow reveal" id="archFlow"><!-- nodes injected by JS --></div>
 
-        <div class="insight-card" data-reveal style="margin-top: var(--space-lg); max-width: var(--max-width-text); margin-inline:auto;">
-          <strong>Business recommendation:</strong>
-          <p>Placeholder — the single most important recommendation an executive should take away from this work.</p>
+          <!-- Sticky detail panel -->
+          <aside class="cs-arch__panel reveal" data-d="1" id="archPanel" aria-live="polite"></aside>
         </div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         BUSINESS PROBLEM  (large typography, keynote feel)
-         REPLACE: the challenge statement
-         ======================================================================= -->
-    <section class="keynote section--mist" aria-labelledby="problem-title">
-      <div class="container container--narrow">
-        <p class="eyebrow" data-reveal>The Challenge</p>
-        <h2 id="problem-title" class="keynote__statement" data-reveal data-reveal-delay="1">
-          Business challenge placeholder — describe the problem in one bold, human sentence.
-        </h2>
-        <p data-reveal data-reveal-delay="2" style="margin-top: var(--space-md); font-size: var(--fs-lead);">
-          Placeholder — expand on the context: why it mattered, who was affected,
-          and what was at stake for the business.
-        </p>
+    <!-- ===================================================================
+         4. WORKFLOW TIMELINE
+         =================================================================== -->
+    <section class="cs-section" id="workflow" style="background:#eef1f6;">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-timeline"></i> The Journey</p>
+          <h2 class="cs-h2">How the work actually unfolded</h2>
+          <p class="cs-sub">Not a folder tree — a story. Tap a stage to see what happened and why it mattered.</p>
+        </div>
+
+        <div class="cs-track reveal" id="wfTrack" role="tablist" aria-label="Workflow stages"></div>
+        <div class="cs-wf-panel reveal" data-d="1" id="wfPanel" aria-live="polite"></div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         DATA
-         REPLACE: dataset overview, data quality notes, data dictionary rows
-         ======================================================================= -->
-    <section class="section" aria-labelledby="data-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">The Data</p>
-          <h2 id="data-title">What we worked with</h2>
+    <!-- ===================================================================
+         5. MODEL EXPLORER
+         =================================================================== -->
+    <section class="cs-section" id="models">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-layer-group"></i> Model Explorer</p>
+          <h2 class="cs-h2">Five models, one retention strategy</h2>
+          <p class="cs-sub">Browse each model like documentation — purpose, approach, algorithms, evaluation, and business impact.</p>
         </div>
 
-        <div class="grid grid--2" style="margin-bottom: var(--space-lg);">
-          <div class="card" data-reveal>
-            <h3>Dataset overview</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — sources, time range, granularity, and volume of the data used.</p>
-          </div>
-          <div class="card" data-reveal data-reveal-delay="1">
-            <h3>Data quality</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — missingness, outliers, and the cleaning/validation steps taken.</p>
-          </div>
-        </div>
-
-        <!-- Data dictionary (REPLACE rows) -->
-        <div data-reveal>
-          <h3 style="margin-bottom: var(--space-sm);">Data dictionary</h3>
-          <table class="data-table">
-            <thead>
-              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>field_name_1</td><td>string</td><td>Placeholder description of field 1</td></tr>
-              <tr><td>field_name_2</td><td>numeric</td><td>Placeholder description of field 2</td></tr>
-              <tr><td>field_name_3</td><td>date</td><td>Placeholder description of field 3</td></tr>
-              <tr><td>field_name_4</td><td>boolean</td><td>Placeholder description of field 4</td></tr>
-            </tbody>
-          </table>
+        <div class="cs-explorer">
+          <nav class="cs-mnav reveal" id="modelNav" aria-label="Models"></nav>
+          <div class="cs-mpanel reveal" data-d="1" id="modelPanel" aria-live="polite"></div>
         </div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         EXPLORATORY ANALYSIS  (charts + insight cards)
-         REPLACE: each chart title, image, and takeaway
-         ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="eda-title">
-      <div class="container container--narrow">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Exploratory Analysis</p>
-          <h2 id="eda-title">What the data revealed</h2>
+    <!-- ===================================================================
+         6. RESULTS
+         =================================================================== -->
+    <section class="cs-section" id="results" style="background:#eef1f6;">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-chart-line"></i> Business Results</p>
+          <h2 class="cs-h2">Outcomes that survive a CFO's questions</h2>
+          <p class="cs-sub">Illustrative figures — tap any card to see why it matters, how it's calculated, and the business implication.</p>
+        </div>
+        <div class="cs-kpis" id="kpiGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         7. DASHBOARD SHOWCASE
+         =================================================================== -->
+    <section class="cs-section" id="dashboard">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-solid fa-gauge-high"></i> Executive Dashboard</p>
+          <h2 class="cs-h2">Where the models become decisions</h2>
+          <p class="cs-sub">A mockup of the delivered dashboard. Select any visual to see the question it answers and who it's for.</p>
         </div>
 
-        <!-- Chart 1 -->
-        <div class="chart-block" data-reveal>
-          <h3 class="chart-block__title">Chart title placeholder 1</h3>
-          <!-- REPLACE with: <img src="../images/customer-growth-eda-1.png" alt="..."> -->
-          <div class="placeholder placeholder--wide">
-            <i class="fa-solid fa-chart-column"></i>
-            <span>Visualization placeholder<br>(../images/customer-growth-eda-1.png)</span>
+        <div class="cs-dash">
+          <div class="cs-dash__frame reveal">
+            <div class="cs-dash__bar"><i class="cs-dot"></i><i class="cs-dot"></i><i class="cs-dot"></i><span>Retention Intelligence · Power BI</span></div>
+            <div class="cs-dash__grid" id="dashGrid"></div>
           </div>
-          <div class="insight-card">
-            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
-          </div>
-        </div>
-
-        <!-- Chart 2 -->
-        <div class="chart-block" data-reveal>
-          <h3 class="chart-block__title">Chart title placeholder 2</h3>
-          <!-- REPLACE with: <img src="../images/customer-growth-eda-2.png" alt="..."> -->
-          <div class="placeholder placeholder--wide">
-            <i class="fa-solid fa-chart-area"></i>
-            <span>Visualization placeholder<br>(../images/customer-growth-eda-2.png)</span>
-          </div>
-          <div class="insight-card">
-            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
-          </div>
-        </div>
-
-        <!-- Chart 3 -->
-        <div class="chart-block" data-reveal>
-          <h3 class="chart-block__title">Chart title placeholder 3</h3>
-          <!-- REPLACE with: <img src="../images/customer-growth-eda-3.png" alt="..."> -->
-          <div class="placeholder placeholder--wide">
-            <i class="fa-solid fa-chart-pie"></i>
-            <span>Visualization placeholder<br>(../images/customer-growth-eda-3.png)</span>
-          </div>
-          <div class="insight-card">
-            <p><strong>Takeaway:</strong> Placeholder — the one insight this chart delivers.</p>
-          </div>
+          <aside class="cs-dash__panel reveal" data-d="1" id="dashPanel" aria-live="polite"></aside>
         </div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         STATISTICAL ANALYSIS  (hypothesis / method / result / implication)
-         REPLACE: text in each card
-         ======================================================================= -->
-    <section class="section" aria-labelledby="stats-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Statistical Analysis</p>
-          <h2 id="stats-title">Testing what we believed</h2>
+    <!-- ===================================================================
+         9. GITHUB REPO PREVIEW
+         =================================================================== -->
+    <section class="cs-section" id="repo" style="background:#eef1f6;">
+      <div class="cs-wrap">
+        <div class="cs-head reveal">
+          <p class="cs-eyebrow"><i class="fa-brands fa-github"></i> The Repository</p>
+          <h2 class="cs-h2">Structured to be read, not just run</h2>
+          <p class="cs-sub">Hover a folder to preview its contents; click to open it on GitHub.</p>
         </div>
-
-        <div class="grid grid--2">
-          <div class="card stat-analysis-card" data-reveal>
-            <h4>Hypothesis</h4>
-            <p>Placeholder — the hypothesis you set out to test.</p>
-          </div>
-          <div class="card stat-analysis-card" data-reveal data-reveal-delay="1">
-            <h4>Method</h4>
-            <p>Placeholder — the statistical test or approach used (e.g. t-test, chi-square, regression).</p>
-          </div>
-          <div class="card stat-analysis-card" data-reveal>
-            <h4>Result</h4>
-            <p>Placeholder — the result, with effect size and significance.</p>
-          </div>
-          <div class="card stat-analysis-card" data-reveal data-reveal-delay="1">
-            <h4>Business implication</h4>
-            <p>Placeholder — what the result means for decision-making.</p>
-          </div>
-        </div>
+        <div class="cs-repo reveal" id="repoGrid"></div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         MACHINE LEARNING
-         REPLACE: pipeline diagram, model comparison, metrics, explainability
-         ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="ml-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Machine Learning</p>
-          <h2 id="ml-title">From features to predictions</h2>
+    <!-- ===================================================================
+         10. LESSONS LEARNED
+         =================================================================== -->
+    <section class="cs-section" id="lessons">
+      <div class="cs-wrap">
+        <div class="cs-head reveal" style="text-align:center;">
+          <p class="cs-eyebrow" style="justify-content:center;"><i class="fa-solid fa-lightbulb"></i> Lessons Learned</p>
+          <h2 class="cs-h2">What the project taught</h2>
         </div>
-
-        <!-- Pipeline diagram -->
-        <div data-reveal style="margin-bottom: var(--space-lg);">
-          <h3 style="margin-bottom: var(--space-sm);">Modeling pipeline</h3>
-          <!-- REPLACE with: <img src="../images/customer-growth-ml-pipeline.png" alt="..."> -->
-          <div class="placeholder placeholder--banner">
-            <i class="fa-solid fa-diagram-project"></i>
-            <span>Pipeline diagram placeholder<br>(../images/customer-growth-ml-pipeline.png)</span>
-          </div>
-        </div>
-
-        <div class="grid grid--2">
-          <!-- Model comparison -->
-          <div class="card" data-reveal>
-            <h3>Model comparison</h3>
-            <table class="data-table" style="margin-top: var(--space-sm); box-shadow:none;">
-              <thead>
-                <tr><th>Model</th><th>Metric</th><th>Score</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Baseline</td><td>placeholder</td><td>0.XX</td></tr>
-                <tr><td>Model A</td><td>placeholder</td><td>0.XX</td></tr>
-                <tr><td>Model B (chosen)</td><td>placeholder</td><td>0.XX</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Performance metrics -->
-          <div class="card" data-reveal data-reveal-delay="1">
-            <h3>Performance metrics</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — headline metrics for the final model (accuracy, precision/recall, RMSE, etc.) and how they were validated.</p>
-          </div>
-        </div>
-
-        <!-- Explainability -->
-        <div class="card" data-reveal style="margin-top: var(--space-md);">
-          <h3>Explainability</h3>
-          <p style="margin-top: var(--space-sm);">Placeholder — feature importance / SHAP findings and what drives the model's predictions in business terms.</p>
-        </div>
+        <div class="cs-lessons reveal" data-d="1" id="lessonList"></div>
       </div>
     </section>
 
-    <!-- =======================================================================
-         DASHBOARD
-         REPLACE: Power BI screenshot + interactive dashboard link
-         ======================================================================= -->
-    <section class="section" aria-labelledby="dashboard-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Dashboard</p>
-          <h2 id="dashboard-title">Putting insight in decision-makers' hands</h2>
-        </div>
-
-        <div data-reveal>
-          <!-- REPLACE with: <img src="../images/customer-growth-dashboard.png" alt="..."> -->
-          <div class="placeholder placeholder--wide">
-            <i class="fa-solid fa-chart-pie"></i>
-            <span>Power BI screenshot placeholder<br>(../images/customer-growth-dashboard.png)</span>
+    <!-- Closing CTA -->
+    <section class="cs-section" style="padding-top:0;">
+      <div class="cs-wrap">
+        <div class="cs-final reveal">
+          <h2>See the full build on GitHub</h2>
+          <p>Notebooks, modeling code, causal uplift experiments, and the executive deliverables — all documented end to end.</p>
+          <div class="cs-hero__cta">
+            <a class="cs-btn cs-btn--primary" data-repo href="#"><i class="fa-brands fa-github"></i> Explore Repository</a>
+            <a class="cs-btn cs-btn--ghost" href="../portfolio.html"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
           </div>
-        </div>
-
-        <div class="btn-group btn-group--center" data-reveal style="margin-top: var(--space-lg);">
-          <!-- REPLACE: interactive dashboard URL (Power BI / Tableau public link) -->
-          <a class="btn btn--primary" href="#REPLACE-dashboard-url" target="_blank" rel="noopener">
-            <i class="fa-solid fa-up-right-from-square"></i> Open Interactive Dashboard
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         BUSINESS RECOMMENDATIONS
-         REPLACE: each recommendation card
-         ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="reco-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Recommendations</p>
-          <h2 id="reco-title">What we advised</h2>
-        </div>
-
-        <div class="grid grid--3">
-          <div class="card" data-reveal>
-            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <h3>Recommendation 1</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
-          </div>
-          <div class="card" data-reveal data-reveal-delay="1">
-            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <h3>Recommendation 2</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
-          </div>
-          <div class="card" data-reveal data-reveal-delay="2">
-            <div class="skill-card__icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <h3>Recommendation 3</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a specific, actionable recommendation.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         BUSINESS IMPACT
-         REPLACE: metrics, ROI, expected outcomes
-         ======================================================================= -->
-    <section class="section" aria-labelledby="impact-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Business Impact</p>
-          <h2 id="impact-title">The value delivered</h2>
-        </div>
-
-        <div class="grid grid--3">
-          <div class="stat" data-reveal>
-            <div class="stat__number">$X.XM</div>
-            <span class="stat__label">Metrics placeholder</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="1">
-            <div class="stat__number">XX%</div>
-            <span class="stat__label">ROI placeholder</span>
-          </div>
-          <div class="stat" data-reveal data-reveal-delay="2">
-            <div class="stat__number">XX</div>
-            <span class="stat__label">Expected outcomes placeholder</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         LESSONS LEARNED
-         REPLACE: each lesson card
-         ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="lessons-title">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Lessons Learned</p>
-          <h2 id="lessons-title">What I'd carry forward</h2>
-        </div>
-
-        <div class="grid grid--3">
-          <div class="card" data-reveal>
-            <h3>Lesson 1</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
-          </div>
-          <div class="card" data-reveal data-reveal-delay="1">
-            <h3>Lesson 2</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
-          </div>
-          <div class="card" data-reveal data-reveal-delay="2">
-            <h3>Lesson 3</h3>
-            <p style="margin-top: var(--space-sm);">Placeholder — a reflection on what worked, what didn't, and why.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         REPOSITORY  (placeholder links)
-         REPLACE: each href with a real URL or file path
-         ======================================================================= -->
-    <section class="section" aria-labelledby="repo-title">
-      <div class="container container--narrow text-center">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Explore Further</p>
-          <h2 id="repo-title">Dig into the details</h2>
-        </div>
-        <div class="btn-group btn-group--center" data-reveal>
-          <!-- REPLACE all four links -->
-          <a class="btn btn--dark" href="#REPLACE-github-url" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub Repository</a>
-          <a class="btn btn--secondary" href="#REPLACE-notebook-url" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i> Notebook</a>
-          <a class="btn btn--secondary" href="#REPLACE-dataset-url" target="_blank" rel="noopener"><i class="fa-solid fa-database"></i> Dataset</a>
-          <a class="btn btn--secondary" href="../documents/customer-growth-documentation.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i> Documentation</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         NEXT / PREVIOUS PROJECT
-         REPLACE: keep links pointing to the correct neighbouring case studies
-         ======================================================================= -->
-    <section class="section section--mist" aria-labelledby="next-title">
-      <div class="container">
-        <h2 id="next-title" class="section-header" data-reveal>Continue the tour</h2>
-        <div class="project-nav">
-          <!-- Previous -->
-          <a class="project-nav__card" href="market-basket.html" data-reveal>
-            <span class="project-nav__label"><i class="fa-solid fa-arrow-left"></i> Previous</span>
-            <h3>Market Basket Analysis</h3>
-          </a>
-          <!-- Next -->
-          <a class="project-nav__card project-nav__card--next" href="demand-planning.html" data-reveal data-reveal-delay="1">
-            <span class="project-nav__label">Next <i class="fa-solid fa-arrow-right"></i></span>
-            <h3>Demand Planning</h3>
-          </a>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER (note ../ paths) -->
+  <!-- FOOTER (kept in sync with the site) -->
   <footer class="footer">
     <div class="container footer__inner">
-      <p class="footer__copy">© <span id="year">2026</span> Your Name. All rights reserved.</p>
+      <p class="footer__copy">© <span id="year">2026</span> Lucas Orjales. All rights reserved.</p>
       <div class="footer__socials">
-        <a href="https://www.linkedin.com/in/yourusername" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="https://github.com/yourusername" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="mailto:you@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/lucas-penovi-orjales-335543158/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/orjalesl" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:lporjales@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
       </div>
     </div>
   </footer>
 
+  <!-- Global site JS (nav hamburger etc.) -->
   <script src="../js/main.js"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+
+  <!-- =========================================================================
+       PAGE INTERACTIONS (modular, vanilla JS)
+       ========================================================================= -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* REPLACE: point this at the real project repository */
+    var REPO_URL = "https://github.com/orjalesl";
+
+    var $  = function (s, r) { return (r || document).querySelector(s); };
+    var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+    var esc = function (t) { return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
+
+    /* Wire every [data-repo] link to the repository */
+    $$("[data-repo]").forEach(function (a) { a.href = REPO_URL; a.target = "_blank"; a.rel = "noopener"; });
+
+    /* ------------------------------------------------------------------
+       DATA
+       ------------------------------------------------------------------ */
+    var ARCH = [
+      { icon:"fa-database",        t:"Raw Data",              s:"Source of truth",
+        purpose:"Consolidate membership, transaction, engagement and support records into a single analytical base table.",
+        inputs:"Transactions, membership history, web/app engagement, support tickets, demographics.",
+        outputs:"A governed, versioned base table keyed by member and date.",
+        tech:["SQL","Azure Data Lake","Delta"] },
+      { icon:"fa-gears",           t:"Data Pipeline",         s:"Clean & reliable",
+        purpose:"Automate ingestion, cleaning, validation and point-in-time feature snapshots to prevent leakage.",
+        inputs:"Raw base tables and event streams.",
+        outputs:"Validated feature store with time-correct snapshots.",
+        tech:["Python","PySpark","Great Expectations"] },
+      { icon:"fa-users-viewfinder",t:"Customer Segmentation", s:"Who they are",
+        purpose:"Group members into behaviorally distinct segments to tailor retention strategy and interpret models.",
+        inputs:"Engagement, tenure, spend and recency features.",
+        outputs:"Segment labels + profiles used downstream and in the dashboard.",
+        tech:["scikit-learn","K-Means","UMAP"] },
+      { icon:"fa-gem",             t:"Customer Lifetime Value", s:"What they're worth",
+        purpose:"Estimate forward-looking value per member so retention effort is weighted by economic stakes.",
+        inputs:"Purchase frequency, monetary value, tenure, segment.",
+        outputs:"Predicted CLV per member feeding the ROI layer.",
+        tech:["Python","BG/NBD","Gamma-Gamma"] },
+      { icon:"fa-triangle-exclamation", t:"Churn Model",      s:"Who will leave",
+        purpose:"Predict each member's probability of churning in the next period.",
+        inputs:"Behavioral, transactional and engagement features.",
+        outputs:"Calibrated churn probabilities per member.",
+        tech:["XGBoost","LightGBM","SHAP"] },
+      { icon:"fa-code-branch",     t:"Uplift Model",          s:"Who we can save",
+        purpose:"Estimate the causal effect of a retention offer — who changes behavior only because they were treated.",
+        inputs:"Treatment/control outcomes, member features.",
+        outputs:"Uplift (persuadability) score per member.",
+        tech:["Causal ML","Meta-learners","EconML"] },
+      { icon:"fa-coins",           t:"ROI Simulation",        s:"What it earns",
+        purpose:"Combine churn risk × CLV × uplift to rank who to target and simulate campaign ROI at each budget level.",
+        inputs:"Churn prob, CLV, uplift score, campaign costs.",
+        outputs:"Optimal target list and expected net return curves.",
+        tech:["Python","NumPy","Monte Carlo"] },
+      { icon:"fa-gauge-high",      t:"Executive Dashboard",   s:"The decision",
+        purpose:"Turn model output into an interactive tool leaders use to set retention budget and track impact.",
+        inputs:"Scored members, segments, ROI simulation.",
+        outputs:"Decisions: who to target, how much to spend, expected return.",
+        tech:["Power BI","DAX"] }
+    ];
+
+    var WORKFLOW = [
+      { t:"Business Problem", lead:"Retention spend was spread evenly — much of it wasted on members who would have stayed anyway, or who were already lost.",
+        items:["Framed the real question: influence, not just prediction","Aligned success metrics with finance","Defined guardrails and target population"] },
+      { t:"Data Pipeline", lead:"Built a reliable, leakage-safe foundation with point-in-time correctness.",
+        items:["Automated ingestion & validation","Point-in-time feature snapshots","Data-quality tests in CI"] },
+      { t:"Feature Engineering", lead:"Engineered behavioral signals that generalize and stay explainable to the business.",
+        items:["Recency / frequency / monetary features","Engagement trend & volatility signals","Leakage audits on every feature"] },
+      { t:"Model Development", lead:"Layered predictive and causal models, each validated against a business-relevant baseline.",
+        items:["Churn: calibrated gradient boosting","Uplift: meta-learner causal models","Honest evaluation & explainability"] },
+      { t:"Business Decisions", lead:"Translated scores into a ranked target list and a budget the ROI simulation could defend.",
+        items:["Rank by risk × value × persuadability","Simulate ROI across budget levels","Recommend the efficient frontier"] },
+      { t:"Executive Delivery", lead:"Packaged everything into a dashboard and narrative leaders could act on immediately.",
+        items:["Interactive Power BI dashboard","Executive presentation & recommendations","Handover + monitoring plan"] }
+    ];
+
+    var MODELS = [
+      { icon:"fa-users-viewfinder", name:"Customer Segmentation",
+        purpose:"Reveal behaviorally distinct member groups so strategy and messaging can be tailored.",
+        problem:"A single retention approach ignores that members churn for very different reasons.",
+        approach:"Unsupervised clustering on engagement/spend features, profiled and named for business use.",
+        algos:["K-Means","Hierarchical clustering","UMAP (viz)"],
+        feats:["RFM features","Engagement cadence","Tenure & plan type"],
+        metrics:["Silhouette score","Segment stability","Business interpretability"],
+        impact:"Turned an anonymous member base into <b>actionable audiences</b> for targeted retention." },
+      { icon:"fa-gem", name:"Customer Lifetime Value",
+        purpose:"Quantify each member's forward economic value to weight retention effort.",
+        problem:"Saving a low-value member can cost more than the member is worth.",
+        approach:"Probabilistic CLV modeling combining purchase frequency and monetary value over tenure.",
+        algos:["BG/NBD","Gamma-Gamma","Gradient boosting (benchmark)"],
+        feats:["Purchase frequency","Average order value","Tenure & recency"],
+        metrics:["MAE vs. holdout value","Calibration","Decile lift"],
+        impact:"Let the business <b>prioritize high-value members</b> rather than treat everyone equally." },
+      { icon:"fa-triangle-exclamation", name:"Churn Prediction",
+        purpose:"Estimate the probability each member leaves in the next period.",
+        problem:"Without a risk signal, outreach is reactive and late.",
+        approach:"Calibrated gradient boosting with rigorous leakage control and probability calibration.",
+        algos:["XGBoost","LightGBM","Isotonic calibration"],
+        feats:["Engagement decline","Support friction","Billing signals"],
+        metrics:["ROC-AUC","PR-AUC","Calibration (Brier)"],
+        impact:"Provided a <b>trustworthy risk score</b> — the input everything downstream depends on." },
+      { icon:"fa-code-branch", name:"Uplift Modeling",
+        purpose:"Estimate the causal effect of a retention offer to find the truly persuadable.",
+        problem:"High churn risk ≠ worth targeting; some leave regardless, some stay regardless.",
+        approach:"Causal meta-learners on treatment/control data to score incremental impact, not correlation.",
+        algos:["T-/X-learner","Causal forests","EconML"],
+        feats:["Treatment response history","Segment × risk interactions","Offer sensitivity"],
+        metrics:["Qini coefficient","Uplift @ decile","Policy value"],
+        impact:"Focused budget on the <b>persuadable few</b> — the core driver of marketing efficiency." },
+      { icon:"fa-coins", name:"ROI Simulation",
+        purpose:"Convert scores into an optimal target list and a defensible budget.",
+        problem:"Leaders need a number: who to target, how much to spend, expected return.",
+        approach:"Combine churn × CLV × uplift with campaign economics; simulate net ROI across budgets.",
+        algos:["Expected-value ranking","Monte Carlo","Budget optimization"],
+        feats:["Churn probability","Predicted CLV","Uplift score","Contact cost"],
+        metrics:["Net ROI","Incremental retained revenue","Cost per retained member"],
+        impact:"Produced the <b>recommendation executives approved</b> — spend, target, and expected payoff." }
+    ];
+
+    var KPIS = [
+      { icon:"fa-shield-halved", val:"$4.2M", lab:"Revenue Protected",
+        why:"Retained revenue from members the model correctly flagged and the campaign successfully saved.",
+        how:"Incremental retained members × predicted CLV, measured against a holdout control group.",
+        imp:"Reframes retention from a cost center to a measurable revenue driver." },
+      { icon:"fa-bullseye", val:"-38%", lab:"Marketing Efficiency",
+        why:"Reduction in retention spend needed to save the same number of members.",
+        how:"Targeting by uplift vs. by churn risk alone, compared at equal retention outcomes.",
+        imp:"Frees budget to reinvest in growth without losing members." },
+      { icon:"fa-arrow-trend-up", val:"+22%", lab:"Retention Lift",
+        why:"Increase in retention among treated persuadable members vs. control.",
+        how:"Difference in retention rate between treatment and control in the persuadable segment.",
+        imp:"Proves the program causes retention rather than taking credit for it." },
+      { icon:"fa-coins", val:"6.3x", lab:"Campaign ROI",
+        why:"Net return per dollar of retention spend under the recommended target list.",
+        how:"Incremental retained revenue minus campaign cost, divided by campaign cost.",
+        imp:"Gives finance a clear, conservative basis to fund the program." }
+    ];
+
+    var DASH = [
+      { cls:"cs-tile--kpi", icon:"fa-shield-halved", h:"Revenue at Risk", kind:"kpi", big:"$11.4M", cap:"next 90 days",
+        q:"How much revenue is exposed to churn right now?", aud:"Executives, Finance",
+        ins:"Sizes the problem and anchors the retention budget conversation.", why:"Makes churn tangible in dollars, not percentages." },
+      { cls:"cs-tile--kpi", icon:"fa-users", h:"Members Flagged", kind:"kpi", big:"18,240", cap:"high-risk",
+        q:"How many members need attention this cycle?", aud:"Retention & CRM teams",
+        ins:"Turns a probability distribution into an operational worklist.", why:"Bridges the model and day-to-day action." },
+      { cls:"cs-tile--wide", icon:"fa-chart-line", h:"Churn Trend", kind:"line",
+        q:"Is churn improving or worsening over time?", aud:"Executives, Analysts",
+        ins:"Tracks the program's impact against the pre-launch baseline.", why:"Keeps the story honest with a longitudinal view." },
+      { cls:"cs-tile--wide", icon:"fa-ranking-star", h:"Feature Importance", kind:"fi",
+        q:"What actually drives churn risk?", aud:"Data Scientists, Product",
+        ins:"Points product and CX teams at the levers that move retention.", why:"Explainability builds trust in the model." },
+      { cls:"cs-tile--wide", icon:"fa-chart-pie", h:"Customer Segments", kind:"donut",
+        q:"How is value distributed across segments?", aud:"Marketing, Strategy",
+        ins:"Shows where high-value, persuadable members concentrate.", why:"Aligns messaging and spend with segment economics." },
+      { cls:"cs-tile--wide", icon:"fa-bars-progress", h:"ROI by Budget", kind:"bars",
+        q:"What's the optimal retention budget?", aud:"Executives, Finance",
+        ins:"Reveals the point of diminishing returns on spend.", why:"Answers 'how much should we spend?' with evidence." }
+    ];
+
+    var REPO = [
+      { n:"01 · Business Problem",         files:[["fa-file-lines","README"],["fa-file-pdf","Brief"]] },
+      { n:"02 · Data Pipeline",            files:[["fa-book","Notebook"],["fa-code","Code"],["fa-file-lines","README"]] },
+      { n:"03 · Customer Segmentation",    files:[["fa-book","Notebook"],["fa-chart-simple","Visuals"]] },
+      { n:"04 · Customer Lifetime Value",  files:[["fa-book","Notebook"],["fa-code","Code"]] },
+      { n:"05 · Churn Model",              files:[["fa-book","Notebook"],["fa-chart-simple","Visuals"],["fa-code","Code"]] },
+      { n:"06 · Uplift Model",             files:[["fa-book","Notebook"],["fa-code","Code"]] },
+      { n:"07 · ROI Simulation",           files:[["fa-book","Notebook"],["fa-chart-simple","Visuals"]] },
+      { n:"08 · Dashboard",                files:[["fa-chart-pie","Power BI"],["fa-file-lines","README"]] },
+      { n:"09 · Executive Presentation",   files:[["fa-file-powerpoint","Deck"],["fa-file-pdf","Summary"]] }
+    ];
+
+    var LESSONS = [
+      { icon:"fa-plug-circle-xmark", t:"Feature Leakage",
+        body:"The hardest bugs weren't in the model — they were in time. Point-in-time snapshots and per-feature leakage audits mattered more than any algorithm choice, because a leaky feature makes a useless model look brilliant offline." },
+      { icon:"fa-scale-unbalanced", t:"Class Imbalance",
+        body:"Churners were the minority, so accuracy was a trap. Calibrated probabilities, PR-AUC, and threshold selection tied to business cost gave a far more honest picture than a headline accuracy number ever could." },
+      { icon:"fa-code-branch", t:"Prediction ≠ Persuasion",
+        body:"The biggest insight: targeting high churn risk wastes money on the already-lost and the never-leaving. Uplift modeling reframed the whole program around causal impact — who we can actually change." },
+      { icon:"fa-eye", t:"Model Explainability",
+        body:"Executives fund what they understand. SHAP explanations and clear segment stories converted a black box into a decision tool — and turned skeptical stakeholders into sponsors." },
+      { icon:"fa-gears", t:"Operational Reality",
+        body:"A great score list is worthless if it can't reach the campaign system on time. Designing for handover, monitoring, and refresh cadence was as important as the modeling itself." }
+    ];
+
+    /* Perspective copy: subtle emphasis per section per lens */
+    var LENS = {
+      hiring: {
+        overview: "<b>For a hiring manager:</b> this project shows end-to-end ownership — problem framing, engineering, modeling, and executive delivery driven by one person.",
+        architecture: "<b>Skills on display:</b> data engineering, ML, causal inference, and BI — integrated into one coherent system, not siloed notebooks.",
+        models: "<b>Ownership:</b> five models designed, validated, and connected into a decision — showing breadth and depth in a single narrative.",
+        results: "<b>Impact leadership:</b> outcomes framed in the language stakeholders care about, evidencing business judgment beyond code."
+      },
+      scientist: {
+        overview: "<b>For a data scientist:</b> the interesting part is the causal layer — separating persuadable members from those who'd stay or leave regardless of treatment.",
+        architecture: "<b>Technical depth:</b> leakage-safe point-in-time features, calibrated boosting, and meta-learner uplift models feeding an ROI optimizer.",
+        models: "<b>Tradeoffs:</b> note the shift from ROC-AUC (churn) to Qini/policy value (uplift) — evaluation matched to the decision, not the algorithm.",
+        results: "<b>Rigor:</b> lift measured against holdout controls, with calibration and honest metrics behind every headline number."
+      },
+      exec: {
+        overview: "<b>For an executive:</b> retention budget was being spent where it changed nothing. This program directs spend only where it moves behavior.",
+        architecture: "<b>Bottom line:</b> the pipeline exists to answer three questions — who's at risk, who's worth saving, and who we can actually influence.",
+        models: "<b>What it delivers:</b> a ranked target list and a budget recommendation you can defend, not a research artifact.",
+        results: "<b>The payoff:</b> revenue protected, marketing efficiency up, and an ROI figure conservative enough for finance to fund."
+      }
+    };
+
+    /* ------------------------------------------------------------------
+       3. ARCHITECTURE
+       ------------------------------------------------------------------ */
+    (function initArch() {
+      var flow = $("#archFlow"), panel = $("#archPanel");
+      if (!flow || !panel) return;
+
+      ARCH.forEach(function (n, i) {
+        if (i > 0) { var c = document.createElement("div"); c.className = "cs-conn"; flow.appendChild(c); }
+        var b = document.createElement("button");
+        b.className = "cs-node"; b.type = "button"; b.dataset.i = i;
+        b.innerHTML =
+          '<span class="cs-node__ico"><i class="fa-solid ' + n.icon + '"></i></span>' +
+          '<span><span class="cs-node__t">' + esc(n.t) + '</span><p class="cs-node__s">' + esc(n.s) + '</p></span>' +
+          '<span class="cs-node__n">' + (i + 1 < 10 ? "0" : "") + (i + 1) + '</span>';
+        b.addEventListener("click", function () { selectArch(i); });
+        flow.appendChild(b);
+      });
+
+      function selectArch(i) {
+        var n = ARCH[i];
+        $$(".cs-node", flow).forEach(function (el) { el.classList.toggle("is-active", +el.dataset.i === i); });
+        panel.innerHTML =
+          '<div class="cs-fade">' +
+            '<div class="cs-panel__ico"><i class="fa-solid ' + n.icon + '"></i></div>' +
+            '<h3 class="cs-panel__title">' + esc(n.t) + '</h3>' +
+            '<p class="cs-panel__purpose">' + esc(n.purpose) + '</p>' +
+            '<div class="cs-io">' +
+              '<div class="cs-io__box"><div class="cs-io__h">Inputs</div><p>' + esc(n.inputs) + '</p></div>' +
+              '<div class="cs-io__box"><div class="cs-io__h">Outputs</div><p>' + esc(n.outputs) + '</p></div>' +
+            '</div>' +
+            '<div class="cs-io__h" style="margin-bottom:.5rem">Technologies</div>' +
+            '<div class="cs-chiprow">' + n.tech.map(function (t) { return '<span class="cs-chip">' + esc(t) + '</span>'; }).join("") + '</div>' +
+          '</div>';
+      }
+      selectArch(0);
+    })();
+
+    /* ------------------------------------------------------------------
+       4. WORKFLOW
+       ------------------------------------------------------------------ */
+    (function initWorkflow() {
+      var track = $("#wfTrack"), panel = $("#wfPanel");
+      if (!track || !panel) return;
+
+      WORKFLOW.forEach(function (w, i) {
+        var b = document.createElement("button");
+        b.className = "cs-stage"; b.type = "button"; b.dataset.i = i; b.setAttribute("role", "tab");
+        b.innerHTML = '<span class="cs-stage__n">' + (i + 1) + '</span><div class="cs-stage__t">' + esc(w.t) + '</div>';
+        b.addEventListener("click", function () { selectStage(i); });
+        track.appendChild(b);
+      });
+
+      function selectStage(i) {
+        var w = WORKFLOW[i];
+        $$(".cs-stage", track).forEach(function (el) {
+          var on = +el.dataset.i === i;
+          el.classList.toggle("is-active", on); el.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panel.innerHTML =
+          '<div class="cs-fade"><h3>' + esc(w.t) + '</h3><p class="cs-wf-lead">' + esc(w.lead) + '</p>' +
+          '<div class="cs-wf-grid">' + w.items.map(function (it) {
+            return '<div class="cs-wf-item"><i class="fa-solid fa-circle-check"></i><span>' + esc(it) + '</span></div>';
+          }).join("") + '</div></div>';
+      }
+      selectStage(0);
+    })();
+
+    /* ------------------------------------------------------------------
+       5. MODEL EXPLORER
+       ------------------------------------------------------------------ */
+    (function initModels() {
+      var nav = $("#modelNav"), panel = $("#modelPanel");
+      if (!nav || !panel) return;
+
+      MODELS.forEach(function (m, i) {
+        var b = document.createElement("button");
+        b.className = "cs-mnav__btn"; b.type = "button"; b.dataset.i = i;
+        b.innerHTML = '<i class="fa-solid ' + m.icon + '"></i> ' + esc(m.name);
+        b.addEventListener("click", function () { selectModel(i); });
+        nav.appendChild(b);
+      });
+
+      function block(h, inner) { return '<div class="cs-mblock"><div class="cs-mblock__h">' + h + '</div>' + inner + '</div>'; }
+      function list(arr) { return '<ul>' + arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>'; }
+
+      function selectModel(i) {
+        var m = MODELS[i];
+        $$(".cs-mnav__btn", nav).forEach(function (el) { el.classList.toggle("is-active", +el.dataset.i === i); });
+        panel.innerHTML =
+          '<div class="cs-fade">' +
+            '<h3>' + esc(m.name) + '</h3>' +
+            '<p class="cs-mpanel__purpose">' + esc(m.purpose) + '</p>' +
+            '<div class="cs-mgrid">' +
+              block("Business Problem", '<p>' + esc(m.problem) + '</p>') +
+              block("Approach", '<p>' + esc(m.approach) + '</p>') +
+              block("Algorithms", list(m.algos)) +
+              block("Key Features", list(m.feats)) +
+              block("Evaluation Metrics", list(m.metrics)) +
+            '</div>' +
+            '<div class="cs-mpanel__foot">' +
+              '<p class="cs-impact"><b>Business impact:</b> ' + m.impact + '</p>' +
+              '<a class="cs-btn cs-btn--dark" href="' + REPO_URL + '" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> View code</a>' +
+            '</div>' +
+          '</div>';
+      }
+      selectModel(0);
+    })();
+
+    /* ------------------------------------------------------------------
+       6. RESULTS (KPI expand)
+       ------------------------------------------------------------------ */
+    (function initKpis() {
+      var grid = $("#kpiGrid");
+      if (!grid) return;
+      KPIS.forEach(function (k, i) {
+        var card = document.createElement("article");
+        card.className = "cs-kpi reveal"; card.dataset.d = (i % 4) + 1;
+        card.setAttribute("tabindex", "0");
+        card.innerHTML =
+          '<div class="cs-kpi__top"><span class="cs-kpi__ico"><i class="fa-solid ' + k.icon + '"></i></span>' +
+          '<i class="fa-solid fa-chevron-down cs-kpi__chev"></i></div>' +
+          '<div class="cs-kpi__val">' + esc(k.val) + '</div>' +
+          '<div class="cs-kpi__lab">' + esc(k.lab) + '</div>' +
+          '<div class="cs-kpi__detail"><div><dl>' +
+            '<dt>Why it matters</dt><dd>' + esc(k.why) + '</dd>' +
+            '<dt>How it\'s calculated</dt><dd>' + esc(k.how) + '</dd>' +
+            '<dt>Business implication</dt><dd>' + esc(k.imp) + '</dd>' +
+          '</dl></div></div>';
+        var toggle = function () { card.classList.toggle("is-open"); };
+        card.addEventListener("click", toggle);
+        card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+        grid.appendChild(card);
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       7. DASHBOARD
+       ------------------------------------------------------------------ */
+    (function initDash() {
+      var grid = $("#dashGrid"), panel = $("#dashPanel");
+      if (!grid || !panel) return;
+
+      function visual(kind) {
+        if (kind === "kpi") return "";
+        if (kind === "line") {
+          return '<svg class="cs-line" viewBox="0 0 200 60" preserveAspectRatio="none">' +
+            '<polyline fill="none" stroke="#0071e3" stroke-width="2.5" points="0,44 28,40 56,46 84,34 112,30 140,22 168,24 200,14"/>' +
+            '<polyline fill="none" stroke="#c9d6e8" stroke-width="2" stroke-dasharray="4 4" points="0,40 200,40"/></svg>';
+        }
+        if (kind === "fi") {
+          var rows = [["Engagement drop", 92], ["Support tickets", 74], ["Billing issues", 61], ["Tenure", 48]];
+          return '<div class="cs-fi">' + rows.map(function (r) {
+            return '<div class="cs-fi__row"><span>' + r[0] + '</span><span class="cs-fi__track"><span class="cs-fi__fill" style="width:' + r[1] + '%"></span></span></div>';
+          }).join("") + '</div>';
+        }
+        if (kind === "donut") {
+          return '<div style="display:flex;align-items:center;gap:1rem"><div class="cs-donut"></div>' +
+            '<div class="cs-seg-legend">' +
+            '<span><i style="background:#0071e3"></i>Champions</span>' +
+            '<span><i style="background:#4f8cff"></i>Loyal</span>' +
+            '<span><i style="background:#9fc0f2"></i>At-risk</span>' +
+            '<span><i style="background:#d9e4f2"></i>Dormant</span></div></div>';
+        }
+        if (kind === "bars") {
+          var hs = [30, 52, 70, 84, 90, 82, 68];
+          return '<div class="cs-bars">' + hs.map(function (h) { return '<i style="height:' + h + '%"></i>'; }).join("") + '</div>';
+        }
+        return "";
+      }
+
+      /* Filters strip (full-width, non-interactive) */
+      var f = document.createElement("div");
+      f.className = "cs-tile cs-tile--full"; f.style.cursor = "default";
+      f.innerHTML = '<div class="cs-tile__h"><i class="fa-solid fa-sliders"></i>Filters</div>' +
+        '<div class="cs-filters"><b>Segment: All</b><b>Region: North</b><b>Tenure: 12m+</b><b>Risk: High</b><b>Plan: Premium</b></div>';
+      grid.appendChild(f);
+
+      DASH.forEach(function (d, i) {
+        var b = document.createElement("button");
+        b.className = "cs-tile " + d.cls; b.type = "button"; b.dataset.i = i;
+        var body = d.kind === "kpi"
+          ? '<div class="cs-tile__big">' + esc(d.big) + '</div><div class="cs-tile__cap">' + esc(d.cap) + '</div>'
+          : visual(d.kind);
+        b.innerHTML = '<div class="cs-tile__h"><i class="fa-solid ' + d.icon + '"></i>' + esc(d.h) + '</div>' + body;
+        b.addEventListener("click", function () { selectTile(i); });
+        grid.appendChild(b);
+      });
+
+      function selectTile(i) {
+        var d = DASH[i];
+        $$(".cs-tile", grid).forEach(function (el) { if (el.dataset.i !== undefined) el.classList.toggle("is-active", +el.dataset.i === i); });
+        panel.innerHTML =
+          '<div class="cs-fade"><h3>' + esc(d.h) + '</h3>' +
+          '<div class="cs-dp__block"><div class="cs-dp__h">Business question</div><p>' + esc(d.q) + '</p></div>' +
+          '<div class="cs-dp__block"><div class="cs-dp__h">Intended audience</div><p>' + esc(d.aud) + '</p></div>' +
+          '<div class="cs-dp__block"><div class="cs-dp__h">Insights generated</div><p>' + esc(d.ins) + '</p></div>' +
+          '<div class="cs-dp__block"><div class="cs-dp__h">Why it exists</div><p>' + esc(d.why) + '</p></div></div>';
+      }
+      selectTile(2);
+    })();
+
+    /* ------------------------------------------------------------------
+       9. REPO PREVIEW
+       ------------------------------------------------------------------ */
+    (function initRepo() {
+      var grid = $("#repoGrid");
+      if (!grid) return;
+      REPO.forEach(function (f) {
+        var a = document.createElement("a");
+        a.className = "cs-folder"; a.href = REPO_URL; a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML =
+          '<div class="cs-folder__top"><i class="fa-solid fa-folder cs-folder__ico"></i>' +
+          '<span class="cs-folder__name">' + esc(f.n) + '</span>' +
+          '<i class="fa-solid fa-arrow-up-right-from-square cs-folder__open"></i></div>' +
+          '<div class="cs-folder__files"><div><ul>' +
+          f.files.map(function (x) { return '<li><i class="fa-solid ' + x[0] + '"></i>' + esc(x[1]) + '</li>'; }).join("") +
+          '</ul></div></div>';
+        grid.appendChild(a);
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       10. LESSONS (accordion)
+       ------------------------------------------------------------------ */
+    (function initLessons() {
+      var list = $("#lessonList");
+      if (!list) return;
+      LESSONS.forEach(function (l) {
+        var item = document.createElement("div");
+        item.className = "cs-lesson";
+        item.innerHTML =
+          '<button class="cs-lesson__q" type="button" aria-expanded="false">' +
+          '<span class="cs-lesson__ico"><i class="fa-solid ' + l.icon + '"></i></span>' +
+          '<span class="cs-lesson__t">' + esc(l.t) + '</span>' +
+          '<i class="fa-solid fa-chevron-down cs-lesson__chev"></i></button>' +
+          '<div class="cs-lesson__body"><div><p>' + esc(l.body) + '</p></div></div>';
+        var btn = $(".cs-lesson__q", item);
+        btn.addEventListener("click", function () {
+          var open = item.classList.toggle("is-open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        list.appendChild(item);
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       8. PERSPECTIVE TOGGLE
+       ------------------------------------------------------------------ */
+    (function initPerspective() {
+      var root = $("#csRoot");
+      var btns = $$(".cs-seg__btn");
+      if (!root || !btns.length) return;
+
+      var lensEls = {
+        overview: $("#lensOverview"), architecture: $("#lensArchitecture"),
+        models: $("#lensModels"), results: $("#lensResults")
+      };
+
+      function apply(p) {
+        root.classList.remove("persp-hiring", "persp-scientist", "persp-exec");
+        root.classList.add("persp-" + p);
+        btns.forEach(function (b) { b.setAttribute("aria-selected", b.dataset.persp === p ? "true" : "false"); });
+        Object.keys(lensEls).forEach(function (key) {
+          var el = lensEls[key]; if (!el) return;
+          el.style.opacity = "0";
+          setTimeout(function () { el.innerHTML = (LENS[p] && LENS[p][key]) || ""; el.style.opacity = "1"; }, 180);
+        });
+      }
+      btns.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.persp); }); });
+      apply("hiring");
+    })();
+
+    /* ------------------------------------------------------------------
+       SCROLL REVEAL + connector trigger
+       ------------------------------------------------------------------ */
+    (function initReveal() {
+      var els = $$(".reveal");
+      if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+      }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+
+    /* ------------------------------------------------------------------
+       2. STICKY SUBNAV — active section highlight
+       ------------------------------------------------------------------ */
+    (function initSubnav() {
+      var links = $$("#csSubnav a");
+      if (!links.length || !("IntersectionObserver" in window)) return;
+      var map = {};
+      links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+      var sections = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove("is-active"); });
+            if (map[en.target.id]) map[en.target.id].classList.add("is-active");
+          }
+        });
+      }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+      sections.forEach(function (s) { io.observe(s); });
+    })();
+
+  })();
+  </script>
 </body>
 </html>

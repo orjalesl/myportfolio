@@ -126,4 +126,98 @@
       console.info("Video placeholder clicked — replace with a real embed in js/main.js.");
     });
   });
+
+  /* ------------------------------------------------------------------
+     6. CARD CAROUSELS — show one card at a time with named tabs + arrows
+     Markup:
+       <div class="carousel" data-carousel>
+         <div class="carousel__viewport">
+           <div class="carousel__track">
+             <div class="carousel__slide" data-title="Label">…card…</div>
+             …
+           </div>
+         </div>
+         <div class="carousel__nav">
+           <button class="carousel__arrow" data-carousel-prev>…</button>
+           <div class="carousel__tabs"></div>   <!-- tabs injected here -->
+           <button class="carousel__arrow" data-carousel-next>…</button>
+         </div>
+       </div>
+     ------------------------------------------------------------------ */
+  document.querySelectorAll("[data-carousel]").forEach(function (root) {
+    var viewport = root.querySelector(".carousel__viewport");
+    var track = root.querySelector(".carousel__track");
+    var tabsWrap = root.querySelector(".carousel__tabs");
+    var prevBtn = root.querySelector("[data-carousel-prev]");
+    var nextBtn = root.querySelector("[data-carousel-next]");
+    if (!viewport || !track) return;
+
+    var slides = Array.prototype.slice.call(track.children);
+    if (slides.length < 2) return; // nothing to navigate
+
+    var index = 0;
+    var tabs = [];
+
+    // Build one named tab per slide (from data-title, fallback to number)
+    if (tabsWrap) {
+      slides.forEach(function (slide, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "carousel__tab";
+        b.setAttribute("role", "tab");
+        b.textContent = slide.getAttribute("data-title") || String(i + 1);
+        b.addEventListener("click", function () { go(i); });
+        tabsWrap.appendChild(b);
+        tabs.push(b);
+      });
+    }
+
+    function setHeight() {
+      // Viewport hugs the active slide so cards of different heights look clean
+      viewport.style.height = slides[index].offsetHeight + "px";
+    }
+
+    function update() {
+      track.style.transform = "translateX(" + (-index * 100) + "%)";
+      tabs.forEach(function (t, i) {
+        var on = i === index;
+        t.classList.toggle("is-active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      setHeight();
+    }
+
+    function go(i) {
+      index = (i + slides.length) % slides.length; // wrap around
+      update();
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", function () { go(index - 1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { go(index + 1); });
+
+    // Keyboard arrows when the carousel (or a child) has focus
+    root.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+    });
+
+    // Touch swipe
+    var startX = null;
+    viewport.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    viewport.addEventListener("touchend", function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 45) { go(dx < 0 ? index + 1 : index - 1); }
+      startX = null;
+    }, { passive: true });
+
+    // Activate the enhanced (horizontal) layout, then lay out
+    root.classList.add("is-ready");
+    update();
+
+    // Recalculate height after images/fonts settle and on resize
+    window.addEventListener("resize", setHeight, { passive: true });
+    window.addEventListener("load", setHeight);
+    setTimeout(setHeight, 300);
+  });
 })();

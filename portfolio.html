@@ -70,10 +70,14 @@
          ======================================================================= -->
     <section class="section">
       <div class="container">
-        <div class="showcase">
+        <!-- One-at-a-time carousel; tabs + arrows injected/handled by js/main.js -->
+        <div class="carousel" data-carousel data-reveal>
+          <div class="carousel__viewport">
+            <div class="carousel__track">
 
-          <!-- CARD 1 — Customer Growth Intelligence -->
-          <article class="showcase-card" data-reveal>
+              <!-- CARD 1 — Customer Growth Intelligence -->
+              <div class="carousel__slide" data-title="Customer Growth Intelligence">
+              <article class="showcase-card">
             <div class="showcase-card__media">
               <!-- REPLACE with: <img src="images/project-customer-growth.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -96,9 +100,11 @@
               <a class="btn btn--dark" href="projects/customer-growth.html">Explore Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- CARD 2 — Demand Planning -->
-          <article class="showcase-card" data-reveal>
+              <!-- CARD 2 — Demand Planning -->
+              <div class="carousel__slide" data-title="Demand Planning">
+              <article class="showcase-card">
             <div class="showcase-card__media">
               <!-- REPLACE with: <img src="images/project-demand-planning.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -118,12 +124,14 @@
                 <span class="tag">Databricks</span>
                 <span class="tag">Fabric</span>
               </div>
-              <a class="btn btn--dark" href="projects/demand-planning.html">Explore Case Study</a>
+              <a class="btn btn--dark" href="projects/customer-growth-2.html">Explore Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- CARD 3 — Funnel Analysis -->
-          <article class="showcase-card" data-reveal>
+              <!-- CARD 3 — Funnel Analysis -->
+              <div class="carousel__slide" data-title="Funnel Analysis">
+              <article class="showcase-card">
             <div class="showcase-card__media">
               <!-- REPLACE with: <img src="images/project-funnel-analysis.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -146,9 +154,11 @@
               <a class="btn btn--dark" href="projects/funnel-analysis.html">Explore Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- CARD 4 — Market Basket Analysis -->
-          <article class="showcase-card" data-reveal>
+              <!-- CARD 4 — Market Basket Analysis -->
+              <div class="carousel__slide" data-title="Market Basket Analysis">
+              <article class="showcase-card">
             <div class="showcase-card__media">
               <!-- REPLACE with: <img src="images/project-market-basket.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -171,7 +181,16 @@
               <a class="btn btn--dark" href="projects/market-basket.html">Explore Case Study</a>
             </div>
           </article>
+              </div>
 
+            </div>
+          </div>
+
+          <div class="carousel__nav">
+            <button class="carousel__arrow" type="button" data-carousel-prev aria-label="Previous case study"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="carousel__tabs" role="tablist" aria-label="Case studies"></div>
+            <button class="carousel__arrow" type="button" data-carousel-next aria-label="Next case study"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
         </div>
       </div>
     </section>

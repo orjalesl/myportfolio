@@ -1117,3 +1117,91 @@ body.no-scroll { overflow: hidden; }
 @media (min-width: 641px) {
   .mobile-menu { display: none; }
 }
+
+/* --------------------------------------------------------------------------
+   21. CAROUSEL — one-at-a-time card navigator
+   Reusable across pages. Wrap slides in .carousel__track and add named
+   tabs + prev/next. Progressive enhancement: with no JS the slides simply
+   stack (flex-wrap), so all content stays visible; main.js adds .is-ready
+   to switch to the horizontal, single-card experience.
+   -------------------------------------------------------------------------- */
+.carousel { position: relative; }
+.carousel__viewport { overflow: hidden; }
+.carousel.is-ready .carousel__viewport { transition: height var(--dur) var(--ease-out); }
+
+.carousel__track {
+  display: flex;
+  flex-wrap: wrap;              /* no-JS fallback: slides stack vertically */
+  align-items: flex-start;
+}
+.carousel.is-ready .carousel__track {
+  flex-wrap: nowrap;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.carousel__slide { flex: 0 0 100%; width: 100%; min-width: 100%; }
+/* Breathing room so hover-lift + soft shadows aren't clipped by the viewport */
+.carousel.is-ready .carousel__slide { padding: 12px 8px 30px; }
+
+/* Navigation row (hidden until JS is ready to avoid dead controls) */
+.carousel__nav { display: none; }
+.carousel.is-ready .carousel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.carousel__arrow {
+  flex: 0 0 auto;
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-charcoal);
+  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.carousel__arrow:hover { transform: translateY(-2px); color: var(--color-accent); border-color: var(--color-accent); box-shadow: var(--shadow-md); }
+.carousel__arrow:active { transform: scale(0.94); }
+
+.carousel__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 760px;
+}
+.carousel__tab {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--color-gray-600);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-pill);
+  padding: 0.5em 1.05em;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.carousel__tab:hover { color: var(--color-charcoal); border-color: var(--color-gray-400); }
+.carousel__tab.is-active { color: #fff; background: var(--color-accent); border-color: var(--color-accent); box-shadow: var(--shadow-sm); }
+
+/* Carousel-scoped card overrides ----------------------------------------- */
+/* Experience card as a full-width slide: Challenge | Solution side by side,
+   Results (last block) spanning the full width beneath them. */
+.carousel .experience-card { height: 100%; }
+.carousel .experience-card__csr { grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+.carousel .experience-card__csr .csr-block:last-child { grid-column: 1 / -1; }
+/* Neutralise the alternating image-side layout inside a carousel (only one
+   card shows at a time, so every slide should look identical). */
+.carousel .feature-card:nth-child(even) .feature-card__media { order: 0; }
+.carousel .feature-card:nth-child(even) .feature-card__body { padding: var(--space-lg) var(--space-lg) var(--space-lg) 0; }
+.carousel .showcase-card:nth-child(even) .showcase-card__media { order: 0; }
+
+@media (max-width: 640px) {
+  .carousel .experience-card__csr { grid-template-columns: 1fr; }
+  .carousel__arrow { width: 42px; height: 42px; }
+  .carousel.is-ready .carousel__slide { padding: 8px 2px 24px; }
+}

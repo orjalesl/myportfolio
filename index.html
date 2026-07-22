@@ -114,17 +114,21 @@
            - the Results KPI cards (metric + one-sentence explanation each)
          ======================================================================= -->
     <section class="section section--mist" aria-labelledby="experience-title">
-      <div class="container container--wide">
+      <div class="container">
         <div class="section-header" data-reveal>
           <p class="eyebrow">Enterprise Impact</p>
           <h2 id="experience-title">Solutions that moved the needle</h2>
           <p>Below are examples of my AI and analytics solutions that solved real business challenges.</p>
         </div>
 
-        <div class="experience-list">
+        <!-- One-at-a-time carousel; tabs + arrows injected/handled by js/main.js -->
+        <div class="carousel" data-carousel data-reveal>
+          <div class="carousel__viewport">
+            <div class="carousel__track">
 
-          <!-- Experience 1 -->
-          <article class="experience-card" data-reveal>
+              <!-- Experience 1 -->
+              <div class="carousel__slide" data-title="AI Audit Readiness Platform">
+              <article class="experience-card">
             <span class="tag tag--industry eyebrow"></p> Finance &amp; Audtiting</span>
             <div class="experience-card__head">
               <h3>AI Audit Readiness Platform</h3>
@@ -183,9 +187,11 @@
               </div>
             </div>
           </article>
+              </div>
 
-          <!-- Experience 2 -->
-          <article class="experience-card" data-reveal>
+              <!-- Experience 2 -->
+              <div class="carousel__slide" data-title="Member Churn">
+              <article class="experience-card">
             <span class="tag tag--industry eyebrow"> Strategy &amp; Marketing</span>
             <div class="experience-card__head">
               <h3>Member Churn</h3>
@@ -241,9 +247,11 @@
               </div>
             </div>
           </article>
+              </div>
 
-          <!-- Experience 3 -->
-          <article class="experience-card" data-reveal>
+              <!-- Experience 3 -->
+              <div class="carousel__slide" data-title="Claims Workbench Platform">
+              <article class="experience-card">
             <span class="tag tag--industry eyebrow"> Operations</span>
             <div class="experience-card__head">
               <h3>Claims Workbench Platform</h3>
@@ -303,10 +311,11 @@
               </div>
             </div>
           </article>
+              </div>
 
-
-          <!-- Experience 4 -->
-          <article class="experience-card" data-reveal>
+              <!-- Experience 4 -->
+              <div class="carousel__slide" data-title="Building &amp; Zoning Bylaw AI Agent">
+              <article class="experience-card">
             <span class="tag tag--industry eyebrow"> Operations</span>
             <div class="experience-card__head">
               <h3>Building &amp; Zoning Bylaw AI Agent</h3>
@@ -365,7 +374,16 @@
               </div>
             </div>
           </article>
+              </div>
 
+            </div>
+          </div>
+
+          <div class="carousel__nav">
+            <button class="carousel__arrow" type="button" data-carousel-prev aria-label="Previous solution"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="carousel__tabs" role="tablist" aria-label="Solutions"></div>
+            <button class="carousel__arrow" type="button" data-carousel-next aria-label="Next solution"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
         </div>
       </div>
     </section>
@@ -475,10 +493,14 @@
           <p>Placeholder — one sentence introducing your case studies.</p>
         </div>
 
-        <div class="grid" style="gap: var(--space-lg);">
+        <!-- One-at-a-time carousel; tabs + arrows injected/handled by js/main.js -->
+        <div class="carousel" data-carousel data-reveal>
+          <div class="carousel__viewport">
+            <div class="carousel__track">
 
-          <!-- Project 1 -->
-          <article class="feature-card" data-reveal>
+              <!-- Project 1 -->
+              <div class="carousel__slide" data-title="Customer Growth Intelligence">
+              <article class="feature-card">
             <div class="feature-card__media">
               <!-- REPLACE with: <img src="images/project-customer-growth.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -497,9 +519,11 @@
               <a class="btn btn--dark" href="projects/customer-growth.html">View Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- Project 2 -->
-          <article class="feature-card" data-reveal>
+              <!-- Project 2 -->
+              <div class="carousel__slide" data-title="Demand Planning">
+              <article class="feature-card">
             <div class="feature-card__media">
               <!-- REPLACE with: <img src="images/project-demand-planning.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -515,12 +539,14 @@
                 <span class="tag">Time Series</span>
                 <span class="tag">Databricks</span>
               </div>
-              <a class="btn btn--dark" href="projects/demand-planning.html">View Case Study</a>
+              <a class="btn btn--dark" href="projects/customer-growth-2.html">View Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- Project 3 -->
-          <article class="feature-card" data-reveal>
+              <!-- Project 3 -->
+              <div class="carousel__slide" data-title="Funnel Analytics">
+              <article class="feature-card">
             <div class="feature-card__media">
               <!-- REPLACE with: <img src="images/project-funnel-analysis.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -539,9 +565,11 @@
               <a class="btn btn--dark" href="projects/funnel-analysis.html">View Case Study</a>
             </div>
           </article>
+              </div>
 
-          <!-- Project 4 -->
-          <article class="feature-card" data-reveal>
+              <!-- Project 4 -->
+              <div class="carousel__slide" data-title="Market Basket Analysis">
+              <article class="feature-card">
             <div class="feature-card__media">
               <!-- REPLACE with: <img src="images/project-market-basket.jpg" alt="..."> -->
               <div class="placeholder placeholder--wide">
@@ -560,7 +588,16 @@
               <a class="btn btn--dark" href="projects/market-basket.html">View Case Study</a>
             </div>
           </article>
+              </div>
 
+            </div>
+          </div>
+
+          <div class="carousel__nav">
+            <button class="carousel__arrow" type="button" data-carousel-prev aria-label="Previous case study"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="carousel__tabs" role="tablist" aria-label="Case studies"></div>
+            <button class="carousel__arrow" type="button" data-carousel-next aria-label="Next case study"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
         </div>
       </div>
     </section>
